@@ -1,0 +1,49 @@
+{
+  "uuid": "call-abc-123",
+  "title": "Découverte produit avec ClientA",
+  "created_at": "2026-05-25T10:00:00Z",
+  "started_at": "2026-05-25T10:00:00Z",
+  "ended_at": "2026-05-25T10:45:00Z",
+  "duration_seconds": 2700,
+  "language": "fr",
+  "status": "completed",
+  "recording_url": "https://app.leexi.ai/calls/call-abc-123",
+  "participants": [
+    {
+      "name": "Cédric Lombardot",
+      "email": "cedric@donkeycode.com",
+      "role": "host"
+    },
+    {
+      "name": "Jean Dupont",
+      "email": "jean@clienta.com",
+      "role": "guest"
+    }
+  ],
+  "topics": ["Découverte besoin", "Présentation offre", "Next steps"],
+  "summary": "Présentation de l'offre DonkeyCode à ClientA. Devis attendu d'ici jeudi.",
+  "simple_transcript": [
+    {
+      "speaker": "Cédric Lombardot",
+      "start": 0,
+      "end": 12.5,
+      "text": "Bonjour Jean, merci de prendre le temps d'échanger avec nous aujourd'hui."
+    },
+    {
+      "speaker": "Jean Dupont",
+      "start": 12.5,
+      "end": 25.0,
+      "text": "Avec plaisir. Nous avons besoin de votre devis pour jeudi au plus tard."
+    }
+  ],
+  "transcript": [
+    {
+      "speaker": "Cédric Lombardot",
+      "start": 0,
+      "words": [
+        { "text": "Bonjour", "start": 0, "end": 0.5 },
+        { "text": "Jean", "start": 0.5, "end": 1.0 }
+      ]
+    }
+  ]
+}
