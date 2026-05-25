@@ -4,6 +4,11 @@ All notable changes to `@donkeycode/leexi-mcp` will be documented here. Format i
 
 ## [Unreleased]
 
+## [0.4.2] — 2026-05-25
+
+### Fixed
+- v0.4.1 shipped the bundled `dist/` but forgot to bump `.claude-plugin/plugin.json` and `marketplace.json` — so `claude plugins update` still reported "already at 0.4.0" and the plugin cache never refreshed. This release bumps all three manifests in sync.
+
 ## [0.4.1] — 2026-05-25
 
 ### Fixed
