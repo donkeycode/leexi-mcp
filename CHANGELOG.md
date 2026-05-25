@@ -4,6 +4,18 @@ All notable changes to `@donkeycode/leexi-mcp` will be documented here. Format i
 
 ## [Unreleased]
 
+## [0.3.0] — 2026-05-25
+
+### Changed (BREAKING)
+- Authentication is now HTTP Basic Auth (`Authorization: Basic base64(KEY_ID:KEY_SECRET)`) per the real Leexi public API. The previous `Bearer` implementation never authenticated successfully against the live API.
+- Config now requires `LEEXI_API_KEY_ID` in addition to `LEEXI_API_KEY` (the secret).
+- `LeexiClient` constructor signature: `{ apiKey, apiKeyId, baseUrl, ... }`.
+
+### Migration
+1. Edit your `.env` (or `claude mcp add --env` args) to add `LEEXI_API_KEY_ID=<your-key-id>`.
+2. The `LEEXI_API_KEY` keeps the same name and now holds the secret half of the pair.
+3. If you don't have the ID handy, find it next to the secret in **Leexi → Settings → Company Settings → API Keys**.
+
 ## [0.2.1] — 2026-05-25
 
 ### Added

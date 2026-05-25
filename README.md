@@ -15,7 +15,7 @@ claude plugins marketplace add donkeycode/leexi-mcp
 claude plugins install leexi-mcp@leexi-mcp
 ```
 
-On first install, you'll be prompted for `LEEXI_API_KEY`. Get one at **Leexi → Settings → Company Settings → API Keys** (requires admin).
+On first install, you'll be prompted for `LEEXI_API_KEY_ID` and `LEEXI_API_KEY`. Get both at **Leexi → Settings → Company Settings → API Keys** (requires admin).
 
 > The `@leexi-mcp` suffix disambiguates the plugin from the marketplace; both share the same name in this single-plugin repo.
 
@@ -57,22 +57,26 @@ pnpm build
 
 ## Configure
 
-1. Get an API key at **Leexi → Settings → Company Settings → API Keys** (requires admin).
+1. Get a key pair at **Leexi → Settings → Company Settings → API Keys** (requires admin).
 2. Copy `.env.example` to `.env` and fill in:
 
 ```
-LEEXI_API_KEY=sk-...
+LEEXI_API_KEY_ID=key_xxxxxxxxx        # the "API Key ID" shown in Leexi settings
+LEEXI_API_KEY=secret_xxxxxxxxxxxxxxx  # the "API Key Secret" shown ONCE at creation
 LEEXI_API_BASE_URL=https://public-api.leexi.ai/v1
 LEEXI_STATE_FILE=./state/processed-calls.json
 LEEXI_RATE_LIMIT_PER_MINUTE=50
 ```
+
+Leexi authentication is HTTP Basic Auth: the MCP sends `Authorization: Basic base64(LEEXI_API_KEY_ID:LEEXI_API_KEY)` on every request. Both values come from the same key creation screen in Leexi — the **ID** is the public identifier, the **Key** is the secret shown only once at creation. If you've lost the secret, regenerate the pair.
 
 ## Register with Claude Code
 
 ```bash
 claude mcp add leexi-donkeycode \
   --command "node /absolute/path/to/leexi-mcp/dist/index.js" \
-  --env LEEXI_API_KEY=sk-... \
+  --env LEEXI_API_KEY_ID=key_... \
+  --env LEEXI_API_KEY=secret_... \
   --env LEEXI_STATE_FILE=/absolute/path/to/state/processed-calls.json
 ```
 
@@ -102,13 +106,15 @@ Prints a sample list, one call detail, and a processed-flag toggle.
 
 ## Troubleshooting
 
-**`Invalid configuration: apiKey: LEEXI_API_KEY must be set`**
-The MCP cannot read `LEEXI_API_KEY` from the environment. Make sure:
-- `.env` exists and contains a valid key (or the var is set in the shell launching Claude Code).
-- If using `claude mcp add`, you passed `--env LEEXI_API_KEY=...`.
+**`Invalid configuration: apiKeyId: LEEXI_API_KEY_ID must be set` or `apiKey: LEEXI_API_KEY must be set`**
+The MCP needs BOTH halves of the Leexi key pair:
+- `LEEXI_API_KEY_ID` — the public identifier shown at the top of each API Key row.
+- `LEEXI_API_KEY` — the secret displayed once at creation.
+
+Make sure both are set in `.env` or passed via `--env` when registering with `claude mcp add`. If you have the ID but lost the secret, regenerate the pair in Leexi.
 
 **`Leexi API 401`**
-Your API key is rejected. Regenerate it at **Leexi → Settings → Company Settings → API Keys**.
+Your credentials are rejected. Regenerate the key pair at **Leexi → Settings → Company Settings → API Keys**. Most often: the ID and Secret don't match (cross-paste), or the Secret was regenerated and your local copy is stale.
 
 **`Leexi API 429` repeated**
 You're hitting the 50 requests/minute rate limit. The client auto-retries once with `Retry-After`, but a tight polling loop can exhaust this. Increase your polling interval or batch fewer calls per cycle.
@@ -132,7 +138,7 @@ pnpm lint        # biome check
 ```mermaid
 flowchart LR
     A[Claude Code Routine] -->|MCP stdio| B[leexi-mcp]
-    B -->|HTTPS Bearer| C[public-api.leexi.ai/v1]
+    B -->|HTTPS Basic Auth| C[public-api.leexi.ai/v1]
     B -->|read/write| D[(state/processed-calls.json)]
 
     subgraph "Tools exposed"
