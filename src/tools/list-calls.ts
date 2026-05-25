@@ -36,13 +36,15 @@ export interface ListCallsResult {
 }
 
 // ---------------------------------------------------------------------------
-// Generic ToolDefinition interface — reused by Tasks 7 and 8
+// Generic ToolDefinition interface — reused by Tasks 7 and 8.
+// P = parsed (post-default) shape; I = raw (pre-default) input; O = output.
+// P defaults to ParsedInput to keep list-calls usage unchanged.
 // ---------------------------------------------------------------------------
 
-export interface ToolDefinition<I, O> {
+export interface ToolDefinition<I, O, P = ParsedInput> {
   name: string;
   description: string;
-  inputSchema: z.ZodType<ParsedInput, z.ZodTypeDef, I>;
+  inputSchema: z.ZodType<P, z.ZodTypeDef, I>;
   handler: (input: I) => Promise<O>;
 }
 
