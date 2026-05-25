@@ -29,7 +29,7 @@ describe("leexi_list_calls tool", () => {
     storePath = join(dir, "processed.json");
     store = new ProcessedStore(storePath);
     await store.load();
-    client = new LeexiClient({ apiKey: "k", baseUrl: BASE_URL });
+    client = new LeexiClient({ apiKeyId: "test-id", apiKey: "k", baseUrl: BASE_URL });
   });
 
   afterEach(() => {

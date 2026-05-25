@@ -18,7 +18,7 @@ function fixture(name: string) {
 const BASE_URL = "https://public-api.leexi.ai/v1";
 
 describe("leexi_get_call tool", () => {
-  const client = new LeexiClient({ apiKey: "k", baseUrl: BASE_URL });
+  const client = new LeexiClient({ apiKeyId: "test-id", apiKey: "k", baseUrl: BASE_URL });
 
   it("returns full call detail with transcript", async () => {
     mswServer.use(

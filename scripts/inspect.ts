@@ -12,7 +12,7 @@ import { createMarkProcessedTool } from "../src/tools/mark-processed.js";
 
 async function main(): Promise<void> {
   const config = loadConfig();
-  const client = new LeexiClient({ apiKey: config.apiKey, baseUrl: config.baseUrl });
+  const client = new LeexiClient({ apiKeyId: config.apiKeyId, apiKey: config.apiKey, baseUrl: config.baseUrl });
   const store = new ProcessedStore(config.stateFile);
   await store.load();
 

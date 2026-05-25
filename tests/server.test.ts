@@ -49,6 +49,7 @@ vi.mock("../src/store/processed-store.js", () => {
 // ---------------------------------------------------------------------------
 
 const testConfig = {
+  apiKeyId: "test-id",
   apiKey: "test-key",
   baseUrl: "https://public-api.leexi.ai/v1",
   stateFile: "/tmp/leexi-test-state.json",

@@ -1,12 +1,15 @@
 // LeexiClient: fetch-based HTTP client for the Leexi public API.
 // Uses the global fetch() (Node 22+, backed by undici) so MSW can intercept in tests.
-// Features: Bearer auth, Zod response parsing, retry on 429/5xx.
+// Features: HTTP Basic Auth (key_id + secret), Zod response parsing, retry on 429/5xx.
 
 import { LeexiApiError } from "../errors.js";
 import { callDetailUrl, callsListUrl } from "./endpoints.js";
 import { type CallDetail, CallDetailSchema, type CallsList, CallsListSchema } from "./types.js";
 
 interface ClientOptions {
+  /** The public key identifier shown in Leexi → Settings → API Keys. */
+  apiKeyId: string;
+  /** The secret half of the Leexi key pair (shown once at creation). */
   apiKey: string;
   baseUrl: string;
   /** Max number of retries for 429/5xx responses (default: 2). */
@@ -22,12 +25,14 @@ interface ListParams {
 }
 
 export class LeexiClient {
+  private readonly apiKeyId: string;
   private readonly apiKey: string;
   private readonly baseUrl: string;
   private readonly maxRetries: number;
   private readonly retryDelayMs: number;
 
   constructor(opts: ClientOptions) {
+    this.apiKeyId = opts.apiKeyId;
     this.apiKey = opts.apiKey;
     // Strip trailing slash to keep URL building consistent.
     this.baseUrl = opts.baseUrl.replace(/\/$/, "");
@@ -62,9 +67,10 @@ export class LeexiClient {
         const res = await fetch(url, {
           method: "GET",
           headers: {
-            authorization: `Bearer ${this.apiKey}`,
+            // Leexi public API uses HTTP Basic Auth: base64(KEY_ID:KEY_SECRET)
+            authorization: `Basic ${Buffer.from(`${this.apiKeyId}:${this.apiKey}`).toString("base64")}`,
             accept: "application/json",
-            "user-agent": "leexi-mcp/0.1.0",
+            "user-agent": "leexi-mcp/0.3.0",
           },
         });
 

@@ -14,12 +14,14 @@ describe("loadConfig", () => {
   });
 
   it("returns parsed config when all required vars are set", () => {
+    process.env.LEEXI_API_KEY_ID = "test-id";
     process.env.LEEXI_API_KEY = "test-key";
     process.env.LEEXI_API_BASE_URL = "https://public-api.leexi.ai/v1";
     process.env.LEEXI_STATE_FILE = "./state/processed.json";
 
     const config = loadConfig();
 
+    expect(config.apiKeyId).toBe("test-id");
     expect(config.apiKey).toBe("test-key");
     expect(config.baseUrl).toBe("https://public-api.leexi.ai/v1");
     expect(config.stateFile).toBe("./state/processed.json");
@@ -27,6 +29,7 @@ describe("loadConfig", () => {
   });
 
   it("applies default base URL and rate limit when omitted", () => {
+    process.env.LEEXI_API_KEY_ID = "test-id";
     process.env.LEEXI_API_KEY = "test-key";
     process.env.LEEXI_API_BASE_URL = undefined;
     process.env.LEEXI_RATE_LIMIT_PER_MINUTE = undefined;
@@ -38,7 +41,17 @@ describe("loadConfig", () => {
     expect(config.rateLimitPerMinute).toBe(50);
   });
 
+  it("throws ConfigError when LEEXI_API_KEY_ID is missing", () => {
+    process.env.LEEXI_API_KEY_ID = undefined;
+    process.env.LEEXI_API_KEY = "test-key";
+    process.env.LEEXI_STATE_FILE = "./state/processed.json";
+
+    expect(() => loadConfig()).toThrow(ConfigError);
+    expect(() => loadConfig()).toThrow(/LEEXI_API_KEY_ID/);
+  });
+
   it("throws ConfigError when LEEXI_API_KEY is missing", () => {
+    process.env.LEEXI_API_KEY_ID = "test-id";
     process.env.LEEXI_API_KEY = undefined;
     process.env.LEEXI_STATE_FILE = "./state/processed.json";
 
@@ -47,6 +60,7 @@ describe("loadConfig", () => {
   });
 
   it("throws ConfigError on invalid rate limit", () => {
+    process.env.LEEXI_API_KEY_ID = "test-id";
     process.env.LEEXI_API_KEY = "test-key";
     process.env.LEEXI_STATE_FILE = "./state/processed.json";
     process.env.LEEXI_RATE_LIMIT_PER_MINUTE = "not-a-number";

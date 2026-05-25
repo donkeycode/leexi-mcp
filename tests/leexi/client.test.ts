@@ -17,7 +17,7 @@ function fixture(name: string) {
 const BASE_URL = "https://public-api.leexi.ai/v1";
 
 function makeClient() {
-  return new LeexiClient({ apiKey: "test-key", baseUrl: BASE_URL });
+  return new LeexiClient({ apiKeyId: "test-id", apiKey: "test-key", baseUrl: BASE_URL });
 }
 
 describe("LeexiClient.listCalls", () => {
@@ -33,7 +33,7 @@ describe("LeexiClient.listCalls", () => {
     const client = makeClient();
     const result = await client.listCalls({ limit: 50 });
 
-    expect(receivedAuth).toBe("Bearer test-key");
+    expect(receivedAuth).toBe(`Basic ${Buffer.from("test-id:test-key").toString("base64")}`);
     expect(result.data).toHaveLength(2);
     expect(result.data[0]?.uuid).toBe("call-abc-123");
   });
