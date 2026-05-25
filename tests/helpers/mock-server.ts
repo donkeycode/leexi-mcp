@@ -1,2 +1,11 @@
-// Placeholder — will be populated with MSW setup in Task 4
-export {};
+// MSW (Mock Service Worker) node server for HTTP-level test mocking.
+// Imported by any test file that needs to intercept outbound HTTP requests.
+
+import { setupServer } from "msw/node";
+import { afterAll, afterEach, beforeAll } from "vitest";
+
+export const mswServer = setupServer();
+
+beforeAll(() => mswServer.listen({ onUnhandledRequest: "error" }));
+afterEach(() => mswServer.resetHandlers());
+afterAll(() => mswServer.close());
