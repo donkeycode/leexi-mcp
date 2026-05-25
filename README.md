@@ -8,11 +8,23 @@ DonkeyCode MCP server for [Leexi](https://www.leexi.ai/) — exposes Leexi calls
 
 ## Install as a Claude Code plugin (recommended)
 
+The repo itself is a Claude Code marketplace. Add it once, then install the plugin:
+
 ```bash
-claude plugins install gh:donkeycode/leexi-mcp
+claude plugins marketplace add donkeycode/leexi-mcp
+claude plugins install leexi-mcp@leexi-mcp
 ```
 
 On first install, you'll be prompted for `LEEXI_API_KEY`. Get one at **Leexi → Settings → Company Settings → API Keys** (requires admin).
+
+> The `@leexi-mcp` suffix disambiguates the plugin from the marketplace; both share the same name in this single-plugin repo.
+
+To update later:
+
+```bash
+claude plugins marketplace update leexi-mcp
+claude plugins update leexi-mcp@leexi-mcp
+```
 
 The plugin auto-registers three tools (`leexi_list_calls`, `leexi_get_call`, `leexi_mark_processed`), a `leexi-routine` skill that teaches Claude how to combine them, and three slash commands:
 

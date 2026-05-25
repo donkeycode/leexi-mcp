@@ -4,6 +4,14 @@ All notable changes to `@donkeycode/leexi-mcp` will be documented here. Format i
 
 ## [Unreleased]
 
+## [0.2.1] — 2026-05-25
+
+### Added
+- `.claude-plugin/marketplace.json` so the repo itself is an installable Claude Code marketplace
+
+### Fixed
+- README install command (`gh:` prefix isn't valid Claude Code syntax; use `marketplace add` + `install <plugin>@<marketplace>`)
+
 ## [0.2.0] — 2026-05-25
 
 ### Added

@@ -1,0 +1,21 @@
+{
+  "name": "leexi-mcp",
+  "owner": {
+    "name": "DonkeyCode",
+    "email": "hello@donkeycode.com"
+  },
+  "metadata": {
+    "description": "Leexi MCP plugin — read calls and transcripts from Claude.",
+    "version": "0.2.1"
+  },
+  "plugins": [
+    {
+      "name": "leexi-mcp",
+      "version": "0.2.1",
+      "source": "./",
+      "description": "Read Leexi calls and transcripts from Claude. Built for post-call automation routines.",
+      "category": "productivity",
+      "tags": ["leexi", "mcp", "transcription", "notetaker", "automation"]
+    }
+  ]
+}
