@@ -3,7 +3,7 @@
 
 import { z } from "zod";
 import type { LeexiClient } from "../leexi/client.js";
-import type { CallSummary } from "../leexi/types.js";
+import type { CallSummary, Pagination } from "../leexi/types.js";
 import type { ProcessedStore } from "../store/processed-store.js";
 
 // ---------------------------------------------------------------------------
@@ -25,14 +25,12 @@ export type ListCallsInput = z.input<typeof ListCallsInputSchema>;
 type ParsedInput = z.infer<typeof ListCallsInputSchema>;
 
 // ---------------------------------------------------------------------------
-// Output type
+// Output type — uses real Leexi pagination: { page, items, count }
 // ---------------------------------------------------------------------------
 
 export interface ListCallsResult {
   calls: CallSummary[];
-  page: number;
-  perPage: number;
-  total: number;
+  pagination: Pagination;
 }
 
 // ---------------------------------------------------------------------------
@@ -59,7 +57,7 @@ export function createListCallsTool(
   return {
     name: "leexi_list_calls",
     description:
-      "List Leexi calls. Use only_unprocessed=true to skip calls already marked processed by this MCP.",
+      "List Leexi calls. Returns call metadata including title, performed_at, duration (float seconds), locale, summary (markdown), chapters, tasks (Leexi-extracted action items), and speakers. Use only_unprocessed=true to skip calls already marked processed by this MCP. Pagination uses { page, items, count }.",
     inputSchema: ListCallsInputSchema,
     handler: async (rawInput) => {
       // Parse to apply Zod defaults before using the values.
@@ -73,7 +71,7 @@ export function createListCallsTool(
       };
       const list = await client.listCalls(listParams);
 
-      let calls = list.data;
+      let calls = list.calls;
 
       if (input.only_unprocessed) {
         const filtered: CallSummary[] = [];
@@ -85,9 +83,7 @@ export function createListCallsTool(
 
       return {
         calls,
-        page: list.meta.page,
-        perPage: list.meta.per_page,
-        total: list.meta.total,
+        pagination: list.pagination,
       };
     },
   };
