@@ -7,6 +7,8 @@ All notable changes to `@donkeycode/leexi-mcp` will be documented here. Format i
 ## [0.2.0] — 2026-05-25
 
 ### Added
+- Claude Code plugin packaging (`.claude-plugin/`, `.mcp.json`, skill, slash commands)
+- `dist/` now committed for one-command plugin install
 - Tests for `errors.ts`, `endpoints.ts`, `server.ts` (full coverage on remaining modules)
 - Coverage tooling (`@vitest/coverage-v8`) with 85% thresholds
 - GitHub Actions CI workflow

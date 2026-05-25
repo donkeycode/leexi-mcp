@@ -6,6 +6,20 @@
 
 DonkeyCode MCP server for [Leexi](https://www.leexi.ai/) — exposes Leexi calls, transcripts, and per-call processing state to any MCP-compatible client (Claude Code, Claude Desktop, IDE plugins).
 
+## Install as a Claude Code plugin (recommended)
+
+```bash
+claude plugins install gh:donkeycode/leexi-mcp
+```
+
+On first install, you'll be prompted for `LEEXI_API_KEY`. Get one at **Leexi → Settings → Company Settings → API Keys** (requires admin).
+
+The plugin auto-registers three tools (`leexi_list_calls`, `leexi_get_call`, `leexi_mark_processed`), a `leexi-routine` skill that teaches Claude how to combine them, and three slash commands:
+
+- `/leexi-today` — list today's calls.
+- `/leexi-recent [n]` — list the N most recent calls.
+- `/leexi-call <uuid>` — fetch a specific call with transcript.
+
 ## Why this MCP?
 
 [Leexi](https://www.leexi.ai/) records and transcribes your calls and meetings. This MCP server lets Claude (in Claude Code, Claude Desktop, or any MCP-compatible client) read those calls and their transcripts, then act on them — write follow-up emails, build CRM records, extract action items, generate summaries.
@@ -20,7 +34,7 @@ Designed to be the data backbone of post-call automation routines: a Claude Code
 | `leexi_get_call` | Fetch a single call by UUID with full transcript (or summary-only via `include_transcript=false`). |
 | `leexi_mark_processed` | Mark a call as processed in the local MCP state, so future `only_unprocessed` queries skip it. |
 
-## Install
+## Install from source (developers)
 
 ```bash
 git clone https://github.com/donkeycode/leexi-mcp.git
