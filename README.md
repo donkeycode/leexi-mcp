@@ -42,9 +42,44 @@ Designed to be the data backbone of post-call automation routines: a Claude Code
 
 | Tool | Description |
 |------|-------------|
-| `leexi_list_calls` | List recent Leexi calls. Optional filters: `since`, `limit`, `page`, `only_unprocessed`. |
-| `leexi_get_call` | Fetch a single call by UUID with full transcript (or summary-only via `include_transcript=false`). |
+| `leexi_list_calls` | List recent Leexi calls. Returns call metadata: `title`, `performed_at`, `duration` (float seconds), `locale`, `summary` (markdown), `chapters`, `tasks` (Leexi-extracted action items), `speakers`, and more. Pagination: `{ page, items, count }`. Optional filters: `since`, `limit`, `page`, `only_unprocessed`. |
+| `leexi_get_call` | Fetch a single call by UUID. Full payload includes `summary` (markdown), `simple_transcript` (plain text string with inline `(HH:MM:SS - HH:MM:SS)` timestamps — read directly), word-level `transcript` array, `chapters`, `tasks`, `call_topics`, `speakers`, `participating_users`, and `meeting_event`. Set `include_transcript=false` for a lite metadata-only payload (zeroes `simple_transcript`, `transcript`, `chapters`, `call_topics`). |
 | `leexi_mark_processed` | Mark a call as processed in the local MCP state, so future `only_unprocessed` queries skip it. |
+
+### Real response shapes
+
+**`leexi_list_calls` — one item:**
+
+```json
+{
+  "uuid": "call-abc-123",
+  "locale": "fr-FR",
+  "duration": 3645.837,
+  "title": "ClientA - Daily Demo",
+  "performedAt": "2026-05-22T08:30:00.000Z",
+  "summary": "# Daily Demo\n\n## Points abordes\n- API integration...",
+  "chapters": [{ "index": 0, "title": "Introduction et Point API", "startTime": 0 }],
+  "tasks": [{ "subject": "Finaliser l'integration API", "status": "not_started", "done": false }],
+  "speakers": [{ "name": "Alice Example", "isUser": true, "duration": 1023.771 }],
+  "pagination": { "page": 1, "items": 2, "count": 864 }
+}
+```
+
+**`leexi_get_call` — selected fields:**
+
+```json
+{
+  "uuid": "call-abc-123",
+  "locale": "fr-FR",
+  "duration": 3645.837,
+  "summary": "# Daily Demo\n\n## Actions\n- Finaliser l'integration API\n...",
+  "simpleTranscript": "Alice Example (00:00:00 - 00:01:12)\nBonjour a tous...\n\nExternal Speaker (00:01:15 - 00:02:30)\nOui, on a avance...",
+  "chapters": [{ "index": 0, "title": "Introduction", "startTime": 0, "text": "..." }],
+  "tasks": [{ "subject": "Finaliser l'integration API", "done": false }],
+  "callTopics": [{ "keyphrase": "integration API", "topicName": "Interest", "startTime": 223.21 }],
+  "participatingUsers": [{ "name": "Alice Example", "email": "alice@example.com" }]
+}
+```
 
 ## Install from source (developers)
 

@@ -4,6 +4,32 @@ All notable changes to `@donkeycode/leexi-mcp` will be documented here. Format i
 
 ## [Unreleased]
 
+## [0.4.0] — 2026-05-25
+
+### Changed (BREAKING)
+- Zod schemas rewritten from live Leexi API responses. Field names + shapes now match reality:
+  - `language` → `locale` (e.g. `"fr-FR"`)
+  - `duration_seconds` (int) → `duration` (float seconds, e.g. `3645.837`)
+  - `participants` → `participating_users` + `speakers` (detail only, not in list)
+  - `simple_transcript` is now a STRING with inline `(HH:MM:SS - HH:MM:SS)` timestamps, not an array
+  - List wrapper: `meta: {page,per_page,total}` → `pagination: {page,items,count}`
+  - Detail wrapper: response is `{data: CallDetail}` — `getCall` unwraps for callers
+  - `started_at`/`ended_at` → `performed_at`
+  - `recording_url` (only link in list) → `leexi_url` (web app URL) + `recording_url` (S3 presigned, detail)
+- New surfaced fields: `chapters`, `tasks` (Leexi-extracted action items), `meeting_event`, `owner`, `summary` (markdown), `prompts`, `call_topics`, `conversation_type`, `direction`, `is_video`, `visible`.
+- `get-call` tool: `include_transcript=false` now zeroes `simple_transcript`, `transcript`, `chapters`, and `call_topics` (was only zeroing transcript arrays).
+- `list-calls` tool result: `{ calls, pagination }` replaces `{ calls, page, perPage, total }`.
+- Test count: 48 → 56.
+
+### Fixed
+- `pnpm inspect` now works against the live API — ZodErrors on `list-calls` are resolved.
+- Fixtures replaced with anonymized real-shape samples that parse cleanly through the new schemas.
+
+### Migration
+- Any consumer reading `.language`, `.durationSeconds`, `.participants`, or treating `simple_transcript` as an array must adapt. Field renames are mechanical.
+- Pagination: replace `result.page` + `result.total` + `result.perPage` with `result.pagination.page` + `result.pagination.count` + `result.pagination.items`.
+- If you wrote a Routine on v0.3.0: it broke at the API level regardless (v0.3.0 could not parse live calls).
+
 ## [0.3.0] — 2026-05-25
 
 ### Changed (BREAKING)
