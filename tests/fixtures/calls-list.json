@@ -2,33 +2,210 @@
   "data": [
     {
       "uuid": "call-abc-123",
-      "title": "Découverte produit avec ClientA",
-      "created_at": "2026-05-25T10:00:00Z",
-      "duration_seconds": 2700,
-      "language": "fr",
-      "status": "completed",
-      "recording_url": "https://app.leexi.ai/calls/call-abc-123",
-      "participants": [
-        { "name": "Cédric Lombardot", "email": "cedric@donkeycode.com", "role": "host" },
-        { "name": "Jean Dupont", "email": "jean@clienta.com", "role": "guest" }
-      ]
+      "locale": "fr-FR",
+      "duration": 3645.837,
+      "direction": "inbound",
+      "is_video": true,
+      "visible": true,
+      "title": "ClientA - Daily Demo",
+      "description": "Daily avec demonstration des developpements en cours",
+      "created_at": "2026-05-22T09:33:39.601Z",
+      "updated_at": "2026-05-22T13:40:59.328Z",
+      "performed_at": "2026-05-22T08:30:00.000Z",
+      "leexi_url": "https://app.leexi.ai/calls/call-abc-123",
+      "video_archived_at": null,
+      "audio_archived_at": null,
+      "transcript_archived_at": null,
+      "completions_archived_at": null,
+      "source": "gmeet_bot",
+      "source_id": "179d414d-2391-4b9e-a636-143b435d0a35",
+      "recording_url": "https://example.com/fixtures/recording.webm",
+      "transcript_url": "https://example.com/fixtures/transcript.json",
+      "summary": "# Daily Demo - ClientA\n\nReunion quotidienne de l'equipe de developpement.\n\n## Points abordes\n- API integration avec le systeme tiers\n- Revue des tickets en cours\n- Planning de la semaine",
+      "conversation_type": {
+        "uuid": "0c29672c-4ca0-4d7d-b1a1-c2bab39ec57a",
+        "slug": "sales_visio_demo",
+        "active": true
+      },
+      "deal": null,
+      "meeting_event": {
+        "uuid": "08810d42-0f2f-4175-acc6-bc4eb6f3ecb5",
+        "title": "ClientA - Daily Demo",
+        "organizer": { "email": "alice@example.com" },
+        "attendees": [
+          { "email": "alice@example.com" },
+          { "email": "bob@example.com" },
+          { "email": "customer1@example.com" }
+        ],
+        "meeting_url": "https://meet.google.com/example-meeting",
+        "meeting_provider": "google_meeting",
+        "internal": false,
+        "direction": "inbound",
+        "start_time": "2026-05-22T08:30:00.000Z",
+        "end_time": "2026-05-22T09:00:00.000Z"
+      },
+      "feedbacks": [],
+      "owner": {
+        "uuid": "d64294f4-4631-4edf-8b48-932cd98283e5",
+        "name": "Alice Example",
+        "email": "alice@example.com",
+        "active": true
+      },
+      "participating_users": [
+        {
+          "uuid": "d64294f4-4631-4edf-8b48-932cd98283e5",
+          "name": "Alice Example",
+          "email": "alice@example.com",
+          "active": true
+        },
+        {
+          "uuid": "e75395g5-5742-5feg-9c59-043ce09394f6",
+          "name": "Bob Example",
+          "email": "bob@example.com",
+          "active": true
+        }
+      ],
+      "customer_phone_numbers": [],
+      "customer_email_addresses": ["customer1@example.com", "customer2@example.com"],
+      "speakers": [
+        {
+          "uuid": "4981f6c6-7f75-4890-be80-9f94e8960384",
+          "index": 0,
+          "duration": 1023.771,
+          "longest_monologue": 117.8,
+          "name": "Alice Example",
+          "is_user": true,
+          "phone_number": null,
+          "email_address": "alice@example.com"
+        },
+        {
+          "uuid": "ca5c9c72-1da7-4f05-a832-9a3220710972",
+          "index": 1,
+          "duration": 820.5,
+          "longest_monologue": 95.2,
+          "name": "External Speaker",
+          "is_user": false,
+          "phone_number": null,
+          "email_address": "customer1@example.com"
+        }
+      ],
+      "prompts": [
+        {
+          "uuid": "17cf9507-0a4d-45a5-8c8a-27fba624f410",
+          "title": "chaptering",
+          "category": "chaptering",
+          "completions": ["Alice prend la parole pour faire un point sur les API."]
+        }
+      ],
+      "chapters": [
+        {
+          "uuid": "c858ae7f-c2c3-4212-9d74-1ec661c2188e",
+          "index": 0,
+          "title": "Chapitre 1: Introduction et Point API",
+          "text": "Alice prend la parole pour faire un point sur les integrations API.",
+          "start_time": 0
+        },
+        {
+          "uuid": "d969bf00-d3d4-5323-0e85-2fd772d3d39f",
+          "index": 1,
+          "title": "Chapitre 2: Revue des tickets",
+          "text": "L'equipe passe en revue les tickets en cours et leur statut.",
+          "start_time": 420.5
+        },
+        {
+          "uuid": "e07ace11-e4e5-6434-1f96-3ge883e4e40g",
+          "index": 2,
+          "title": "Chapitre 3: Planning semaine",
+          "text": "Discussion sur le planning de la semaine et les priorites.",
+          "start_time": 1200.0
+        }
+      ],
+      "scorecards": [],
+      "tags": [],
+      "tasks": [
+        {
+          "uuid": "f282a297-0951-41e2-946b-15642d32c2db",
+          "active": true,
+          "subject": "Finaliser l'integration API et tester avec l'environnement client.",
+          "description": null,
+          "status": "not_started",
+          "owner": null,
+          "done": false,
+          "speaker": null,
+          "last_editor": null,
+          "created_at": "2026-05-22T10:03:41.894Z",
+          "updated_at": "2026-05-22T10:03:41.894Z"
+        },
+        {
+          "uuid": "g393b308-1062-52f3-057c-26753e3d3dec",
+          "active": true,
+          "subject": "Preparer la demo pour la prochaine reunion avec le client.",
+          "description": null,
+          "status": "not_started",
+          "owner": null,
+          "done": false,
+          "speaker": null,
+          "last_editor": null,
+          "created_at": "2026-05-22T10:05:12.100Z",
+          "updated_at": "2026-05-22T10:05:12.100Z"
+        }
+      ],
+      "simple_transcript": "Alice Example (00:00:00 - 00:01:12)\nBonjour a tous, on commence le daily. Je prends la main pour le point API.\n\nExternal Speaker (00:01:15 - 00:02:30)\nOui, on a avance sur l'integration hier. Il reste quelques points a clarifier.\n\n"
     },
     {
       "uuid": "call-def-456",
-      "title": "Daily équipe",
-      "created_at": "2026-05-24T09:00:00Z",
-      "duration_seconds": 900,
-      "language": "fr",
-      "status": "completed",
-      "recording_url": "https://app.leexi.ai/calls/call-def-456",
-      "participants": [
-        { "name": "Cédric Lombardot", "email": "cedric@donkeycode.com", "role": "host" }
-      ]
+      "locale": "fr-FR",
+      "duration": 1820.5,
+      "direction": "inbound",
+      "is_video": false,
+      "visible": true,
+      "title": "Internal Sync",
+      "description": null,
+      "created_at": "2026-05-23T14:10:00.000Z",
+      "updated_at": "2026-05-23T14:45:00.000Z",
+      "performed_at": "2026-05-23T14:00:00.000Z",
+      "leexi_url": "https://app.leexi.ai/calls/call-def-456",
+      "video_archived_at": null,
+      "audio_archived_at": null,
+      "transcript_archived_at": null,
+      "completions_archived_at": null,
+      "source": "gmeet_bot",
+      "source_id": null,
+      "recording_url": "https://example.com/fixtures/recording.webm",
+      "transcript_url": "https://example.com/fixtures/transcript.json",
+      "summary": "# Internal Sync\n\nSync interne de l'equipe DonkeyCode.",
+      "conversation_type": null,
+      "deal": null,
+      "meeting_event": null,
+      "feedbacks": [],
+      "owner": {
+        "uuid": "d64294f4-4631-4edf-8b48-932cd98283e5",
+        "name": "Alice Example",
+        "email": "alice@example.com",
+        "active": true
+      },
+      "participating_users": [
+        {
+          "uuid": "d64294f4-4631-4edf-8b48-932cd98283e5",
+          "name": "Alice Example",
+          "email": "alice@example.com",
+          "active": true
+        }
+      ],
+      "customer_phone_numbers": [],
+      "customer_email_addresses": [],
+      "speakers": [],
+      "prompts": [],
+      "chapters": [],
+      "scorecards": [],
+      "tags": [],
+      "tasks": [],
+      "simple_transcript": "Alice Example (00:00:00 - 00:05:00)\nSync interne rapide sur les priorites de la semaine.\n\n"
     }
   ],
-  "meta": {
+  "pagination": {
     "page": 1,
-    "per_page": 50,
-    "total": 2
+    "items": 2,
+    "count": 864
   }
 }
