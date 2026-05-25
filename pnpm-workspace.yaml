@@ -10,3 +10,8 @@ onlyBuiltDependencies:
 # the registry before pnpm will install it. Set to 0 to disable the check.
 # We disable it for fast iteration; tighten later when the project stabilises.
 minimumReleaseAge: 0
+
+allowBuilds:
+  '@biomejs/biome': set this to true or false
+  esbuild: set this to true or false
+  msw: set this to true or false

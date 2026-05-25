@@ -21,7 +21,10 @@ jobs:
           node-version: 22
           cache: pnpm
 
+      - run: pnpm config set strict-dep-builds false
+      - run: pnpm config set minimum-release-age 0
       - run: pnpm install --frozen-lockfile
+      - run: pnpm rebuild @biomejs/biome esbuild msw
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm test:coverage
