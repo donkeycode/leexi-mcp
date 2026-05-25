@@ -36,7 +36,7 @@ describe("leexi_list_calls tool", () => {
     rmSync(dir, { recursive: true, force: true });
   });
 
-  it("returns all calls when no filter is applied", async () => {
+  it("returns all calls and real pagination when no filter is applied", async () => {
     mswServer.use(
       http.get(`${BASE_URL}/calls`, () => HttpResponse.json(fixture("calls-list.json"))),
     );
@@ -46,6 +46,10 @@ describe("leexi_list_calls tool", () => {
 
     expect(result.calls).toHaveLength(2);
     expect(result.calls[0]?.uuid).toBe("call-abc-123");
+    // Real pagination shape: { page, items, count } — not { page, perPage, total }
+    expect(result.pagination.page).toBe(1);
+    expect(result.pagination.items).toBe(2);
+    expect(result.pagination.count).toBe(864);
   });
 
   it("excludes processed calls when only_unprocessed is true", async () => {

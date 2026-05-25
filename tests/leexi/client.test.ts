@@ -21,7 +21,7 @@ function makeClient() {
 }
 
 describe("LeexiClient.listCalls", () => {
-  it("sends Authorization header and returns parsed list", async () => {
+  it("sends Authorization header and returns parsed list with real pagination", async () => {
     let receivedAuth: string | null = null;
     mswServer.use(
       http.get(`${BASE_URL}/calls`, ({ request }) => {
@@ -34,8 +34,13 @@ describe("LeexiClient.listCalls", () => {
     const result = await client.listCalls({ limit: 50 });
 
     expect(receivedAuth).toBe(`Basic ${Buffer.from("test-id:test-key").toString("base64")}`);
-    expect(result.data).toHaveLength(2);
-    expect(result.data[0]?.uuid).toBe("call-abc-123");
+    // listCalls returns { calls, pagination } — not { data, meta }
+    expect(result.calls).toHaveLength(2);
+    expect(result.calls[0]?.uuid).toBe("call-abc-123");
+    // Real pagination shape: { page, items, count }
+    expect(result.pagination.page).toBe(1);
+    expect(result.pagination.items).toBe(2);
+    expect(result.pagination.count).toBe(864);
   });
 
   it("forwards since and per_page query params", async () => {
@@ -64,16 +69,23 @@ describe("LeexiClient.listCalls", () => {
 });
 
 describe("LeexiClient.getCall", () => {
-  it("fetches and parses a full call detail", async () => {
+  it("fetches, unwraps the data wrapper, and returns parsed call detail", async () => {
     mswServer.use(
       http.get(`${BASE_URL}/calls/call-abc-123`, () =>
         HttpResponse.json(fixture("call-detail.json")),
       ),
     );
+    // getCall unwraps { data: CallDetail } — caller receives CallDetail directly
     const call = await makeClient().getCall("call-abc-123");
     expect(call.uuid).toBe("call-abc-123");
-    expect(call.simpleTranscript).toHaveLength(2);
-    expect(call.summary).toContain("Devis");
+    // simple_transcript is a string in v0.4.0
+    expect(typeof call.simpleTranscript).toBe("string");
+    expect(call.simpleTranscript).toContain("Alice Example");
+    // summary is markdown
+    expect(call.summary).toContain("Daily Demo");
+    // participatingUsers replaces participants
+    expect(call.participatingUsers.length).toBeGreaterThan(0);
+    expect(call.participatingUsers[0]?.name).toBe("Alice Example");
   });
 
   it("throws LeexiApiError on 404", async () => {
