@@ -1,0 +1,9 @@
+{
+  "name": "leexi-mcp",
+  "description": "Read Leexi calls and transcripts from Claude. Built for post-call automation routines.",
+  "version": "0.2.0",
+  "author": {
+    "name": "DonkeyCode",
+    "email": "hello@donkeycode.com"
+  }
+}

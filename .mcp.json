@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "leexi": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/dist/index.js"],
+      "env": {
+        "LEEXI_API_KEY": "${LEEXI_API_KEY}",
+        "LEEXI_API_BASE_URL": "https://public-api.leexi.ai/v1",
+        "LEEXI_STATE_FILE": "${CLAUDE_PLUGIN_ROOT}/state/processed-calls.json"
+      }
+    }
+  }
+}
