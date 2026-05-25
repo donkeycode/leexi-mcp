@@ -4,7 +4,13 @@
 
 import { LeexiApiError } from "../errors.js";
 import { callDetailUrl, callsListUrl } from "./endpoints.js";
-import { type CallDetail, CallDetailSchema, type CallsList, CallsListSchema } from "./types.js";
+import {
+  type CallDetail,
+  CallDetailResponseSchema,
+  type CallSummary,
+  CallsListResponseSchema,
+  type Pagination,
+} from "./types.js";
 
 interface ClientOptions {
   /** The public key identifier shown in Leexi → Settings → API Keys. */
@@ -24,6 +30,11 @@ interface ListParams {
   page?: number;
 }
 
+export interface CallsList {
+  calls: CallSummary[];
+  pagination: Pagination;
+}
+
 export class LeexiClient {
   private readonly apiKeyId: string;
   private readonly apiKey: string;
@@ -40,18 +51,23 @@ export class LeexiClient {
     this.retryDelayMs = opts.retryDelayMs ?? 500;
   }
 
-  /** Returns a paginated list of calls, optionally filtered by date. */
+  /** Returns a paginated list of calls with real pagination shape. */
   async listCalls(params: ListParams): Promise<CallsList> {
     const url = callsListUrl(this.baseUrl, params);
     const json = await this.fetchJson(url);
-    return CallsListSchema.parse(json);
+    const parsed = CallsListResponseSchema.parse(json);
+    return { calls: parsed.data, pagination: parsed.pagination };
   }
 
-  /** Returns full detail for a single call by UUID. */
+  /**
+   * Returns full detail for a single call by UUID.
+   * Unwraps the `{ data: CallDetail }` wrapper — callers receive the call directly.
+   */
   async getCall(uuid: string): Promise<CallDetail> {
     const url = callDetailUrl(this.baseUrl, uuid);
     const json = await this.fetchJson(url);
-    return CallDetailSchema.parse(json);
+    const parsed = CallDetailResponseSchema.parse(json);
+    return parsed.data;
   }
 
   /**
@@ -70,7 +86,7 @@ export class LeexiClient {
             // Leexi public API uses HTTP Basic Auth: base64(KEY_ID:KEY_SECRET)
             authorization: `Basic ${Buffer.from(`${this.apiKeyId}:${this.apiKey}`).toString("base64")}`,
             accept: "application/json",
-            "user-agent": "leexi-mcp/0.3.0",
+            "user-agent": "leexi-mcp/0.4.0",
           },
         });
 
