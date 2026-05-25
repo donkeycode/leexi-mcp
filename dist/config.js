@@ -2,6 +2,7 @@
 import { z } from "zod";
 import { ConfigError } from "./errors.js";
 const ConfigSchema = z.object({
+    apiKeyId: z.string().min(1, "LEEXI_API_KEY_ID must be set"),
     apiKey: z.string().min(1, "LEEXI_API_KEY must be set"),
     baseUrl: z.string().url().default("https://public-api.leexi.ai/v1"),
     stateFile: z.string().min(1, "LEEXI_STATE_FILE must be set"),
@@ -9,6 +10,7 @@ const ConfigSchema = z.object({
 });
 export function loadConfig() {
     const raw = {
+        apiKeyId: process.env.LEEXI_API_KEY_ID,
         apiKey: process.env.LEEXI_API_KEY,
         baseUrl: process.env.LEEXI_API_BASE_URL,
         stateFile: process.env.LEEXI_STATE_FILE,
@@ -16,6 +18,7 @@ export function loadConfig() {
     };
     // Map Zod field names back to their env var names for clear error messages
     const fieldToEnvVar = {
+        apiKeyId: "LEEXI_API_KEY_ID",
         apiKey: "LEEXI_API_KEY",
         baseUrl: "LEEXI_API_BASE_URL",
         stateFile: "LEEXI_STATE_FILE",

@@ -1,15 +1,17 @@
 // LeexiClient: fetch-based HTTP client for the Leexi public API.
 // Uses the global fetch() (Node 22+, backed by undici) so MSW can intercept in tests.
-// Features: Bearer auth, Zod response parsing, retry on 429/5xx.
+// Features: HTTP Basic Auth (key_id + secret), Zod response parsing, retry on 429/5xx.
 import { LeexiApiError } from "../errors.js";
 import { callDetailUrl, callsListUrl } from "./endpoints.js";
 import { CallDetailSchema, CallsListSchema } from "./types.js";
 export class LeexiClient {
+    apiKeyId;
     apiKey;
     baseUrl;
     maxRetries;
     retryDelayMs;
     constructor(opts) {
+        this.apiKeyId = opts.apiKeyId;
         this.apiKey = opts.apiKey;
         // Strip trailing slash to keep URL building consistent.
         this.baseUrl = opts.baseUrl.replace(/\/$/, "");
@@ -40,9 +42,10 @@ export class LeexiClient {
                 const res = await fetch(url, {
                     method: "GET",
                     headers: {
-                        authorization: `Bearer ${this.apiKey}`,
+                        // Leexi public API uses HTTP Basic Auth: base64(KEY_ID:KEY_SECRET)
+                        authorization: `Basic ${Buffer.from(`${this.apiKeyId}:${this.apiKey}`).toString("base64")}`,
                         accept: "application/json",
-                        "user-agent": "leexi-mcp/0.1.0",
+                        "user-agent": "leexi-mcp/0.3.0",
                     },
                 });
                 // Determine if we should retry (429 rate-limit or 5xx server error).

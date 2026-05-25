@@ -1,15 +1,18 @@
 import { z } from "zod";
 declare const ConfigSchema: z.ZodObject<{
+    apiKeyId: z.ZodString;
     apiKey: z.ZodString;
     baseUrl: z.ZodDefault<z.ZodString>;
     stateFile: z.ZodString;
     rateLimitPerMinute: z.ZodDefault<z.ZodNumber>;
 }, "strip", z.ZodTypeAny, {
+    apiKeyId: string;
     apiKey: string;
     baseUrl: string;
     stateFile: string;
     rateLimitPerMinute: number;
 }, {
+    apiKeyId: string;
     apiKey: string;
     stateFile: string;
     baseUrl?: string | undefined;

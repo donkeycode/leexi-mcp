@@ -1,5 +1,8 @@
 import { type CallDetail, type CallsList } from "./types.js";
 interface ClientOptions {
+    /** The public key identifier shown in Leexi → Settings → API Keys. */
+    apiKeyId: string;
+    /** The secret half of the Leexi key pair (shown once at creation). */
     apiKey: string;
     baseUrl: string;
     /** Max number of retries for 429/5xx responses (default: 2). */
@@ -13,6 +16,7 @@ interface ListParams {
     page?: number;
 }
 export declare class LeexiClient {
+    private readonly apiKeyId;
     private readonly apiKey;
     private readonly baseUrl;
     private readonly maxRetries;
