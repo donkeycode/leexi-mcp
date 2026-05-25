@@ -10,6 +10,21 @@ import { createGetCallTool } from "./tools/get-call.js";
 import { createListCallsTool } from "./tools/list-calls.js";
 import { createMarkProcessedTool } from "./tools/mark-processed.js";
 // ---------------------------------------------------------------------------
+// toMcpInputSchema — convert a Zod schema to JSON Schema for an MCP tool's
+// inputSchema field. Targets draft-7 (NOT openApi3, which uses `nullable`)
+// and strips the `$schema` declaration so the Claude API (which validates
+// against draft 2020-12) accepts the result without complaining about a
+// mismatched draft identifier.
+// ---------------------------------------------------------------------------
+function toMcpInputSchema(zodSchema) {
+    const raw = zodToJsonSchema(zodSchema, {
+        target: "jsonSchema7",
+        $refStrategy: "none",
+    });
+    const { $schema: _ignored, ...rest } = raw;
+    return rest;
+}
+// ---------------------------------------------------------------------------
 // buildServer — creates the MCP Server and registers all request handlers.
 // Does NOT connect to any transport; call server.connect(transport) yourself.
 // ---------------------------------------------------------------------------
@@ -33,9 +48,7 @@ export function buildServer(config) {
         tools: tools.map((t) => ({
             name: t.name,
             description: t.description,
-            inputSchema: zodToJsonSchema(t.inputSchema, {
-                target: "openApi3",
-            }),
+            inputSchema: toMcpInputSchema(t.inputSchema),
         })),
     }));
     // Dispatch a tool call: validate args with the tool's Zod schema, run handler.

@@ -4,6 +4,11 @@ All notable changes to `@donkeycode/leexi-mcp` will be documented here. Format i
 
 ## [Unreleased]
 
+## [0.4.3] — 2026-05-25
+
+### Fixed
+- **MCP tool schemas rejected by Claude API** (HTTP 400 `tools.N.custom.input_schema: JSON schema is invalid. It must match JSON Schema draft 2020-12`). Caused by `zodToJsonSchema(schema, { target: "openApi3" })` emitting OpenAPI-3-isms (`nullable: true` instead of unions). Switched to `target: "jsonSchema7"` (forward-compatible with 2020-12) and stripped the `$schema: "draft-07"` declaration that confused the Claude validator.
+
 ## [0.4.2] — 2026-05-25
 
 ### Fixed

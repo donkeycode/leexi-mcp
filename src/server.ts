@@ -28,6 +28,22 @@ interface AnyTool {
 }
 
 // ---------------------------------------------------------------------------
+// toMcpInputSchema — convert a Zod schema to JSON Schema for an MCP tool's
+// inputSchema field. Targets draft-7 (NOT openApi3, which uses `nullable`)
+// and strips the `$schema` declaration so the Claude API (which validates
+// against draft 2020-12) accepts the result without complaining about a
+// mismatched draft identifier.
+// ---------------------------------------------------------------------------
+function toMcpInputSchema(zodSchema: AnyTool["inputSchema"]): Record<string, unknown> {
+  const raw = zodToJsonSchema(zodSchema as Parameters<typeof zodToJsonSchema>[0], {
+    target: "jsonSchema7",
+    $refStrategy: "none",
+  }) as Record<string, unknown>;
+  const { $schema: _ignored, ...rest } = raw;
+  return rest;
+}
+
+// ---------------------------------------------------------------------------
 // BuildServer result — returned without connecting to any transport.
 // Exported so tests can wire request handlers without touching stdio.
 // ---------------------------------------------------------------------------
@@ -67,9 +83,7 @@ export function buildServer(config: Config): BuildServerResult {
     tools: tools.map((t) => ({
       name: t.name,
       description: t.description,
-      inputSchema: zodToJsonSchema(t.inputSchema as Parameters<typeof zodToJsonSchema>[0], {
-        target: "openApi3",
-      }) as Record<string, unknown>,
+      inputSchema: toMcpInputSchema(t.inputSchema),
     })),
   }));
 

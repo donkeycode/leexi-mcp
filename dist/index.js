@@ -19895,6 +19895,14 @@ function createMarkProcessedTool(store) {
 }
 
 // src/server.ts
+function toMcpInputSchema(zodSchema) {
+  const raw = zodToJsonSchema(zodSchema, {
+    target: "jsonSchema7",
+    $refStrategy: "none"
+  });
+  const { $schema: _ignored, ...rest } = raw;
+  return rest;
+}
 function buildServer(config2) {
   const client = new LeexiClient({
     apiKeyId: config2.apiKeyId,
@@ -19915,9 +19923,7 @@ function buildServer(config2) {
     tools: tools.map((t) => ({
       name: t.name,
       description: t.description,
-      inputSchema: zodToJsonSchema(t.inputSchema, {
-        target: "openApi3"
-      })
+      inputSchema: toMcpInputSchema(t.inputSchema)
     }))
   }));
   server.setRequestHandler(CallToolRequestSchema, async (req) => {
