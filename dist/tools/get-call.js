@@ -14,15 +14,21 @@ export const GetCallInputSchema = z.object({
 export function createGetCallTool(client) {
     return {
         name: "leexi_get_call",
-        description: "Fetch a single Leexi call by UUID, including the full transcription. Set include_transcript=false to omit transcripts (keeps summary + topics).",
+        description: "Fetch a single Leexi call by UUID. Returns full call detail: title, performed_at, duration (float seconds), locale, summary (markdown text), simple_transcript (full text string with inline '(HH:MM:SS - HH:MM:SS)' timestamps — read directly), chapters (AI-generated chapter summaries), tasks (Leexi-extracted action items), speakers, participating_users, call_topics, and the word-level transcript array. Set include_transcript=false to get a lite payload (metadata only): simple_transcript becomes '', transcript/chapters/call_topics are emptied — useful when only the summary and tasks matter.",
         inputSchema: GetCallInputSchema,
         handler: async (rawInput) => {
             // Parse to apply Zod defaults before using the values.
             const input = GetCallInputSchema.parse(rawInput);
             const call = await client.getCall(input.uuid);
             if (!input.include_transcript) {
-                // Strip transcript arrays while preserving all other fields.
-                return { ...call, simpleTranscript: [], transcript: [] };
+                // Strip transcript data while preserving all other metadata fields.
+                return {
+                    ...call,
+                    simpleTranscript: "",
+                    transcript: [],
+                    chapters: [],
+                    callTopics: [],
+                };
             }
             return call;
         },

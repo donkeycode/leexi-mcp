@@ -16,7 +16,7 @@ export const ListCallsInputSchema = z.object({
 export function createListCallsTool(client, store) {
     return {
         name: "leexi_list_calls",
-        description: "List Leexi calls. Use only_unprocessed=true to skip calls already marked processed by this MCP.",
+        description: "List Leexi calls. Returns call metadata including title, performed_at, duration (float seconds), locale, summary (markdown), chapters, tasks (Leexi-extracted action items), and speakers. Use only_unprocessed=true to skip calls already marked processed by this MCP. Pagination uses { page, items, count }.",
         inputSchema: ListCallsInputSchema,
         handler: async (rawInput) => {
             // Parse to apply Zod defaults before using the values.
@@ -28,7 +28,7 @@ export function createListCallsTool(client, store) {
                 ...(input.page !== undefined ? { page: input.page } : {}),
             };
             const list = await client.listCalls(listParams);
-            let calls = list.data;
+            let calls = list.calls;
             if (input.only_unprocessed) {
                 const filtered = [];
                 for (const call of calls) {
@@ -39,9 +39,7 @@ export function createListCallsTool(client, store) {
             }
             return {
                 calls,
-                page: list.meta.page,
-                perPage: list.meta.per_page,
-                total: list.meta.total,
+                pagination: list.pagination,
             };
         },
     };

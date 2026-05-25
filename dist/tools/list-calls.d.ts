@@ -1,6 +1,6 @@
 import { z } from "zod";
 import type { LeexiClient } from "../leexi/client.js";
-import type { CallSummary } from "../leexi/types.js";
+import type { CallSummary, Pagination } from "../leexi/types.js";
 import type { ProcessedStore } from "../store/processed-store.js";
 export declare const ListCallsInputSchema: z.ZodObject<{
     since: z.ZodOptional<z.ZodString>;
@@ -22,9 +22,7 @@ export type ListCallsInput = z.input<typeof ListCallsInputSchema>;
 type ParsedInput = z.infer<typeof ListCallsInputSchema>;
 export interface ListCallsResult {
     calls: CallSummary[];
-    page: number;
-    perPage: number;
-    total: number;
+    pagination: Pagination;
 }
 export interface ToolDefinition<I, O, P = ParsedInput> {
     name: string;

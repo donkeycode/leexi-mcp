@@ -1,4 +1,4 @@
-import { type CallDetail, type CallsList } from "./types.js";
+import { type CallDetail, type CallSummary, type Pagination } from "./types.js";
 interface ClientOptions {
     /** The public key identifier shown in Leexi → Settings → API Keys. */
     apiKeyId: string;
@@ -15,6 +15,10 @@ interface ListParams {
     limit?: number;
     page?: number;
 }
+export interface CallsList {
+    calls: CallSummary[];
+    pagination: Pagination;
+}
 export declare class LeexiClient {
     private readonly apiKeyId;
     private readonly apiKey;
@@ -22,9 +26,12 @@ export declare class LeexiClient {
     private readonly maxRetries;
     private readonly retryDelayMs;
     constructor(opts: ClientOptions);
-    /** Returns a paginated list of calls, optionally filtered by date. */
+    /** Returns a paginated list of calls with real pagination shape. */
     listCalls(params: ListParams): Promise<CallsList>;
-    /** Returns full detail for a single call by UUID. */
+    /**
+     * Returns full detail for a single call by UUID.
+     * Unwraps the `{ data: CallDetail }` wrapper — callers receive the call directly.
+     */
     getCall(uuid: string): Promise<CallDetail>;
     /**
      * Executes a GET request with retry logic.

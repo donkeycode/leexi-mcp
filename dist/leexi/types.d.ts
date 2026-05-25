@@ -1,486 +1,3579 @@
 import { z } from "zod";
-export declare const ParticipantSchema: z.ZodObject<{
+/** A Leexi internal user (owner or participating user). */
+export declare const UserRefSchema: z.ZodObject<{
+    uuid: z.ZodString;
     name: z.ZodString;
-    email: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-    role: z.ZodDefault<z.ZodEnum<["host", "guest", "unknown"]>>;
-}, "strip", z.ZodTypeAny, {
+    email: z.ZodString;
+    active: z.ZodBoolean;
+}, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+    uuid: z.ZodString;
+    name: z.ZodString;
+    email: z.ZodString;
+    active: z.ZodBoolean;
+}, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+    uuid: z.ZodString;
+    name: z.ZodString;
+    email: z.ZodString;
+    active: z.ZodBoolean;
+}, z.ZodTypeAny, "passthrough">>;
+export type UserRef = z.infer<typeof UserRefSchema>;
+/** A speaker on the call (external or internal). */
+export declare const SpeakerSchema: z.ZodEffects<z.ZodObject<{
+    uuid: z.ZodString;
+    index: z.ZodNumber;
+    duration: z.ZodNumber;
+    longest_monologue: z.ZodNumber;
+    name: z.ZodString;
+    is_user: z.ZodBoolean;
+    phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    email_address: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+}, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+    uuid: z.ZodString;
+    index: z.ZodNumber;
+    duration: z.ZodNumber;
+    longest_monologue: z.ZodNumber;
+    name: z.ZodString;
+    is_user: z.ZodBoolean;
+    phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    email_address: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+}, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+    uuid: z.ZodString;
+    index: z.ZodNumber;
+    duration: z.ZodNumber;
+    longest_monologue: z.ZodNumber;
+    name: z.ZodString;
+    is_user: z.ZodBoolean;
+    phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    email_address: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+}, z.ZodTypeAny, "passthrough">>, {
+    uuid: string;
+    index: number;
+    duration: number;
+    longestMonologue: number;
     name: string;
-    role: "host" | "guest" | "unknown";
-    email?: string | null | undefined;
-}, {
-    name: string;
-    email?: string | null | undefined;
-    role?: "host" | "guest" | "unknown" | undefined;
-}>;
-export declare const TranscriptParagraphSchema: z.ZodObject<{
-    speaker: z.ZodString;
-    start: z.ZodNumber;
-    end: z.ZodNumber;
+    isUser: boolean;
+    phoneNumber: string | null;
+    emailAddress: string | null;
+}, z.objectInputType<{
+    uuid: z.ZodString;
+    index: z.ZodNumber;
+    duration: z.ZodNumber;
+    longest_monologue: z.ZodNumber;
+    name: z.ZodString;
+    is_user: z.ZodBoolean;
+    phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    email_address: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+}, z.ZodTypeAny, "passthrough">>;
+export type Speaker = z.infer<typeof SpeakerSchema>;
+/** A chapter extracted by Leexi AI. */
+export declare const ChapterSchema: z.ZodEffects<z.ZodObject<{
+    uuid: z.ZodString;
+    index: z.ZodNumber;
+    title: z.ZodString;
     text: z.ZodString;
-}, "strip", z.ZodTypeAny, {
-    speaker: string;
-    start: number;
-    end: number;
-    text: string;
-}, {
-    speaker: string;
-    start: number;
-    end: number;
-    text: string;
-}>;
-export declare const TranscriptWordSchema: z.ZodObject<{
+    start_time: z.ZodNumber;
+}, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+    uuid: z.ZodString;
+    index: z.ZodNumber;
+    title: z.ZodString;
     text: z.ZodString;
-    start: z.ZodNumber;
-    end: z.ZodNumber;
-}, "strip", z.ZodTypeAny, {
-    start: number;
-    end: number;
+    start_time: z.ZodNumber;
+}, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+    uuid: z.ZodString;
+    index: z.ZodNumber;
+    title: z.ZodString;
+    text: z.ZodString;
+    start_time: z.ZodNumber;
+}, z.ZodTypeAny, "passthrough">>, {
+    uuid: string;
+    index: number;
+    title: string;
     text: string;
-}, {
-    start: number;
-    end: number;
-    text: string;
-}>;
-export declare const TranscriptUtteranceSchema: z.ZodObject<{
-    speaker: z.ZodString;
-    start: z.ZodNumber;
-    words: z.ZodArray<z.ZodObject<{
-        text: z.ZodString;
-        start: z.ZodNumber;
-        end: z.ZodNumber;
-    }, "strip", z.ZodTypeAny, {
-        start: number;
-        end: number;
-        text: string;
-    }, {
-        start: number;
-        end: number;
-        text: string;
-    }>, "many">;
+    startTime: number;
+}, z.objectInputType<{
+    uuid: z.ZodString;
+    index: z.ZodNumber;
+    title: z.ZodString;
+    text: z.ZodString;
+    start_time: z.ZodNumber;
+}, z.ZodTypeAny, "passthrough">>;
+export type Chapter = z.infer<typeof ChapterSchema>;
+/** A task (action item) extracted by Leexi AI. */
+export declare const TaskSchema: z.ZodEffects<z.ZodObject<{
+    uuid: z.ZodString;
+    active: z.ZodBoolean;
+    subject: z.ZodString;
+    description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    status: z.ZodString;
+    done: z.ZodBoolean;
+    created_at: z.ZodString;
+    updated_at: z.ZodString;
+}, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+    uuid: z.ZodString;
+    active: z.ZodBoolean;
+    subject: z.ZodString;
+    description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    status: z.ZodString;
+    done: z.ZodBoolean;
+    created_at: z.ZodString;
+    updated_at: z.ZodString;
+}, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+    uuid: z.ZodString;
+    active: z.ZodBoolean;
+    subject: z.ZodString;
+    description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    status: z.ZodString;
+    done: z.ZodBoolean;
+    created_at: z.ZodString;
+    updated_at: z.ZodString;
+}, z.ZodTypeAny, "passthrough">>, {
+    uuid: string;
+    active: boolean;
+    subject: string;
+    description: string | null;
+    status: string;
+    done: boolean;
+    createdAt: string;
+    updatedAt: string;
+}, z.objectInputType<{
+    uuid: z.ZodString;
+    active: z.ZodBoolean;
+    subject: z.ZodString;
+    description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    status: z.ZodString;
+    done: z.ZodBoolean;
+    created_at: z.ZodString;
+    updated_at: z.ZodString;
+}, z.ZodTypeAny, "passthrough">>;
+export type Task = z.infer<typeof TaskSchema>;
+/** A conversation type label (e.g. sales_visio_demo). */
+export declare const ConversationTypeSchema: z.ZodObject<{
+    uuid: z.ZodString;
+    slug: z.ZodString;
+    active: z.ZodBoolean;
+}, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+    uuid: z.ZodString;
+    slug: z.ZodString;
+    active: z.ZodBoolean;
+}, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+    uuid: z.ZodString;
+    slug: z.ZodString;
+    active: z.ZodBoolean;
+}, z.ZodTypeAny, "passthrough">>;
+export type ConversationType = z.infer<typeof ConversationTypeSchema>;
+/** Meeting event metadata (Google Meet / Teams / etc.). */
+export declare const MeetingEventSchema: z.ZodEffects<z.ZodObject<{
+    uuid: z.ZodString;
+    title: z.ZodString;
+    meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    internal: z.ZodBoolean;
+    direction: z.ZodString;
+    start_time: z.ZodString;
+    end_time: z.ZodString;
+}, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+    uuid: z.ZodString;
+    title: z.ZodString;
+    meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    internal: z.ZodBoolean;
+    direction: z.ZodString;
+    start_time: z.ZodString;
+    end_time: z.ZodString;
+}, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+    uuid: z.ZodString;
+    title: z.ZodString;
+    meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    internal: z.ZodBoolean;
+    direction: z.ZodString;
+    start_time: z.ZodString;
+    end_time: z.ZodString;
+}, z.ZodTypeAny, "passthrough">>, {
+    uuid: string;
+    title: string;
+    meetingUrl: string | null;
+    meetingProvider: string | null;
+    internal: boolean;
+    direction: string;
+    startTime: string;
+    endTime: string;
+}, z.objectInputType<{
+    uuid: z.ZodString;
+    title: z.ZodString;
+    meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    internal: z.ZodBoolean;
+    direction: z.ZodString;
+    start_time: z.ZodString;
+    end_time: z.ZodString;
+}, z.ZodTypeAny, "passthrough">>;
+export type MeetingEvent = z.infer<typeof MeetingEventSchema>;
+/** Prompt completion item (AI-generated text for a prompt template). */
+export declare const PromptSchema: z.ZodObject<{
+    uuid: z.ZodString;
+    title: z.ZodString;
+    category: z.ZodString;
+    completions: z.ZodArray<z.ZodString, "many">;
+}, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+    uuid: z.ZodString;
+    title: z.ZodString;
+    category: z.ZodString;
+    completions: z.ZodArray<z.ZodString, "many">;
+}, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+    uuid: z.ZodString;
+    title: z.ZodString;
+    category: z.ZodString;
+    completions: z.ZodArray<z.ZodString, "many">;
+}, z.ZodTypeAny, "passthrough">>;
+export type Prompt = z.infer<typeof PromptSchema>;
+/** A call topic (keyphrase + semantic label). */
+export declare const CallTopicSchema: z.ZodEffects<z.ZodObject<{
+    uuid: z.ZodString;
+    start_time: z.ZodNumber;
+    end_time: z.ZodNumber;
+    keyphrase: z.ZodString;
+    topic_name: z.ZodString;
+}, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+    uuid: z.ZodString;
+    start_time: z.ZodNumber;
+    end_time: z.ZodNumber;
+    keyphrase: z.ZodString;
+    topic_name: z.ZodString;
+}, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+    uuid: z.ZodString;
+    start_time: z.ZodNumber;
+    end_time: z.ZodNumber;
+    keyphrase: z.ZodString;
+    topic_name: z.ZodString;
+}, z.ZodTypeAny, "passthrough">>, {
+    uuid: string;
+    startTime: number;
+    endTime: number;
+    keyphrase: string;
+    topicName: string;
+}, z.objectInputType<{
+    uuid: z.ZodString;
+    start_time: z.ZodNumber;
+    end_time: z.ZodNumber;
+    keyphrase: z.ZodString;
+    topic_name: z.ZodString;
+}, z.ZodTypeAny, "passthrough">>;
+export type CallTopic = z.infer<typeof CallTopicSchema>;
+/** A word-level transcript item (word + timing). */
+export declare const TranscriptItemSchema: z.ZodEffects<z.ZodObject<{
+    start_time: z.ZodNumber;
+    end_time: z.ZodNumber;
+    content: z.ZodString;
+}, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+    start_time: z.ZodNumber;
+    end_time: z.ZodNumber;
+    content: z.ZodString;
+}, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+    start_time: z.ZodNumber;
+    end_time: z.ZodNumber;
+    content: z.ZodString;
+}, z.ZodTypeAny, "passthrough">>, {
+    startTime: number;
+    endTime: number;
+    content: string;
+}, z.objectInputType<{
+    start_time: z.ZodNumber;
+    end_time: z.ZodNumber;
+    content: z.ZodString;
+}, z.ZodTypeAny, "passthrough">>;
+/** A speaker utterance in the word-level transcript. */
+export declare const TranscriptUtteranceSchema: z.ZodEffects<z.ZodObject<{
+    speaker_index: z.ZodNumber;
+    start_time: z.ZodNumber;
+    end_time: z.ZodNumber;
+    items: z.ZodArray<z.ZodEffects<z.ZodObject<{
+        start_time: z.ZodNumber;
+        end_time: z.ZodNumber;
+        content: z.ZodString;
+    }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+        start_time: z.ZodNumber;
+        end_time: z.ZodNumber;
+        content: z.ZodString;
+    }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+        start_time: z.ZodNumber;
+        end_time: z.ZodNumber;
+        content: z.ZodString;
+    }, z.ZodTypeAny, "passthrough">>, {
+        startTime: number;
+        endTime: number;
+        content: string;
+    }, z.objectInputType<{
+        start_time: z.ZodNumber;
+        end_time: z.ZodNumber;
+        content: z.ZodString;
+    }, z.ZodTypeAny, "passthrough">>, "many">;
 }, "strip", z.ZodTypeAny, {
-    speaker: string;
-    start: number;
-    words: {
-        start: number;
-        end: number;
-        text: string;
+    start_time: number;
+    end_time: number;
+    speaker_index: number;
+    items: {
+        startTime: number;
+        endTime: number;
+        content: string;
     }[];
 }, {
-    speaker: string;
-    start: number;
-    words: {
-        start: number;
-        end: number;
-        text: string;
+    start_time: number;
+    end_time: number;
+    speaker_index: number;
+    items: z.objectInputType<{
+        start_time: z.ZodNumber;
+        end_time: z.ZodNumber;
+        content: z.ZodString;
+    }, z.ZodTypeAny, "passthrough">[];
+}>, {
+    speakerIndex: number;
+    startTime: number;
+    endTime: number;
+    items: {
+        startTime: number;
+        endTime: number;
+        content: string;
     }[];
+}, {
+    start_time: number;
+    end_time: number;
+    speaker_index: number;
+    items: z.objectInputType<{
+        start_time: z.ZodNumber;
+        end_time: z.ZodNumber;
+        content: z.ZodString;
+    }, z.ZodTypeAny, "passthrough">[];
 }>;
+export type TranscriptUtterance = z.infer<typeof TranscriptUtteranceSchema>;
+export declare const PaginationSchema: z.ZodObject<{
+    page: z.ZodNumber;
+    items: z.ZodNumber;
+    count: z.ZodNumber;
+}, "strip", z.ZodTypeAny, {
+    page: number;
+    items: number;
+    count: number;
+}, {
+    page: number;
+    items: number;
+    count: number;
+}>;
+export type Pagination = z.infer<typeof PaginationSchema>;
 export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
     uuid: z.ZodString;
+    locale: z.ZodString;
+    duration: z.ZodNumber;
+    direction: z.ZodString;
+    is_video: z.ZodBoolean;
+    visible: z.ZodBoolean;
     title: z.ZodString;
+    description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     created_at: z.ZodString;
-    duration_seconds: z.ZodNumber;
-    language: z.ZodString;
-    status: z.ZodString;
-    recording_url: z.ZodString;
-    participants: z.ZodArray<z.ZodObject<{
-        name: z.ZodString;
-        email: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-        role: z.ZodDefault<z.ZodEnum<["host", "guest", "unknown"]>>;
-    }, "strip", z.ZodTypeAny, {
-        name: string;
-        role: "host" | "guest" | "unknown";
-        email?: string | null | undefined;
-    }, {
-        name: string;
-        email?: string | null | undefined;
-        role?: "host" | "guest" | "unknown" | undefined;
-    }>, "many">;
-}, "strip", z.ZodTypeAny, {
-    status: string;
-    uuid: string;
-    title: string;
-    created_at: string;
-    duration_seconds: number;
-    language: string;
-    recording_url: string;
-    participants: {
-        name: string;
-        role: "host" | "guest" | "unknown";
-        email?: string | null | undefined;
-    }[];
-}, {
-    status: string;
-    uuid: string;
-    title: string;
-    created_at: string;
-    duration_seconds: number;
-    language: string;
-    recording_url: string;
-    participants: {
-        name: string;
-        email?: string | null | undefined;
-        role?: "host" | "guest" | "unknown" | undefined;
-    }[];
-}>, {
-    uuid: string;
-    title: string;
-    createdAt: string;
-    durationSeconds: number;
-    language: string;
-    status: string;
-    recordingUrl: string;
-    participants: {
-        name: string;
-        role: "host" | "guest" | "unknown";
-        email?: string | null | undefined;
-    }[];
-}, {
-    status: string;
-    uuid: string;
-    title: string;
-    created_at: string;
-    duration_seconds: number;
-    language: string;
-    recording_url: string;
-    participants: {
-        name: string;
-        email?: string | null | undefined;
-        role?: "host" | "guest" | "unknown" | undefined;
-    }[];
-}>;
-export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
-    uuid: z.ZodString;
-    title: z.ZodString;
-    created_at: z.ZodString;
-    started_at: z.ZodOptional<z.ZodString>;
-    ended_at: z.ZodOptional<z.ZodString>;
-    duration_seconds: z.ZodNumber;
-    language: z.ZodString;
-    status: z.ZodString;
-    recording_url: z.ZodString;
-    participants: z.ZodArray<z.ZodObject<{
-        name: z.ZodString;
-        email: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-        role: z.ZodDefault<z.ZodEnum<["host", "guest", "unknown"]>>;
-    }, "strip", z.ZodTypeAny, {
-        name: string;
-        role: "host" | "guest" | "unknown";
-        email?: string | null | undefined;
-    }, {
-        name: string;
-        email?: string | null | undefined;
-        role?: "host" | "guest" | "unknown" | undefined;
-    }>, "many">;
-    topics: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-    summary: z.ZodOptional<z.ZodString>;
-    simple_transcript: z.ZodDefault<z.ZodArray<z.ZodObject<{
-        speaker: z.ZodString;
-        start: z.ZodNumber;
-        end: z.ZodNumber;
-        text: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        speaker: string;
-        start: number;
-        end: number;
-        text: string;
-    }, {
-        speaker: string;
-        start: number;
-        end: number;
-        text: string;
-    }>, "many">>;
-    transcript: z.ZodDefault<z.ZodArray<z.ZodObject<{
-        speaker: z.ZodString;
-        start: z.ZodNumber;
-        words: z.ZodArray<z.ZodObject<{
-            text: z.ZodString;
-            start: z.ZodNumber;
-            end: z.ZodNumber;
-        }, "strip", z.ZodTypeAny, {
-            start: number;
-            end: number;
-            text: string;
-        }, {
-            start: number;
-            end: number;
-            text: string;
-        }>, "many">;
-    }, "strip", z.ZodTypeAny, {
-        speaker: string;
-        start: number;
-        words: {
-            start: number;
-            end: number;
-            text: string;
-        }[];
-    }, {
-        speaker: string;
-        start: number;
-        words: {
-            start: number;
-            end: number;
-            text: string;
-        }[];
-    }>, "many">>;
-}, "strip", z.ZodTypeAny, {
-    status: string;
-    uuid: string;
-    title: string;
-    created_at: string;
-    duration_seconds: number;
-    language: string;
-    recording_url: string;
-    participants: {
-        name: string;
-        role: "host" | "guest" | "unknown";
-        email?: string | null | undefined;
-    }[];
-    topics: string[];
-    simple_transcript: {
-        speaker: string;
-        start: number;
-        end: number;
-        text: string;
-    }[];
-    transcript: {
-        speaker: string;
-        start: number;
-        words: {
-            start: number;
-            end: number;
-            text: string;
-        }[];
-    }[];
-    started_at?: string | undefined;
-    ended_at?: string | undefined;
-    summary?: string | undefined;
-}, {
-    status: string;
-    uuid: string;
-    title: string;
-    created_at: string;
-    duration_seconds: number;
-    language: string;
-    recording_url: string;
-    participants: {
-        name: string;
-        email?: string | null | undefined;
-        role?: "host" | "guest" | "unknown" | undefined;
-    }[];
-    started_at?: string | undefined;
-    ended_at?: string | undefined;
-    topics?: string[] | undefined;
-    summary?: string | undefined;
-    simple_transcript?: {
-        speaker: string;
-        start: number;
-        end: number;
-        text: string;
-    }[] | undefined;
-    transcript?: {
-        speaker: string;
-        start: number;
-        words: {
-            start: number;
-            end: number;
-            text: string;
-        }[];
-    }[] | undefined;
-}>, {
-    uuid: string;
-    title: string;
-    createdAt: string;
-    startedAt: string | undefined;
-    endedAt: string | undefined;
-    durationSeconds: number;
-    language: string;
-    status: string;
-    recordingUrl: string;
-    participants: {
-        name: string;
-        role: "host" | "guest" | "unknown";
-        email?: string | null | undefined;
-    }[];
-    topics: string[];
-    summary: string | undefined;
-    simpleTranscript: {
-        speaker: string;
-        start: number;
-        end: number;
-        text: string;
-    }[];
-    transcript: {
-        speaker: string;
-        start: number;
-        words: {
-            start: number;
-            end: number;
-            text: string;
-        }[];
-    }[];
-}, {
-    status: string;
-    uuid: string;
-    title: string;
-    created_at: string;
-    duration_seconds: number;
-    language: string;
-    recording_url: string;
-    participants: {
-        name: string;
-        email?: string | null | undefined;
-        role?: "host" | "guest" | "unknown" | undefined;
-    }[];
-    started_at?: string | undefined;
-    ended_at?: string | undefined;
-    topics?: string[] | undefined;
-    summary?: string | undefined;
-    simple_transcript?: {
-        speaker: string;
-        start: number;
-        end: number;
-        text: string;
-    }[] | undefined;
-    transcript?: {
-        speaker: string;
-        start: number;
-        words: {
-            start: number;
-            end: number;
-            text: string;
-        }[];
-    }[] | undefined;
-}>;
-export declare const CallsListSchema: z.ZodObject<{
-    data: z.ZodArray<z.ZodEffects<z.ZodObject<{
+    updated_at: z.ZodString;
+    performed_at: z.ZodString;
+    leexi_url: z.ZodString;
+    video_archived_at: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    audio_archived_at: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    transcript_archived_at: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    completions_archived_at: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    source: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    source_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    recording_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    transcript_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    summary: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    conversation_type: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        uuid: z.ZodString;
+        slug: z.ZodString;
+        active: z.ZodBoolean;
+    }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+        uuid: z.ZodString;
+        slug: z.ZodString;
+        active: z.ZodBoolean;
+    }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+        uuid: z.ZodString;
+        slug: z.ZodString;
+        active: z.ZodBoolean;
+    }, z.ZodTypeAny, "passthrough">>>>;
+    deal: z.ZodOptional<z.ZodNullable<z.ZodUnknown>>;
+    meeting_event: z.ZodOptional<z.ZodNullable<z.ZodEffects<z.ZodObject<{
         uuid: z.ZodString;
         title: z.ZodString;
-        created_at: z.ZodString;
-        duration_seconds: z.ZodNumber;
-        language: z.ZodString;
-        status: z.ZodString;
-        recording_url: z.ZodString;
-        participants: z.ZodArray<z.ZodObject<{
-            name: z.ZodString;
-            email: z.ZodOptional<z.ZodNullable<z.ZodString>>;
-            role: z.ZodDefault<z.ZodEnum<["host", "guest", "unknown"]>>;
-        }, "strip", z.ZodTypeAny, {
-            name: string;
-            role: "host" | "guest" | "unknown";
-            email?: string | null | undefined;
-        }, {
-            name: string;
-            email?: string | null | undefined;
-            role?: "host" | "guest" | "unknown" | undefined;
-        }>, "many">;
-    }, "strip", z.ZodTypeAny, {
-        status: string;
+        meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        internal: z.ZodBoolean;
+        direction: z.ZodString;
+        start_time: z.ZodString;
+        end_time: z.ZodString;
+    }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+        uuid: z.ZodString;
+        title: z.ZodString;
+        meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        internal: z.ZodBoolean;
+        direction: z.ZodString;
+        start_time: z.ZodString;
+        end_time: z.ZodString;
+    }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+        uuid: z.ZodString;
+        title: z.ZodString;
+        meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        internal: z.ZodBoolean;
+        direction: z.ZodString;
+        start_time: z.ZodString;
+        end_time: z.ZodString;
+    }, z.ZodTypeAny, "passthrough">>, {
         uuid: string;
         title: string;
-        created_at: string;
-        duration_seconds: number;
-        language: string;
-        recording_url: string;
-        participants: {
-            name: string;
-            role: "host" | "guest" | "unknown";
-            email?: string | null | undefined;
+        meetingUrl: string | null;
+        meetingProvider: string | null;
+        internal: boolean;
+        direction: string;
+        startTime: string;
+        endTime: string;
+    }, z.objectInputType<{
+        uuid: z.ZodString;
+        title: z.ZodString;
+        meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        internal: z.ZodBoolean;
+        direction: z.ZodString;
+        start_time: z.ZodString;
+        end_time: z.ZodString;
+    }, z.ZodTypeAny, "passthrough">>>>;
+    feedbacks: z.ZodOptional<z.ZodArray<z.ZodUnknown, "many">>;
+    owner: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        uuid: z.ZodString;
+        name: z.ZodString;
+        email: z.ZodString;
+        active: z.ZodBoolean;
+    }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+        uuid: z.ZodString;
+        name: z.ZodString;
+        email: z.ZodString;
+        active: z.ZodBoolean;
+    }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+        uuid: z.ZodString;
+        name: z.ZodString;
+        email: z.ZodString;
+        active: z.ZodBoolean;
+    }, z.ZodTypeAny, "passthrough">>>>;
+    participating_users: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        uuid: z.ZodString;
+        name: z.ZodString;
+        email: z.ZodString;
+        active: z.ZodBoolean;
+    }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+        uuid: z.ZodString;
+        name: z.ZodString;
+        email: z.ZodString;
+        active: z.ZodBoolean;
+    }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+        uuid: z.ZodString;
+        name: z.ZodString;
+        email: z.ZodString;
+        active: z.ZodBoolean;
+    }, z.ZodTypeAny, "passthrough">>, "many">>;
+    customer_phone_numbers: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+    customer_email_addresses: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+    speakers: z.ZodOptional<z.ZodArray<z.ZodEffects<z.ZodObject<{
+        uuid: z.ZodString;
+        index: z.ZodNumber;
+        duration: z.ZodNumber;
+        longest_monologue: z.ZodNumber;
+        name: z.ZodString;
+        is_user: z.ZodBoolean;
+        phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        email_address: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+        uuid: z.ZodString;
+        index: z.ZodNumber;
+        duration: z.ZodNumber;
+        longest_monologue: z.ZodNumber;
+        name: z.ZodString;
+        is_user: z.ZodBoolean;
+        phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        email_address: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+        uuid: z.ZodString;
+        index: z.ZodNumber;
+        duration: z.ZodNumber;
+        longest_monologue: z.ZodNumber;
+        name: z.ZodString;
+        is_user: z.ZodBoolean;
+        phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        email_address: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    }, z.ZodTypeAny, "passthrough">>, {
+        uuid: string;
+        index: number;
+        duration: number;
+        longestMonologue: number;
+        name: string;
+        isUser: boolean;
+        phoneNumber: string | null;
+        emailAddress: string | null;
+    }, z.objectInputType<{
+        uuid: z.ZodString;
+        index: z.ZodNumber;
+        duration: z.ZodNumber;
+        longest_monologue: z.ZodNumber;
+        name: z.ZodString;
+        is_user: z.ZodBoolean;
+        phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        email_address: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    }, z.ZodTypeAny, "passthrough">>, "many">>;
+    prompts: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        uuid: z.ZodString;
+        title: z.ZodString;
+        category: z.ZodString;
+        completions: z.ZodArray<z.ZodString, "many">;
+    }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+        uuid: z.ZodString;
+        title: z.ZodString;
+        category: z.ZodString;
+        completions: z.ZodArray<z.ZodString, "many">;
+    }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+        uuid: z.ZodString;
+        title: z.ZodString;
+        category: z.ZodString;
+        completions: z.ZodArray<z.ZodString, "many">;
+    }, z.ZodTypeAny, "passthrough">>, "many">>;
+    chapters: z.ZodOptional<z.ZodArray<z.ZodEffects<z.ZodObject<{
+        uuid: z.ZodString;
+        index: z.ZodNumber;
+        title: z.ZodString;
+        text: z.ZodString;
+        start_time: z.ZodNumber;
+    }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+        uuid: z.ZodString;
+        index: z.ZodNumber;
+        title: z.ZodString;
+        text: z.ZodString;
+        start_time: z.ZodNumber;
+    }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+        uuid: z.ZodString;
+        index: z.ZodNumber;
+        title: z.ZodString;
+        text: z.ZodString;
+        start_time: z.ZodNumber;
+    }, z.ZodTypeAny, "passthrough">>, {
+        uuid: string;
+        index: number;
+        title: string;
+        text: string;
+        startTime: number;
+    }, z.objectInputType<{
+        uuid: z.ZodString;
+        index: z.ZodNumber;
+        title: z.ZodString;
+        text: z.ZodString;
+        start_time: z.ZodNumber;
+    }, z.ZodTypeAny, "passthrough">>, "many">>;
+    scorecards: z.ZodOptional<z.ZodArray<z.ZodUnknown, "many">>;
+    tags: z.ZodOptional<z.ZodArray<z.ZodUnknown, "many">>;
+    tasks: z.ZodOptional<z.ZodArray<z.ZodEffects<z.ZodObject<{
+        uuid: z.ZodString;
+        active: z.ZodBoolean;
+        subject: z.ZodString;
+        description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        status: z.ZodString;
+        done: z.ZodBoolean;
+        created_at: z.ZodString;
+        updated_at: z.ZodString;
+    }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+        uuid: z.ZodString;
+        active: z.ZodBoolean;
+        subject: z.ZodString;
+        description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        status: z.ZodString;
+        done: z.ZodBoolean;
+        created_at: z.ZodString;
+        updated_at: z.ZodString;
+    }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+        uuid: z.ZodString;
+        active: z.ZodBoolean;
+        subject: z.ZodString;
+        description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        status: z.ZodString;
+        done: z.ZodBoolean;
+        created_at: z.ZodString;
+        updated_at: z.ZodString;
+    }, z.ZodTypeAny, "passthrough">>, {
+        uuid: string;
+        active: boolean;
+        subject: string;
+        description: string | null;
+        status: string;
+        done: boolean;
+        createdAt: string;
+        updatedAt: string;
+    }, z.objectInputType<{
+        uuid: z.ZodString;
+        active: z.ZodBoolean;
+        subject: z.ZodString;
+        description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        status: z.ZodString;
+        done: z.ZodBoolean;
+        created_at: z.ZodString;
+        updated_at: z.ZodString;
+    }, z.ZodTypeAny, "passthrough">>, "many">>;
+    simple_transcript: z.ZodOptional<z.ZodString>;
+}, "strip", z.ZodTypeAny, {
+    uuid: string;
+    duration: number;
+    title: string;
+    created_at: string;
+    updated_at: string;
+    direction: string;
+    locale: string;
+    is_video: boolean;
+    visible: boolean;
+    performed_at: string;
+    leexi_url: string;
+    description?: string | null | undefined;
+    video_archived_at?: string | null | undefined;
+    audio_archived_at?: string | null | undefined;
+    transcript_archived_at?: string | null | undefined;
+    completions_archived_at?: string | null | undefined;
+    source?: string | null | undefined;
+    source_id?: string | null | undefined;
+    recording_url?: string | null | undefined;
+    transcript_url?: string | null | undefined;
+    summary?: string | null | undefined;
+    conversation_type?: z.objectOutputType<{
+        uuid: z.ZodString;
+        slug: z.ZodString;
+        active: z.ZodBoolean;
+    }, z.ZodTypeAny, "passthrough"> | null | undefined;
+    deal?: unknown;
+    meeting_event?: {
+        uuid: string;
+        title: string;
+        meetingUrl: string | null;
+        meetingProvider: string | null;
+        internal: boolean;
+        direction: string;
+        startTime: string;
+        endTime: string;
+    } | null | undefined;
+    feedbacks?: unknown[] | undefined;
+    owner?: z.objectOutputType<{
+        uuid: z.ZodString;
+        name: z.ZodString;
+        email: z.ZodString;
+        active: z.ZodBoolean;
+    }, z.ZodTypeAny, "passthrough"> | null | undefined;
+    participating_users?: z.objectOutputType<{
+        uuid: z.ZodString;
+        name: z.ZodString;
+        email: z.ZodString;
+        active: z.ZodBoolean;
+    }, z.ZodTypeAny, "passthrough">[] | undefined;
+    customer_phone_numbers?: string[] | undefined;
+    customer_email_addresses?: string[] | undefined;
+    speakers?: {
+        uuid: string;
+        index: number;
+        duration: number;
+        longestMonologue: number;
+        name: string;
+        isUser: boolean;
+        phoneNumber: string | null;
+        emailAddress: string | null;
+    }[] | undefined;
+    prompts?: z.objectOutputType<{
+        uuid: z.ZodString;
+        title: z.ZodString;
+        category: z.ZodString;
+        completions: z.ZodArray<z.ZodString, "many">;
+    }, z.ZodTypeAny, "passthrough">[] | undefined;
+    chapters?: {
+        uuid: string;
+        index: number;
+        title: string;
+        text: string;
+        startTime: number;
+    }[] | undefined;
+    scorecards?: unknown[] | undefined;
+    tags?: unknown[] | undefined;
+    tasks?: {
+        uuid: string;
+        active: boolean;
+        subject: string;
+        description: string | null;
+        status: string;
+        done: boolean;
+        createdAt: string;
+        updatedAt: string;
+    }[] | undefined;
+    simple_transcript?: string | undefined;
+}, {
+    uuid: string;
+    duration: number;
+    title: string;
+    created_at: string;
+    updated_at: string;
+    direction: string;
+    locale: string;
+    is_video: boolean;
+    visible: boolean;
+    performed_at: string;
+    leexi_url: string;
+    description?: string | null | undefined;
+    video_archived_at?: string | null | undefined;
+    audio_archived_at?: string | null | undefined;
+    transcript_archived_at?: string | null | undefined;
+    completions_archived_at?: string | null | undefined;
+    source?: string | null | undefined;
+    source_id?: string | null | undefined;
+    recording_url?: string | null | undefined;
+    transcript_url?: string | null | undefined;
+    summary?: string | null | undefined;
+    conversation_type?: z.objectInputType<{
+        uuid: z.ZodString;
+        slug: z.ZodString;
+        active: z.ZodBoolean;
+    }, z.ZodTypeAny, "passthrough"> | null | undefined;
+    deal?: unknown;
+    meeting_event?: z.objectInputType<{
+        uuid: z.ZodString;
+        title: z.ZodString;
+        meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        internal: z.ZodBoolean;
+        direction: z.ZodString;
+        start_time: z.ZodString;
+        end_time: z.ZodString;
+    }, z.ZodTypeAny, "passthrough"> | null | undefined;
+    feedbacks?: unknown[] | undefined;
+    owner?: z.objectInputType<{
+        uuid: z.ZodString;
+        name: z.ZodString;
+        email: z.ZodString;
+        active: z.ZodBoolean;
+    }, z.ZodTypeAny, "passthrough"> | null | undefined;
+    participating_users?: z.objectInputType<{
+        uuid: z.ZodString;
+        name: z.ZodString;
+        email: z.ZodString;
+        active: z.ZodBoolean;
+    }, z.ZodTypeAny, "passthrough">[] | undefined;
+    customer_phone_numbers?: string[] | undefined;
+    customer_email_addresses?: string[] | undefined;
+    speakers?: z.objectInputType<{
+        uuid: z.ZodString;
+        index: z.ZodNumber;
+        duration: z.ZodNumber;
+        longest_monologue: z.ZodNumber;
+        name: z.ZodString;
+        is_user: z.ZodBoolean;
+        phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        email_address: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    }, z.ZodTypeAny, "passthrough">[] | undefined;
+    prompts?: z.objectInputType<{
+        uuid: z.ZodString;
+        title: z.ZodString;
+        category: z.ZodString;
+        completions: z.ZodArray<z.ZodString, "many">;
+    }, z.ZodTypeAny, "passthrough">[] | undefined;
+    chapters?: z.objectInputType<{
+        uuid: z.ZodString;
+        index: z.ZodNumber;
+        title: z.ZodString;
+        text: z.ZodString;
+        start_time: z.ZodNumber;
+    }, z.ZodTypeAny, "passthrough">[] | undefined;
+    scorecards?: unknown[] | undefined;
+    tags?: unknown[] | undefined;
+    tasks?: z.objectInputType<{
+        uuid: z.ZodString;
+        active: z.ZodBoolean;
+        subject: z.ZodString;
+        description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        status: z.ZodString;
+        done: z.ZodBoolean;
+        created_at: z.ZodString;
+        updated_at: z.ZodString;
+    }, z.ZodTypeAny, "passthrough">[] | undefined;
+    simple_transcript?: string | undefined;
+}>, {
+    uuid: string;
+    locale: string;
+    duration: number;
+    direction: string;
+    isVideo: boolean;
+    visible: boolean;
+    title: string;
+    description: string | null;
+    createdAt: string;
+    updatedAt: string;
+    performedAt: string;
+    leexiUrl: string;
+    videoArchivedAt: string | null;
+    audioArchivedAt: string | null;
+    transcriptArchivedAt: string | null;
+    completionsArchivedAt: string | null;
+    source: string | null;
+    sourceId: string | null;
+    recordingUrl: string | null;
+    transcriptUrl: string | null;
+    summary: string | null;
+    conversationType: z.objectOutputType<{
+        uuid: z.ZodString;
+        slug: z.ZodString;
+        active: z.ZodBoolean;
+    }, z.ZodTypeAny, "passthrough"> | null;
+    deal: {} | null;
+    meetingEvent: {
+        uuid: string;
+        title: string;
+        meetingUrl: string | null;
+        meetingProvider: string | null;
+        internal: boolean;
+        direction: string;
+        startTime: string;
+        endTime: string;
+    } | null;
+    feedbacks: unknown[];
+    owner: z.objectOutputType<{
+        uuid: z.ZodString;
+        name: z.ZodString;
+        email: z.ZodString;
+        active: z.ZodBoolean;
+    }, z.ZodTypeAny, "passthrough"> | null;
+    participatingUsers: z.objectOutputType<{
+        uuid: z.ZodString;
+        name: z.ZodString;
+        email: z.ZodString;
+        active: z.ZodBoolean;
+    }, z.ZodTypeAny, "passthrough">[];
+    customerPhoneNumbers: string[];
+    customerEmailAddresses: string[];
+    speakers: {
+        uuid: string;
+        index: number;
+        duration: number;
+        longestMonologue: number;
+        name: string;
+        isUser: boolean;
+        phoneNumber: string | null;
+        emailAddress: string | null;
+    }[];
+    prompts: z.objectOutputType<{
+        uuid: z.ZodString;
+        title: z.ZodString;
+        category: z.ZodString;
+        completions: z.ZodArray<z.ZodString, "many">;
+    }, z.ZodTypeAny, "passthrough">[];
+    chapters: {
+        uuid: string;
+        index: number;
+        title: string;
+        text: string;
+        startTime: number;
+    }[];
+    scorecards: unknown[];
+    tags: unknown[];
+    tasks: {
+        uuid: string;
+        active: boolean;
+        subject: string;
+        description: string | null;
+        status: string;
+        done: boolean;
+        createdAt: string;
+        updatedAt: string;
+    }[];
+    simpleTranscript: string;
+}, {
+    uuid: string;
+    duration: number;
+    title: string;
+    created_at: string;
+    updated_at: string;
+    direction: string;
+    locale: string;
+    is_video: boolean;
+    visible: boolean;
+    performed_at: string;
+    leexi_url: string;
+    description?: string | null | undefined;
+    video_archived_at?: string | null | undefined;
+    audio_archived_at?: string | null | undefined;
+    transcript_archived_at?: string | null | undefined;
+    completions_archived_at?: string | null | undefined;
+    source?: string | null | undefined;
+    source_id?: string | null | undefined;
+    recording_url?: string | null | undefined;
+    transcript_url?: string | null | undefined;
+    summary?: string | null | undefined;
+    conversation_type?: z.objectInputType<{
+        uuid: z.ZodString;
+        slug: z.ZodString;
+        active: z.ZodBoolean;
+    }, z.ZodTypeAny, "passthrough"> | null | undefined;
+    deal?: unknown;
+    meeting_event?: z.objectInputType<{
+        uuid: z.ZodString;
+        title: z.ZodString;
+        meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        internal: z.ZodBoolean;
+        direction: z.ZodString;
+        start_time: z.ZodString;
+        end_time: z.ZodString;
+    }, z.ZodTypeAny, "passthrough"> | null | undefined;
+    feedbacks?: unknown[] | undefined;
+    owner?: z.objectInputType<{
+        uuid: z.ZodString;
+        name: z.ZodString;
+        email: z.ZodString;
+        active: z.ZodBoolean;
+    }, z.ZodTypeAny, "passthrough"> | null | undefined;
+    participating_users?: z.objectInputType<{
+        uuid: z.ZodString;
+        name: z.ZodString;
+        email: z.ZodString;
+        active: z.ZodBoolean;
+    }, z.ZodTypeAny, "passthrough">[] | undefined;
+    customer_phone_numbers?: string[] | undefined;
+    customer_email_addresses?: string[] | undefined;
+    speakers?: z.objectInputType<{
+        uuid: z.ZodString;
+        index: z.ZodNumber;
+        duration: z.ZodNumber;
+        longest_monologue: z.ZodNumber;
+        name: z.ZodString;
+        is_user: z.ZodBoolean;
+        phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        email_address: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    }, z.ZodTypeAny, "passthrough">[] | undefined;
+    prompts?: z.objectInputType<{
+        uuid: z.ZodString;
+        title: z.ZodString;
+        category: z.ZodString;
+        completions: z.ZodArray<z.ZodString, "many">;
+    }, z.ZodTypeAny, "passthrough">[] | undefined;
+    chapters?: z.objectInputType<{
+        uuid: z.ZodString;
+        index: z.ZodNumber;
+        title: z.ZodString;
+        text: z.ZodString;
+        start_time: z.ZodNumber;
+    }, z.ZodTypeAny, "passthrough">[] | undefined;
+    scorecards?: unknown[] | undefined;
+    tags?: unknown[] | undefined;
+    tasks?: z.objectInputType<{
+        uuid: z.ZodString;
+        active: z.ZodBoolean;
+        subject: z.ZodString;
+        description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        status: z.ZodString;
+        done: z.ZodBoolean;
+        created_at: z.ZodString;
+        updated_at: z.ZodString;
+    }, z.ZodTypeAny, "passthrough">[] | undefined;
+    simple_transcript?: string | undefined;
+}>;
+export type CallSummary = z.infer<typeof CallSummarySchema>;
+export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
+    uuid: z.ZodString;
+    locale: z.ZodString;
+    duration: z.ZodNumber;
+    direction: z.ZodString;
+    is_video: z.ZodBoolean;
+    visible: z.ZodBoolean;
+    title: z.ZodString;
+    description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    created_at: z.ZodString;
+    updated_at: z.ZodString;
+    performed_at: z.ZodString;
+    leexi_url: z.ZodString;
+    video_archived_at: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    audio_archived_at: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    transcript_archived_at: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    completions_archived_at: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    source: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    source_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    recording_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    transcript_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    summary: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    conversation_type: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        uuid: z.ZodString;
+        slug: z.ZodString;
+        active: z.ZodBoolean;
+    }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+        uuid: z.ZodString;
+        slug: z.ZodString;
+        active: z.ZodBoolean;
+    }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+        uuid: z.ZodString;
+        slug: z.ZodString;
+        active: z.ZodBoolean;
+    }, z.ZodTypeAny, "passthrough">>>>;
+    deal: z.ZodOptional<z.ZodNullable<z.ZodUnknown>>;
+    meeting_event: z.ZodOptional<z.ZodNullable<z.ZodEffects<z.ZodObject<{
+        uuid: z.ZodString;
+        title: z.ZodString;
+        meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        internal: z.ZodBoolean;
+        direction: z.ZodString;
+        start_time: z.ZodString;
+        end_time: z.ZodString;
+    }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+        uuid: z.ZodString;
+        title: z.ZodString;
+        meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        internal: z.ZodBoolean;
+        direction: z.ZodString;
+        start_time: z.ZodString;
+        end_time: z.ZodString;
+    }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+        uuid: z.ZodString;
+        title: z.ZodString;
+        meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        internal: z.ZodBoolean;
+        direction: z.ZodString;
+        start_time: z.ZodString;
+        end_time: z.ZodString;
+    }, z.ZodTypeAny, "passthrough">>, {
+        uuid: string;
+        title: string;
+        meetingUrl: string | null;
+        meetingProvider: string | null;
+        internal: boolean;
+        direction: string;
+        startTime: string;
+        endTime: string;
+    }, z.objectInputType<{
+        uuid: z.ZodString;
+        title: z.ZodString;
+        meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        internal: z.ZodBoolean;
+        direction: z.ZodString;
+        start_time: z.ZodString;
+        end_time: z.ZodString;
+    }, z.ZodTypeAny, "passthrough">>>>;
+    feedbacks: z.ZodOptional<z.ZodArray<z.ZodUnknown, "many">>;
+    owner: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+        uuid: z.ZodString;
+        name: z.ZodString;
+        email: z.ZodString;
+        active: z.ZodBoolean;
+    }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+        uuid: z.ZodString;
+        name: z.ZodString;
+        email: z.ZodString;
+        active: z.ZodBoolean;
+    }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+        uuid: z.ZodString;
+        name: z.ZodString;
+        email: z.ZodString;
+        active: z.ZodBoolean;
+    }, z.ZodTypeAny, "passthrough">>>>;
+    participating_users: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        uuid: z.ZodString;
+        name: z.ZodString;
+        email: z.ZodString;
+        active: z.ZodBoolean;
+    }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+        uuid: z.ZodString;
+        name: z.ZodString;
+        email: z.ZodString;
+        active: z.ZodBoolean;
+    }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+        uuid: z.ZodString;
+        name: z.ZodString;
+        email: z.ZodString;
+        active: z.ZodBoolean;
+    }, z.ZodTypeAny, "passthrough">>, "many">>;
+    customer_phone_numbers: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+    customer_email_addresses: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+    speakers: z.ZodOptional<z.ZodArray<z.ZodEffects<z.ZodObject<{
+        uuid: z.ZodString;
+        index: z.ZodNumber;
+        duration: z.ZodNumber;
+        longest_monologue: z.ZodNumber;
+        name: z.ZodString;
+        is_user: z.ZodBoolean;
+        phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        email_address: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+        uuid: z.ZodString;
+        index: z.ZodNumber;
+        duration: z.ZodNumber;
+        longest_monologue: z.ZodNumber;
+        name: z.ZodString;
+        is_user: z.ZodBoolean;
+        phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        email_address: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+        uuid: z.ZodString;
+        index: z.ZodNumber;
+        duration: z.ZodNumber;
+        longest_monologue: z.ZodNumber;
+        name: z.ZodString;
+        is_user: z.ZodBoolean;
+        phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        email_address: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    }, z.ZodTypeAny, "passthrough">>, {
+        uuid: string;
+        index: number;
+        duration: number;
+        longestMonologue: number;
+        name: string;
+        isUser: boolean;
+        phoneNumber: string | null;
+        emailAddress: string | null;
+    }, z.objectInputType<{
+        uuid: z.ZodString;
+        index: z.ZodNumber;
+        duration: z.ZodNumber;
+        longest_monologue: z.ZodNumber;
+        name: z.ZodString;
+        is_user: z.ZodBoolean;
+        phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        email_address: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    }, z.ZodTypeAny, "passthrough">>, "many">>;
+    prompts: z.ZodOptional<z.ZodArray<z.ZodObject<{
+        uuid: z.ZodString;
+        title: z.ZodString;
+        category: z.ZodString;
+        completions: z.ZodArray<z.ZodString, "many">;
+    }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+        uuid: z.ZodString;
+        title: z.ZodString;
+        category: z.ZodString;
+        completions: z.ZodArray<z.ZodString, "many">;
+    }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+        uuid: z.ZodString;
+        title: z.ZodString;
+        category: z.ZodString;
+        completions: z.ZodArray<z.ZodString, "many">;
+    }, z.ZodTypeAny, "passthrough">>, "many">>;
+    chapters: z.ZodOptional<z.ZodArray<z.ZodEffects<z.ZodObject<{
+        uuid: z.ZodString;
+        index: z.ZodNumber;
+        title: z.ZodString;
+        text: z.ZodString;
+        start_time: z.ZodNumber;
+    }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+        uuid: z.ZodString;
+        index: z.ZodNumber;
+        title: z.ZodString;
+        text: z.ZodString;
+        start_time: z.ZodNumber;
+    }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+        uuid: z.ZodString;
+        index: z.ZodNumber;
+        title: z.ZodString;
+        text: z.ZodString;
+        start_time: z.ZodNumber;
+    }, z.ZodTypeAny, "passthrough">>, {
+        uuid: string;
+        index: number;
+        title: string;
+        text: string;
+        startTime: number;
+    }, z.objectInputType<{
+        uuid: z.ZodString;
+        index: z.ZodNumber;
+        title: z.ZodString;
+        text: z.ZodString;
+        start_time: z.ZodNumber;
+    }, z.ZodTypeAny, "passthrough">>, "many">>;
+    scorecards: z.ZodOptional<z.ZodArray<z.ZodUnknown, "many">>;
+    tags: z.ZodOptional<z.ZodArray<z.ZodUnknown, "many">>;
+    tasks: z.ZodOptional<z.ZodArray<z.ZodEffects<z.ZodObject<{
+        uuid: z.ZodString;
+        active: z.ZodBoolean;
+        subject: z.ZodString;
+        description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        status: z.ZodString;
+        done: z.ZodBoolean;
+        created_at: z.ZodString;
+        updated_at: z.ZodString;
+    }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+        uuid: z.ZodString;
+        active: z.ZodBoolean;
+        subject: z.ZodString;
+        description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        status: z.ZodString;
+        done: z.ZodBoolean;
+        created_at: z.ZodString;
+        updated_at: z.ZodString;
+    }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+        uuid: z.ZodString;
+        active: z.ZodBoolean;
+        subject: z.ZodString;
+        description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        status: z.ZodString;
+        done: z.ZodBoolean;
+        created_at: z.ZodString;
+        updated_at: z.ZodString;
+    }, z.ZodTypeAny, "passthrough">>, {
+        uuid: string;
+        active: boolean;
+        subject: string;
+        description: string | null;
+        status: string;
+        done: boolean;
+        createdAt: string;
+        updatedAt: string;
+    }, z.objectInputType<{
+        uuid: z.ZodString;
+        active: z.ZodBoolean;
+        subject: z.ZodString;
+        description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        status: z.ZodString;
+        done: z.ZodBoolean;
+        created_at: z.ZodString;
+        updated_at: z.ZodString;
+    }, z.ZodTypeAny, "passthrough">>, "many">>;
+    simple_transcript: z.ZodOptional<z.ZodString>;
+    call_topics: z.ZodOptional<z.ZodArray<z.ZodEffects<z.ZodObject<{
+        uuid: z.ZodString;
+        start_time: z.ZodNumber;
+        end_time: z.ZodNumber;
+        keyphrase: z.ZodString;
+        topic_name: z.ZodString;
+    }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+        uuid: z.ZodString;
+        start_time: z.ZodNumber;
+        end_time: z.ZodNumber;
+        keyphrase: z.ZodString;
+        topic_name: z.ZodString;
+    }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+        uuid: z.ZodString;
+        start_time: z.ZodNumber;
+        end_time: z.ZodNumber;
+        keyphrase: z.ZodString;
+        topic_name: z.ZodString;
+    }, z.ZodTypeAny, "passthrough">>, {
+        uuid: string;
+        startTime: number;
+        endTime: number;
+        keyphrase: string;
+        topicName: string;
+    }, z.objectInputType<{
+        uuid: z.ZodString;
+        start_time: z.ZodNumber;
+        end_time: z.ZodNumber;
+        keyphrase: z.ZodString;
+        topic_name: z.ZodString;
+    }, z.ZodTypeAny, "passthrough">>, "many">>;
+    transcript: z.ZodOptional<z.ZodArray<z.ZodEffects<z.ZodObject<{
+        speaker_index: z.ZodNumber;
+        start_time: z.ZodNumber;
+        end_time: z.ZodNumber;
+        items: z.ZodArray<z.ZodEffects<z.ZodObject<{
+            start_time: z.ZodNumber;
+            end_time: z.ZodNumber;
+            content: z.ZodString;
+        }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+            start_time: z.ZodNumber;
+            end_time: z.ZodNumber;
+            content: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+            start_time: z.ZodNumber;
+            end_time: z.ZodNumber;
+            content: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">>, {
+            startTime: number;
+            endTime: number;
+            content: string;
+        }, z.objectInputType<{
+            start_time: z.ZodNumber;
+            end_time: z.ZodNumber;
+            content: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">>, "many">;
+    }, "strip", z.ZodTypeAny, {
+        start_time: number;
+        end_time: number;
+        speaker_index: number;
+        items: {
+            startTime: number;
+            endTime: number;
+            content: string;
         }[];
     }, {
-        status: string;
+        start_time: number;
+        end_time: number;
+        speaker_index: number;
+        items: z.objectInputType<{
+            start_time: z.ZodNumber;
+            end_time: z.ZodNumber;
+            content: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">[];
+    }>, {
+        speakerIndex: number;
+        startTime: number;
+        endTime: number;
+        items: {
+            startTime: number;
+            endTime: number;
+            content: string;
+        }[];
+    }, {
+        start_time: number;
+        end_time: number;
+        speaker_index: number;
+        items: z.objectInputType<{
+            start_time: z.ZodNumber;
+            end_time: z.ZodNumber;
+            content: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">[];
+    }>, "many">>;
+}, "strip", z.ZodTypeAny, {
+    uuid: string;
+    duration: number;
+    title: string;
+    created_at: string;
+    updated_at: string;
+    direction: string;
+    locale: string;
+    is_video: boolean;
+    visible: boolean;
+    performed_at: string;
+    leexi_url: string;
+    description?: string | null | undefined;
+    video_archived_at?: string | null | undefined;
+    audio_archived_at?: string | null | undefined;
+    transcript_archived_at?: string | null | undefined;
+    completions_archived_at?: string | null | undefined;
+    source?: string | null | undefined;
+    source_id?: string | null | undefined;
+    recording_url?: string | null | undefined;
+    transcript_url?: string | null | undefined;
+    summary?: string | null | undefined;
+    conversation_type?: z.objectOutputType<{
+        uuid: z.ZodString;
+        slug: z.ZodString;
+        active: z.ZodBoolean;
+    }, z.ZodTypeAny, "passthrough"> | null | undefined;
+    deal?: unknown;
+    meeting_event?: {
         uuid: string;
         title: string;
-        created_at: string;
-        duration_seconds: number;
-        language: string;
-        recording_url: string;
-        participants: {
-            name: string;
-            email?: string | null | undefined;
-            role?: "host" | "guest" | "unknown" | undefined;
+        meetingUrl: string | null;
+        meetingProvider: string | null;
+        internal: boolean;
+        direction: string;
+        startTime: string;
+        endTime: string;
+    } | null | undefined;
+    feedbacks?: unknown[] | undefined;
+    owner?: z.objectOutputType<{
+        uuid: z.ZodString;
+        name: z.ZodString;
+        email: z.ZodString;
+        active: z.ZodBoolean;
+    }, z.ZodTypeAny, "passthrough"> | null | undefined;
+    participating_users?: z.objectOutputType<{
+        uuid: z.ZodString;
+        name: z.ZodString;
+        email: z.ZodString;
+        active: z.ZodBoolean;
+    }, z.ZodTypeAny, "passthrough">[] | undefined;
+    customer_phone_numbers?: string[] | undefined;
+    customer_email_addresses?: string[] | undefined;
+    speakers?: {
+        uuid: string;
+        index: number;
+        duration: number;
+        longestMonologue: number;
+        name: string;
+        isUser: boolean;
+        phoneNumber: string | null;
+        emailAddress: string | null;
+    }[] | undefined;
+    prompts?: z.objectOutputType<{
+        uuid: z.ZodString;
+        title: z.ZodString;
+        category: z.ZodString;
+        completions: z.ZodArray<z.ZodString, "many">;
+    }, z.ZodTypeAny, "passthrough">[] | undefined;
+    chapters?: {
+        uuid: string;
+        index: number;
+        title: string;
+        text: string;
+        startTime: number;
+    }[] | undefined;
+    scorecards?: unknown[] | undefined;
+    tags?: unknown[] | undefined;
+    tasks?: {
+        uuid: string;
+        active: boolean;
+        subject: string;
+        description: string | null;
+        status: string;
+        done: boolean;
+        createdAt: string;
+        updatedAt: string;
+    }[] | undefined;
+    simple_transcript?: string | undefined;
+    call_topics?: {
+        uuid: string;
+        startTime: number;
+        endTime: number;
+        keyphrase: string;
+        topicName: string;
+    }[] | undefined;
+    transcript?: {
+        speakerIndex: number;
+        startTime: number;
+        endTime: number;
+        items: {
+            startTime: number;
+            endTime: number;
+            content: string;
         }[];
+    }[] | undefined;
+}, {
+    uuid: string;
+    duration: number;
+    title: string;
+    created_at: string;
+    updated_at: string;
+    direction: string;
+    locale: string;
+    is_video: boolean;
+    visible: boolean;
+    performed_at: string;
+    leexi_url: string;
+    description?: string | null | undefined;
+    video_archived_at?: string | null | undefined;
+    audio_archived_at?: string | null | undefined;
+    transcript_archived_at?: string | null | undefined;
+    completions_archived_at?: string | null | undefined;
+    source?: string | null | undefined;
+    source_id?: string | null | undefined;
+    recording_url?: string | null | undefined;
+    transcript_url?: string | null | undefined;
+    summary?: string | null | undefined;
+    conversation_type?: z.objectInputType<{
+        uuid: z.ZodString;
+        slug: z.ZodString;
+        active: z.ZodBoolean;
+    }, z.ZodTypeAny, "passthrough"> | null | undefined;
+    deal?: unknown;
+    meeting_event?: z.objectInputType<{
+        uuid: z.ZodString;
+        title: z.ZodString;
+        meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        internal: z.ZodBoolean;
+        direction: z.ZodString;
+        start_time: z.ZodString;
+        end_time: z.ZodString;
+    }, z.ZodTypeAny, "passthrough"> | null | undefined;
+    feedbacks?: unknown[] | undefined;
+    owner?: z.objectInputType<{
+        uuid: z.ZodString;
+        name: z.ZodString;
+        email: z.ZodString;
+        active: z.ZodBoolean;
+    }, z.ZodTypeAny, "passthrough"> | null | undefined;
+    participating_users?: z.objectInputType<{
+        uuid: z.ZodString;
+        name: z.ZodString;
+        email: z.ZodString;
+        active: z.ZodBoolean;
+    }, z.ZodTypeAny, "passthrough">[] | undefined;
+    customer_phone_numbers?: string[] | undefined;
+    customer_email_addresses?: string[] | undefined;
+    speakers?: z.objectInputType<{
+        uuid: z.ZodString;
+        index: z.ZodNumber;
+        duration: z.ZodNumber;
+        longest_monologue: z.ZodNumber;
+        name: z.ZodString;
+        is_user: z.ZodBoolean;
+        phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        email_address: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    }, z.ZodTypeAny, "passthrough">[] | undefined;
+    prompts?: z.objectInputType<{
+        uuid: z.ZodString;
+        title: z.ZodString;
+        category: z.ZodString;
+        completions: z.ZodArray<z.ZodString, "many">;
+    }, z.ZodTypeAny, "passthrough">[] | undefined;
+    chapters?: z.objectInputType<{
+        uuid: z.ZodString;
+        index: z.ZodNumber;
+        title: z.ZodString;
+        text: z.ZodString;
+        start_time: z.ZodNumber;
+    }, z.ZodTypeAny, "passthrough">[] | undefined;
+    scorecards?: unknown[] | undefined;
+    tags?: unknown[] | undefined;
+    tasks?: z.objectInputType<{
+        uuid: z.ZodString;
+        active: z.ZodBoolean;
+        subject: z.ZodString;
+        description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        status: z.ZodString;
+        done: z.ZodBoolean;
+        created_at: z.ZodString;
+        updated_at: z.ZodString;
+    }, z.ZodTypeAny, "passthrough">[] | undefined;
+    simple_transcript?: string | undefined;
+    call_topics?: z.objectInputType<{
+        uuid: z.ZodString;
+        start_time: z.ZodNumber;
+        end_time: z.ZodNumber;
+        keyphrase: z.ZodString;
+        topic_name: z.ZodString;
+    }, z.ZodTypeAny, "passthrough">[] | undefined;
+    transcript?: {
+        start_time: number;
+        end_time: number;
+        speaker_index: number;
+        items: z.objectInputType<{
+            start_time: z.ZodNumber;
+            end_time: z.ZodNumber;
+            content: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">[];
+    }[] | undefined;
+}>, {
+    uuid: string;
+    locale: string;
+    duration: number;
+    direction: string;
+    isVideo: boolean;
+    visible: boolean;
+    title: string;
+    description: string | null;
+    createdAt: string;
+    updatedAt: string;
+    performedAt: string;
+    leexiUrl: string;
+    videoArchivedAt: string | null;
+    audioArchivedAt: string | null;
+    transcriptArchivedAt: string | null;
+    completionsArchivedAt: string | null;
+    source: string | null;
+    sourceId: string | null;
+    recordingUrl: string | null;
+    transcriptUrl: string | null;
+    summary: string | null;
+    conversationType: z.objectOutputType<{
+        uuid: z.ZodString;
+        slug: z.ZodString;
+        active: z.ZodBoolean;
+    }, z.ZodTypeAny, "passthrough"> | null;
+    deal: {} | null;
+    meetingEvent: {
+        uuid: string;
+        title: string;
+        meetingUrl: string | null;
+        meetingProvider: string | null;
+        internal: boolean;
+        direction: string;
+        startTime: string;
+        endTime: string;
+    } | null;
+    feedbacks: unknown[];
+    owner: z.objectOutputType<{
+        uuid: z.ZodString;
+        name: z.ZodString;
+        email: z.ZodString;
+        active: z.ZodBoolean;
+    }, z.ZodTypeAny, "passthrough"> | null;
+    participatingUsers: z.objectOutputType<{
+        uuid: z.ZodString;
+        name: z.ZodString;
+        email: z.ZodString;
+        active: z.ZodBoolean;
+    }, z.ZodTypeAny, "passthrough">[];
+    customerPhoneNumbers: string[];
+    customerEmailAddresses: string[];
+    speakers: {
+        uuid: string;
+        index: number;
+        duration: number;
+        longestMonologue: number;
+        name: string;
+        isUser: boolean;
+        phoneNumber: string | null;
+        emailAddress: string | null;
+    }[];
+    prompts: z.objectOutputType<{
+        uuid: z.ZodString;
+        title: z.ZodString;
+        category: z.ZodString;
+        completions: z.ZodArray<z.ZodString, "many">;
+    }, z.ZodTypeAny, "passthrough">[];
+    chapters: {
+        uuid: string;
+        index: number;
+        title: string;
+        text: string;
+        startTime: number;
+    }[];
+    scorecards: unknown[];
+    tags: unknown[];
+    tasks: {
+        uuid: string;
+        active: boolean;
+        subject: string;
+        description: string | null;
+        status: string;
+        done: boolean;
+        createdAt: string;
+        updatedAt: string;
+    }[];
+    simpleTranscript: string;
+    callTopics: {
+        uuid: string;
+        startTime: number;
+        endTime: number;
+        keyphrase: string;
+        topicName: string;
+    }[];
+    transcript: {
+        speakerIndex: number;
+        startTime: number;
+        endTime: number;
+        items: {
+            startTime: number;
+            endTime: number;
+            content: string;
+        }[];
+    }[];
+}, {
+    uuid: string;
+    duration: number;
+    title: string;
+    created_at: string;
+    updated_at: string;
+    direction: string;
+    locale: string;
+    is_video: boolean;
+    visible: boolean;
+    performed_at: string;
+    leexi_url: string;
+    description?: string | null | undefined;
+    video_archived_at?: string | null | undefined;
+    audio_archived_at?: string | null | undefined;
+    transcript_archived_at?: string | null | undefined;
+    completions_archived_at?: string | null | undefined;
+    source?: string | null | undefined;
+    source_id?: string | null | undefined;
+    recording_url?: string | null | undefined;
+    transcript_url?: string | null | undefined;
+    summary?: string | null | undefined;
+    conversation_type?: z.objectInputType<{
+        uuid: z.ZodString;
+        slug: z.ZodString;
+        active: z.ZodBoolean;
+    }, z.ZodTypeAny, "passthrough"> | null | undefined;
+    deal?: unknown;
+    meeting_event?: z.objectInputType<{
+        uuid: z.ZodString;
+        title: z.ZodString;
+        meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        internal: z.ZodBoolean;
+        direction: z.ZodString;
+        start_time: z.ZodString;
+        end_time: z.ZodString;
+    }, z.ZodTypeAny, "passthrough"> | null | undefined;
+    feedbacks?: unknown[] | undefined;
+    owner?: z.objectInputType<{
+        uuid: z.ZodString;
+        name: z.ZodString;
+        email: z.ZodString;
+        active: z.ZodBoolean;
+    }, z.ZodTypeAny, "passthrough"> | null | undefined;
+    participating_users?: z.objectInputType<{
+        uuid: z.ZodString;
+        name: z.ZodString;
+        email: z.ZodString;
+        active: z.ZodBoolean;
+    }, z.ZodTypeAny, "passthrough">[] | undefined;
+    customer_phone_numbers?: string[] | undefined;
+    customer_email_addresses?: string[] | undefined;
+    speakers?: z.objectInputType<{
+        uuid: z.ZodString;
+        index: z.ZodNumber;
+        duration: z.ZodNumber;
+        longest_monologue: z.ZodNumber;
+        name: z.ZodString;
+        is_user: z.ZodBoolean;
+        phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        email_address: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    }, z.ZodTypeAny, "passthrough">[] | undefined;
+    prompts?: z.objectInputType<{
+        uuid: z.ZodString;
+        title: z.ZodString;
+        category: z.ZodString;
+        completions: z.ZodArray<z.ZodString, "many">;
+    }, z.ZodTypeAny, "passthrough">[] | undefined;
+    chapters?: z.objectInputType<{
+        uuid: z.ZodString;
+        index: z.ZodNumber;
+        title: z.ZodString;
+        text: z.ZodString;
+        start_time: z.ZodNumber;
+    }, z.ZodTypeAny, "passthrough">[] | undefined;
+    scorecards?: unknown[] | undefined;
+    tags?: unknown[] | undefined;
+    tasks?: z.objectInputType<{
+        uuid: z.ZodString;
+        active: z.ZodBoolean;
+        subject: z.ZodString;
+        description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        status: z.ZodString;
+        done: z.ZodBoolean;
+        created_at: z.ZodString;
+        updated_at: z.ZodString;
+    }, z.ZodTypeAny, "passthrough">[] | undefined;
+    simple_transcript?: string | undefined;
+    call_topics?: z.objectInputType<{
+        uuid: z.ZodString;
+        start_time: z.ZodNumber;
+        end_time: z.ZodNumber;
+        keyphrase: z.ZodString;
+        topic_name: z.ZodString;
+    }, z.ZodTypeAny, "passthrough">[] | undefined;
+    transcript?: {
+        start_time: number;
+        end_time: number;
+        speaker_index: number;
+        items: z.objectInputType<{
+            start_time: z.ZodNumber;
+            end_time: z.ZodNumber;
+            content: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">[];
+    }[] | undefined;
+}>;
+export type CallDetail = z.infer<typeof CallDetailSchema>;
+/** Response shape for GET /v1/calls */
+export declare const CallsListResponseSchema: z.ZodObject<{
+    data: z.ZodArray<z.ZodEffects<z.ZodObject<{
+        uuid: z.ZodString;
+        locale: z.ZodString;
+        duration: z.ZodNumber;
+        direction: z.ZodString;
+        is_video: z.ZodBoolean;
+        visible: z.ZodBoolean;
+        title: z.ZodString;
+        description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        created_at: z.ZodString;
+        updated_at: z.ZodString;
+        performed_at: z.ZodString;
+        leexi_url: z.ZodString;
+        video_archived_at: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        audio_archived_at: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        transcript_archived_at: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        completions_archived_at: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        source: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        source_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        recording_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        transcript_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        summary: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        conversation_type: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+            uuid: z.ZodString;
+            slug: z.ZodString;
+            active: z.ZodBoolean;
+        }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+            uuid: z.ZodString;
+            slug: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+            uuid: z.ZodString;
+            slug: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough">>>>;
+        deal: z.ZodOptional<z.ZodNullable<z.ZodUnknown>>;
+        meeting_event: z.ZodOptional<z.ZodNullable<z.ZodEffects<z.ZodObject<{
+            uuid: z.ZodString;
+            title: z.ZodString;
+            meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            internal: z.ZodBoolean;
+            direction: z.ZodString;
+            start_time: z.ZodString;
+            end_time: z.ZodString;
+        }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+            uuid: z.ZodString;
+            title: z.ZodString;
+            meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            internal: z.ZodBoolean;
+            direction: z.ZodString;
+            start_time: z.ZodString;
+            end_time: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+            uuid: z.ZodString;
+            title: z.ZodString;
+            meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            internal: z.ZodBoolean;
+            direction: z.ZodString;
+            start_time: z.ZodString;
+            end_time: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">>, {
+            uuid: string;
+            title: string;
+            meetingUrl: string | null;
+            meetingProvider: string | null;
+            internal: boolean;
+            direction: string;
+            startTime: string;
+            endTime: string;
+        }, z.objectInputType<{
+            uuid: z.ZodString;
+            title: z.ZodString;
+            meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            internal: z.ZodBoolean;
+            direction: z.ZodString;
+            start_time: z.ZodString;
+            end_time: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">>>>;
+        feedbacks: z.ZodOptional<z.ZodArray<z.ZodUnknown, "many">>;
+        owner: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+            uuid: z.ZodString;
+            name: z.ZodString;
+            email: z.ZodString;
+            active: z.ZodBoolean;
+        }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+            uuid: z.ZodString;
+            name: z.ZodString;
+            email: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+            uuid: z.ZodString;
+            name: z.ZodString;
+            email: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough">>>>;
+        participating_users: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            uuid: z.ZodString;
+            name: z.ZodString;
+            email: z.ZodString;
+            active: z.ZodBoolean;
+        }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+            uuid: z.ZodString;
+            name: z.ZodString;
+            email: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+            uuid: z.ZodString;
+            name: z.ZodString;
+            email: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough">>, "many">>;
+        customer_phone_numbers: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        customer_email_addresses: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        speakers: z.ZodOptional<z.ZodArray<z.ZodEffects<z.ZodObject<{
+            uuid: z.ZodString;
+            index: z.ZodNumber;
+            duration: z.ZodNumber;
+            longest_monologue: z.ZodNumber;
+            name: z.ZodString;
+            is_user: z.ZodBoolean;
+            phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            email_address: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+            uuid: z.ZodString;
+            index: z.ZodNumber;
+            duration: z.ZodNumber;
+            longest_monologue: z.ZodNumber;
+            name: z.ZodString;
+            is_user: z.ZodBoolean;
+            phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            email_address: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+            uuid: z.ZodString;
+            index: z.ZodNumber;
+            duration: z.ZodNumber;
+            longest_monologue: z.ZodNumber;
+            name: z.ZodString;
+            is_user: z.ZodBoolean;
+            phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            email_address: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        }, z.ZodTypeAny, "passthrough">>, {
+            uuid: string;
+            index: number;
+            duration: number;
+            longestMonologue: number;
+            name: string;
+            isUser: boolean;
+            phoneNumber: string | null;
+            emailAddress: string | null;
+        }, z.objectInputType<{
+            uuid: z.ZodString;
+            index: z.ZodNumber;
+            duration: z.ZodNumber;
+            longest_monologue: z.ZodNumber;
+            name: z.ZodString;
+            is_user: z.ZodBoolean;
+            phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            email_address: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        }, z.ZodTypeAny, "passthrough">>, "many">>;
+        prompts: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            uuid: z.ZodString;
+            title: z.ZodString;
+            category: z.ZodString;
+            completions: z.ZodArray<z.ZodString, "many">;
+        }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+            uuid: z.ZodString;
+            title: z.ZodString;
+            category: z.ZodString;
+            completions: z.ZodArray<z.ZodString, "many">;
+        }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+            uuid: z.ZodString;
+            title: z.ZodString;
+            category: z.ZodString;
+            completions: z.ZodArray<z.ZodString, "many">;
+        }, z.ZodTypeAny, "passthrough">>, "many">>;
+        chapters: z.ZodOptional<z.ZodArray<z.ZodEffects<z.ZodObject<{
+            uuid: z.ZodString;
+            index: z.ZodNumber;
+            title: z.ZodString;
+            text: z.ZodString;
+            start_time: z.ZodNumber;
+        }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+            uuid: z.ZodString;
+            index: z.ZodNumber;
+            title: z.ZodString;
+            text: z.ZodString;
+            start_time: z.ZodNumber;
+        }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+            uuid: z.ZodString;
+            index: z.ZodNumber;
+            title: z.ZodString;
+            text: z.ZodString;
+            start_time: z.ZodNumber;
+        }, z.ZodTypeAny, "passthrough">>, {
+            uuid: string;
+            index: number;
+            title: string;
+            text: string;
+            startTime: number;
+        }, z.objectInputType<{
+            uuid: z.ZodString;
+            index: z.ZodNumber;
+            title: z.ZodString;
+            text: z.ZodString;
+            start_time: z.ZodNumber;
+        }, z.ZodTypeAny, "passthrough">>, "many">>;
+        scorecards: z.ZodOptional<z.ZodArray<z.ZodUnknown, "many">>;
+        tags: z.ZodOptional<z.ZodArray<z.ZodUnknown, "many">>;
+        tasks: z.ZodOptional<z.ZodArray<z.ZodEffects<z.ZodObject<{
+            uuid: z.ZodString;
+            active: z.ZodBoolean;
+            subject: z.ZodString;
+            description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            status: z.ZodString;
+            done: z.ZodBoolean;
+            created_at: z.ZodString;
+            updated_at: z.ZodString;
+        }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+            uuid: z.ZodString;
+            active: z.ZodBoolean;
+            subject: z.ZodString;
+            description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            status: z.ZodString;
+            done: z.ZodBoolean;
+            created_at: z.ZodString;
+            updated_at: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+            uuid: z.ZodString;
+            active: z.ZodBoolean;
+            subject: z.ZodString;
+            description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            status: z.ZodString;
+            done: z.ZodBoolean;
+            created_at: z.ZodString;
+            updated_at: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">>, {
+            uuid: string;
+            active: boolean;
+            subject: string;
+            description: string | null;
+            status: string;
+            done: boolean;
+            createdAt: string;
+            updatedAt: string;
+        }, z.objectInputType<{
+            uuid: z.ZodString;
+            active: z.ZodBoolean;
+            subject: z.ZodString;
+            description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            status: z.ZodString;
+            done: z.ZodBoolean;
+            created_at: z.ZodString;
+            updated_at: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">>, "many">>;
+        simple_transcript: z.ZodOptional<z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        uuid: string;
+        duration: number;
+        title: string;
+        created_at: string;
+        updated_at: string;
+        direction: string;
+        locale: string;
+        is_video: boolean;
+        visible: boolean;
+        performed_at: string;
+        leexi_url: string;
+        description?: string | null | undefined;
+        video_archived_at?: string | null | undefined;
+        audio_archived_at?: string | null | undefined;
+        transcript_archived_at?: string | null | undefined;
+        completions_archived_at?: string | null | undefined;
+        source?: string | null | undefined;
+        source_id?: string | null | undefined;
+        recording_url?: string | null | undefined;
+        transcript_url?: string | null | undefined;
+        summary?: string | null | undefined;
+        conversation_type?: z.objectOutputType<{
+            uuid: z.ZodString;
+            slug: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough"> | null | undefined;
+        deal?: unknown;
+        meeting_event?: {
+            uuid: string;
+            title: string;
+            meetingUrl: string | null;
+            meetingProvider: string | null;
+            internal: boolean;
+            direction: string;
+            startTime: string;
+            endTime: string;
+        } | null | undefined;
+        feedbacks?: unknown[] | undefined;
+        owner?: z.objectOutputType<{
+            uuid: z.ZodString;
+            name: z.ZodString;
+            email: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough"> | null | undefined;
+        participating_users?: z.objectOutputType<{
+            uuid: z.ZodString;
+            name: z.ZodString;
+            email: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        customer_phone_numbers?: string[] | undefined;
+        customer_email_addresses?: string[] | undefined;
+        speakers?: {
+            uuid: string;
+            index: number;
+            duration: number;
+            longestMonologue: number;
+            name: string;
+            isUser: boolean;
+            phoneNumber: string | null;
+            emailAddress: string | null;
+        }[] | undefined;
+        prompts?: z.objectOutputType<{
+            uuid: z.ZodString;
+            title: z.ZodString;
+            category: z.ZodString;
+            completions: z.ZodArray<z.ZodString, "many">;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        chapters?: {
+            uuid: string;
+            index: number;
+            title: string;
+            text: string;
+            startTime: number;
+        }[] | undefined;
+        scorecards?: unknown[] | undefined;
+        tags?: unknown[] | undefined;
+        tasks?: {
+            uuid: string;
+            active: boolean;
+            subject: string;
+            description: string | null;
+            status: string;
+            done: boolean;
+            createdAt: string;
+            updatedAt: string;
+        }[] | undefined;
+        simple_transcript?: string | undefined;
+    }, {
+        uuid: string;
+        duration: number;
+        title: string;
+        created_at: string;
+        updated_at: string;
+        direction: string;
+        locale: string;
+        is_video: boolean;
+        visible: boolean;
+        performed_at: string;
+        leexi_url: string;
+        description?: string | null | undefined;
+        video_archived_at?: string | null | undefined;
+        audio_archived_at?: string | null | undefined;
+        transcript_archived_at?: string | null | undefined;
+        completions_archived_at?: string | null | undefined;
+        source?: string | null | undefined;
+        source_id?: string | null | undefined;
+        recording_url?: string | null | undefined;
+        transcript_url?: string | null | undefined;
+        summary?: string | null | undefined;
+        conversation_type?: z.objectInputType<{
+            uuid: z.ZodString;
+            slug: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough"> | null | undefined;
+        deal?: unknown;
+        meeting_event?: z.objectInputType<{
+            uuid: z.ZodString;
+            title: z.ZodString;
+            meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            internal: z.ZodBoolean;
+            direction: z.ZodString;
+            start_time: z.ZodString;
+            end_time: z.ZodString;
+        }, z.ZodTypeAny, "passthrough"> | null | undefined;
+        feedbacks?: unknown[] | undefined;
+        owner?: z.objectInputType<{
+            uuid: z.ZodString;
+            name: z.ZodString;
+            email: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough"> | null | undefined;
+        participating_users?: z.objectInputType<{
+            uuid: z.ZodString;
+            name: z.ZodString;
+            email: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        customer_phone_numbers?: string[] | undefined;
+        customer_email_addresses?: string[] | undefined;
+        speakers?: z.objectInputType<{
+            uuid: z.ZodString;
+            index: z.ZodNumber;
+            duration: z.ZodNumber;
+            longest_monologue: z.ZodNumber;
+            name: z.ZodString;
+            is_user: z.ZodBoolean;
+            phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            email_address: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        prompts?: z.objectInputType<{
+            uuid: z.ZodString;
+            title: z.ZodString;
+            category: z.ZodString;
+            completions: z.ZodArray<z.ZodString, "many">;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        chapters?: z.objectInputType<{
+            uuid: z.ZodString;
+            index: z.ZodNumber;
+            title: z.ZodString;
+            text: z.ZodString;
+            start_time: z.ZodNumber;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        scorecards?: unknown[] | undefined;
+        tags?: unknown[] | undefined;
+        tasks?: z.objectInputType<{
+            uuid: z.ZodString;
+            active: z.ZodBoolean;
+            subject: z.ZodString;
+            description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            status: z.ZodString;
+            done: z.ZodBoolean;
+            created_at: z.ZodString;
+            updated_at: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        simple_transcript?: string | undefined;
     }>, {
         uuid: string;
+        locale: string;
+        duration: number;
+        direction: string;
+        isVideo: boolean;
+        visible: boolean;
         title: string;
+        description: string | null;
         createdAt: string;
-        durationSeconds: number;
-        language: string;
-        status: string;
-        recordingUrl: string;
-        participants: {
+        updatedAt: string;
+        performedAt: string;
+        leexiUrl: string;
+        videoArchivedAt: string | null;
+        audioArchivedAt: string | null;
+        transcriptArchivedAt: string | null;
+        completionsArchivedAt: string | null;
+        source: string | null;
+        sourceId: string | null;
+        recordingUrl: string | null;
+        transcriptUrl: string | null;
+        summary: string | null;
+        conversationType: z.objectOutputType<{
+            uuid: z.ZodString;
+            slug: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough"> | null;
+        deal: {} | null;
+        meetingEvent: {
+            uuid: string;
+            title: string;
+            meetingUrl: string | null;
+            meetingProvider: string | null;
+            internal: boolean;
+            direction: string;
+            startTime: string;
+            endTime: string;
+        } | null;
+        feedbacks: unknown[];
+        owner: z.objectOutputType<{
+            uuid: z.ZodString;
+            name: z.ZodString;
+            email: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough"> | null;
+        participatingUsers: z.objectOutputType<{
+            uuid: z.ZodString;
+            name: z.ZodString;
+            email: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough">[];
+        customerPhoneNumbers: string[];
+        customerEmailAddresses: string[];
+        speakers: {
+            uuid: string;
+            index: number;
+            duration: number;
+            longestMonologue: number;
             name: string;
-            role: "host" | "guest" | "unknown";
-            email?: string | null | undefined;
+            isUser: boolean;
+            phoneNumber: string | null;
+            emailAddress: string | null;
         }[];
+        prompts: z.objectOutputType<{
+            uuid: z.ZodString;
+            title: z.ZodString;
+            category: z.ZodString;
+            completions: z.ZodArray<z.ZodString, "many">;
+        }, z.ZodTypeAny, "passthrough">[];
+        chapters: {
+            uuid: string;
+            index: number;
+            title: string;
+            text: string;
+            startTime: number;
+        }[];
+        scorecards: unknown[];
+        tags: unknown[];
+        tasks: {
+            uuid: string;
+            active: boolean;
+            subject: string;
+            description: string | null;
+            status: string;
+            done: boolean;
+            createdAt: string;
+            updatedAt: string;
+        }[];
+        simpleTranscript: string;
     }, {
-        status: string;
         uuid: string;
+        duration: number;
         title: string;
         created_at: string;
-        duration_seconds: number;
-        language: string;
-        recording_url: string;
-        participants: {
-            name: string;
-            email?: string | null | undefined;
-            role?: "host" | "guest" | "unknown" | undefined;
-        }[];
+        updated_at: string;
+        direction: string;
+        locale: string;
+        is_video: boolean;
+        visible: boolean;
+        performed_at: string;
+        leexi_url: string;
+        description?: string | null | undefined;
+        video_archived_at?: string | null | undefined;
+        audio_archived_at?: string | null | undefined;
+        transcript_archived_at?: string | null | undefined;
+        completions_archived_at?: string | null | undefined;
+        source?: string | null | undefined;
+        source_id?: string | null | undefined;
+        recording_url?: string | null | undefined;
+        transcript_url?: string | null | undefined;
+        summary?: string | null | undefined;
+        conversation_type?: z.objectInputType<{
+            uuid: z.ZodString;
+            slug: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough"> | null | undefined;
+        deal?: unknown;
+        meeting_event?: z.objectInputType<{
+            uuid: z.ZodString;
+            title: z.ZodString;
+            meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            internal: z.ZodBoolean;
+            direction: z.ZodString;
+            start_time: z.ZodString;
+            end_time: z.ZodString;
+        }, z.ZodTypeAny, "passthrough"> | null | undefined;
+        feedbacks?: unknown[] | undefined;
+        owner?: z.objectInputType<{
+            uuid: z.ZodString;
+            name: z.ZodString;
+            email: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough"> | null | undefined;
+        participating_users?: z.objectInputType<{
+            uuid: z.ZodString;
+            name: z.ZodString;
+            email: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        customer_phone_numbers?: string[] | undefined;
+        customer_email_addresses?: string[] | undefined;
+        speakers?: z.objectInputType<{
+            uuid: z.ZodString;
+            index: z.ZodNumber;
+            duration: z.ZodNumber;
+            longest_monologue: z.ZodNumber;
+            name: z.ZodString;
+            is_user: z.ZodBoolean;
+            phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            email_address: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        prompts?: z.objectInputType<{
+            uuid: z.ZodString;
+            title: z.ZodString;
+            category: z.ZodString;
+            completions: z.ZodArray<z.ZodString, "many">;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        chapters?: z.objectInputType<{
+            uuid: z.ZodString;
+            index: z.ZodNumber;
+            title: z.ZodString;
+            text: z.ZodString;
+            start_time: z.ZodNumber;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        scorecards?: unknown[] | undefined;
+        tags?: unknown[] | undefined;
+        tasks?: z.objectInputType<{
+            uuid: z.ZodString;
+            active: z.ZodBoolean;
+            subject: z.ZodString;
+            description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            status: z.ZodString;
+            done: z.ZodBoolean;
+            created_at: z.ZodString;
+            updated_at: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        simple_transcript?: string | undefined;
     }>, "many">;
-    meta: z.ZodObject<{
+    pagination: z.ZodObject<{
         page: z.ZodNumber;
-        per_page: z.ZodNumber;
-        total: z.ZodNumber;
+        items: z.ZodNumber;
+        count: z.ZodNumber;
     }, "strip", z.ZodTypeAny, {
-        per_page: number;
         page: number;
-        total: number;
+        items: number;
+        count: number;
     }, {
-        per_page: number;
         page: number;
-        total: number;
+        items: number;
+        count: number;
     }>;
 }, "strip", z.ZodTypeAny, {
     data: {
         uuid: string;
+        locale: string;
+        duration: number;
+        direction: string;
+        isVideo: boolean;
+        visible: boolean;
         title: string;
+        description: string | null;
         createdAt: string;
-        durationSeconds: number;
-        language: string;
-        status: string;
-        recordingUrl: string;
-        participants: {
+        updatedAt: string;
+        performedAt: string;
+        leexiUrl: string;
+        videoArchivedAt: string | null;
+        audioArchivedAt: string | null;
+        transcriptArchivedAt: string | null;
+        completionsArchivedAt: string | null;
+        source: string | null;
+        sourceId: string | null;
+        recordingUrl: string | null;
+        transcriptUrl: string | null;
+        summary: string | null;
+        conversationType: z.objectOutputType<{
+            uuid: z.ZodString;
+            slug: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough"> | null;
+        deal: {} | null;
+        meetingEvent: {
+            uuid: string;
+            title: string;
+            meetingUrl: string | null;
+            meetingProvider: string | null;
+            internal: boolean;
+            direction: string;
+            startTime: string;
+            endTime: string;
+        } | null;
+        feedbacks: unknown[];
+        owner: z.objectOutputType<{
+            uuid: z.ZodString;
+            name: z.ZodString;
+            email: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough"> | null;
+        participatingUsers: z.objectOutputType<{
+            uuid: z.ZodString;
+            name: z.ZodString;
+            email: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough">[];
+        customerPhoneNumbers: string[];
+        customerEmailAddresses: string[];
+        speakers: {
+            uuid: string;
+            index: number;
+            duration: number;
+            longestMonologue: number;
             name: string;
-            role: "host" | "guest" | "unknown";
-            email?: string | null | undefined;
+            isUser: boolean;
+            phoneNumber: string | null;
+            emailAddress: string | null;
         }[];
+        prompts: z.objectOutputType<{
+            uuid: z.ZodString;
+            title: z.ZodString;
+            category: z.ZodString;
+            completions: z.ZodArray<z.ZodString, "many">;
+        }, z.ZodTypeAny, "passthrough">[];
+        chapters: {
+            uuid: string;
+            index: number;
+            title: string;
+            text: string;
+            startTime: number;
+        }[];
+        scorecards: unknown[];
+        tags: unknown[];
+        tasks: {
+            uuid: string;
+            active: boolean;
+            subject: string;
+            description: string | null;
+            status: string;
+            done: boolean;
+            createdAt: string;
+            updatedAt: string;
+        }[];
+        simpleTranscript: string;
     }[];
-    meta: {
-        per_page: number;
+    pagination: {
         page: number;
-        total: number;
+        items: number;
+        count: number;
     };
 }, {
     data: {
-        status: string;
         uuid: string;
+        duration: number;
         title: string;
         created_at: string;
-        duration_seconds: number;
-        language: string;
-        recording_url: string;
-        participants: {
-            name: string;
-            email?: string | null | undefined;
-            role?: "host" | "guest" | "unknown" | undefined;
-        }[];
+        updated_at: string;
+        direction: string;
+        locale: string;
+        is_video: boolean;
+        visible: boolean;
+        performed_at: string;
+        leexi_url: string;
+        description?: string | null | undefined;
+        video_archived_at?: string | null | undefined;
+        audio_archived_at?: string | null | undefined;
+        transcript_archived_at?: string | null | undefined;
+        completions_archived_at?: string | null | undefined;
+        source?: string | null | undefined;
+        source_id?: string | null | undefined;
+        recording_url?: string | null | undefined;
+        transcript_url?: string | null | undefined;
+        summary?: string | null | undefined;
+        conversation_type?: z.objectInputType<{
+            uuid: z.ZodString;
+            slug: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough"> | null | undefined;
+        deal?: unknown;
+        meeting_event?: z.objectInputType<{
+            uuid: z.ZodString;
+            title: z.ZodString;
+            meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            internal: z.ZodBoolean;
+            direction: z.ZodString;
+            start_time: z.ZodString;
+            end_time: z.ZodString;
+        }, z.ZodTypeAny, "passthrough"> | null | undefined;
+        feedbacks?: unknown[] | undefined;
+        owner?: z.objectInputType<{
+            uuid: z.ZodString;
+            name: z.ZodString;
+            email: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough"> | null | undefined;
+        participating_users?: z.objectInputType<{
+            uuid: z.ZodString;
+            name: z.ZodString;
+            email: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        customer_phone_numbers?: string[] | undefined;
+        customer_email_addresses?: string[] | undefined;
+        speakers?: z.objectInputType<{
+            uuid: z.ZodString;
+            index: z.ZodNumber;
+            duration: z.ZodNumber;
+            longest_monologue: z.ZodNumber;
+            name: z.ZodString;
+            is_user: z.ZodBoolean;
+            phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            email_address: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        prompts?: z.objectInputType<{
+            uuid: z.ZodString;
+            title: z.ZodString;
+            category: z.ZodString;
+            completions: z.ZodArray<z.ZodString, "many">;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        chapters?: z.objectInputType<{
+            uuid: z.ZodString;
+            index: z.ZodNumber;
+            title: z.ZodString;
+            text: z.ZodString;
+            start_time: z.ZodNumber;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        scorecards?: unknown[] | undefined;
+        tags?: unknown[] | undefined;
+        tasks?: z.objectInputType<{
+            uuid: z.ZodString;
+            active: z.ZodBoolean;
+            subject: z.ZodString;
+            description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            status: z.ZodString;
+            done: z.ZodBoolean;
+            created_at: z.ZodString;
+            updated_at: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        simple_transcript?: string | undefined;
     }[];
-    meta: {
-        per_page: number;
+    pagination: {
         page: number;
-        total: number;
+        items: number;
+        count: number;
     };
 }>;
-export type Participant = z.infer<typeof ParticipantSchema>;
-export type CallSummary = z.infer<typeof CallSummarySchema>;
-export type CallDetail = z.infer<typeof CallDetailSchema>;
-export type CallsList = z.infer<typeof CallsListSchema>;
+export type CallsListResponse = z.infer<typeof CallsListResponseSchema>;
+/** Response shape for GET /v1/calls/{uuid} */
+export declare const CallDetailResponseSchema: z.ZodObject<{
+    data: z.ZodEffects<z.ZodObject<{
+        uuid: z.ZodString;
+        locale: z.ZodString;
+        duration: z.ZodNumber;
+        direction: z.ZodString;
+        is_video: z.ZodBoolean;
+        visible: z.ZodBoolean;
+        title: z.ZodString;
+        description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        created_at: z.ZodString;
+        updated_at: z.ZodString;
+        performed_at: z.ZodString;
+        leexi_url: z.ZodString;
+        video_archived_at: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        audio_archived_at: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        transcript_archived_at: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        completions_archived_at: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        source: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        source_id: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        recording_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        transcript_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        summary: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        conversation_type: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+            uuid: z.ZodString;
+            slug: z.ZodString;
+            active: z.ZodBoolean;
+        }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+            uuid: z.ZodString;
+            slug: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+            uuid: z.ZodString;
+            slug: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough">>>>;
+        deal: z.ZodOptional<z.ZodNullable<z.ZodUnknown>>;
+        meeting_event: z.ZodOptional<z.ZodNullable<z.ZodEffects<z.ZodObject<{
+            uuid: z.ZodString;
+            title: z.ZodString;
+            meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            internal: z.ZodBoolean;
+            direction: z.ZodString;
+            start_time: z.ZodString;
+            end_time: z.ZodString;
+        }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+            uuid: z.ZodString;
+            title: z.ZodString;
+            meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            internal: z.ZodBoolean;
+            direction: z.ZodString;
+            start_time: z.ZodString;
+            end_time: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+            uuid: z.ZodString;
+            title: z.ZodString;
+            meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            internal: z.ZodBoolean;
+            direction: z.ZodString;
+            start_time: z.ZodString;
+            end_time: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">>, {
+            uuid: string;
+            title: string;
+            meetingUrl: string | null;
+            meetingProvider: string | null;
+            internal: boolean;
+            direction: string;
+            startTime: string;
+            endTime: string;
+        }, z.objectInputType<{
+            uuid: z.ZodString;
+            title: z.ZodString;
+            meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            internal: z.ZodBoolean;
+            direction: z.ZodString;
+            start_time: z.ZodString;
+            end_time: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">>>>;
+        feedbacks: z.ZodOptional<z.ZodArray<z.ZodUnknown, "many">>;
+        owner: z.ZodOptional<z.ZodNullable<z.ZodObject<{
+            uuid: z.ZodString;
+            name: z.ZodString;
+            email: z.ZodString;
+            active: z.ZodBoolean;
+        }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+            uuid: z.ZodString;
+            name: z.ZodString;
+            email: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+            uuid: z.ZodString;
+            name: z.ZodString;
+            email: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough">>>>;
+        participating_users: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            uuid: z.ZodString;
+            name: z.ZodString;
+            email: z.ZodString;
+            active: z.ZodBoolean;
+        }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+            uuid: z.ZodString;
+            name: z.ZodString;
+            email: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+            uuid: z.ZodString;
+            name: z.ZodString;
+            email: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough">>, "many">>;
+        customer_phone_numbers: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        customer_email_addresses: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        speakers: z.ZodOptional<z.ZodArray<z.ZodEffects<z.ZodObject<{
+            uuid: z.ZodString;
+            index: z.ZodNumber;
+            duration: z.ZodNumber;
+            longest_monologue: z.ZodNumber;
+            name: z.ZodString;
+            is_user: z.ZodBoolean;
+            phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            email_address: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+            uuid: z.ZodString;
+            index: z.ZodNumber;
+            duration: z.ZodNumber;
+            longest_monologue: z.ZodNumber;
+            name: z.ZodString;
+            is_user: z.ZodBoolean;
+            phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            email_address: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+            uuid: z.ZodString;
+            index: z.ZodNumber;
+            duration: z.ZodNumber;
+            longest_monologue: z.ZodNumber;
+            name: z.ZodString;
+            is_user: z.ZodBoolean;
+            phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            email_address: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        }, z.ZodTypeAny, "passthrough">>, {
+            uuid: string;
+            index: number;
+            duration: number;
+            longestMonologue: number;
+            name: string;
+            isUser: boolean;
+            phoneNumber: string | null;
+            emailAddress: string | null;
+        }, z.objectInputType<{
+            uuid: z.ZodString;
+            index: z.ZodNumber;
+            duration: z.ZodNumber;
+            longest_monologue: z.ZodNumber;
+            name: z.ZodString;
+            is_user: z.ZodBoolean;
+            phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            email_address: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        }, z.ZodTypeAny, "passthrough">>, "many">>;
+        prompts: z.ZodOptional<z.ZodArray<z.ZodObject<{
+            uuid: z.ZodString;
+            title: z.ZodString;
+            category: z.ZodString;
+            completions: z.ZodArray<z.ZodString, "many">;
+        }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+            uuid: z.ZodString;
+            title: z.ZodString;
+            category: z.ZodString;
+            completions: z.ZodArray<z.ZodString, "many">;
+        }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+            uuid: z.ZodString;
+            title: z.ZodString;
+            category: z.ZodString;
+            completions: z.ZodArray<z.ZodString, "many">;
+        }, z.ZodTypeAny, "passthrough">>, "many">>;
+        chapters: z.ZodOptional<z.ZodArray<z.ZodEffects<z.ZodObject<{
+            uuid: z.ZodString;
+            index: z.ZodNumber;
+            title: z.ZodString;
+            text: z.ZodString;
+            start_time: z.ZodNumber;
+        }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+            uuid: z.ZodString;
+            index: z.ZodNumber;
+            title: z.ZodString;
+            text: z.ZodString;
+            start_time: z.ZodNumber;
+        }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+            uuid: z.ZodString;
+            index: z.ZodNumber;
+            title: z.ZodString;
+            text: z.ZodString;
+            start_time: z.ZodNumber;
+        }, z.ZodTypeAny, "passthrough">>, {
+            uuid: string;
+            index: number;
+            title: string;
+            text: string;
+            startTime: number;
+        }, z.objectInputType<{
+            uuid: z.ZodString;
+            index: z.ZodNumber;
+            title: z.ZodString;
+            text: z.ZodString;
+            start_time: z.ZodNumber;
+        }, z.ZodTypeAny, "passthrough">>, "many">>;
+        scorecards: z.ZodOptional<z.ZodArray<z.ZodUnknown, "many">>;
+        tags: z.ZodOptional<z.ZodArray<z.ZodUnknown, "many">>;
+        tasks: z.ZodOptional<z.ZodArray<z.ZodEffects<z.ZodObject<{
+            uuid: z.ZodString;
+            active: z.ZodBoolean;
+            subject: z.ZodString;
+            description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            status: z.ZodString;
+            done: z.ZodBoolean;
+            created_at: z.ZodString;
+            updated_at: z.ZodString;
+        }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+            uuid: z.ZodString;
+            active: z.ZodBoolean;
+            subject: z.ZodString;
+            description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            status: z.ZodString;
+            done: z.ZodBoolean;
+            created_at: z.ZodString;
+            updated_at: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+            uuid: z.ZodString;
+            active: z.ZodBoolean;
+            subject: z.ZodString;
+            description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            status: z.ZodString;
+            done: z.ZodBoolean;
+            created_at: z.ZodString;
+            updated_at: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">>, {
+            uuid: string;
+            active: boolean;
+            subject: string;
+            description: string | null;
+            status: string;
+            done: boolean;
+            createdAt: string;
+            updatedAt: string;
+        }, z.objectInputType<{
+            uuid: z.ZodString;
+            active: z.ZodBoolean;
+            subject: z.ZodString;
+            description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            status: z.ZodString;
+            done: z.ZodBoolean;
+            created_at: z.ZodString;
+            updated_at: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">>, "many">>;
+        simple_transcript: z.ZodOptional<z.ZodString>;
+        call_topics: z.ZodOptional<z.ZodArray<z.ZodEffects<z.ZodObject<{
+            uuid: z.ZodString;
+            start_time: z.ZodNumber;
+            end_time: z.ZodNumber;
+            keyphrase: z.ZodString;
+            topic_name: z.ZodString;
+        }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+            uuid: z.ZodString;
+            start_time: z.ZodNumber;
+            end_time: z.ZodNumber;
+            keyphrase: z.ZodString;
+            topic_name: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+            uuid: z.ZodString;
+            start_time: z.ZodNumber;
+            end_time: z.ZodNumber;
+            keyphrase: z.ZodString;
+            topic_name: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">>, {
+            uuid: string;
+            startTime: number;
+            endTime: number;
+            keyphrase: string;
+            topicName: string;
+        }, z.objectInputType<{
+            uuid: z.ZodString;
+            start_time: z.ZodNumber;
+            end_time: z.ZodNumber;
+            keyphrase: z.ZodString;
+            topic_name: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">>, "many">>;
+        transcript: z.ZodOptional<z.ZodArray<z.ZodEffects<z.ZodObject<{
+            speaker_index: z.ZodNumber;
+            start_time: z.ZodNumber;
+            end_time: z.ZodNumber;
+            items: z.ZodArray<z.ZodEffects<z.ZodObject<{
+                start_time: z.ZodNumber;
+                end_time: z.ZodNumber;
+                content: z.ZodString;
+            }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
+                start_time: z.ZodNumber;
+                end_time: z.ZodNumber;
+                content: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
+                start_time: z.ZodNumber;
+                end_time: z.ZodNumber;
+                content: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">>, {
+                startTime: number;
+                endTime: number;
+                content: string;
+            }, z.objectInputType<{
+                start_time: z.ZodNumber;
+                end_time: z.ZodNumber;
+                content: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">>, "many">;
+        }, "strip", z.ZodTypeAny, {
+            start_time: number;
+            end_time: number;
+            speaker_index: number;
+            items: {
+                startTime: number;
+                endTime: number;
+                content: string;
+            }[];
+        }, {
+            start_time: number;
+            end_time: number;
+            speaker_index: number;
+            items: z.objectInputType<{
+                start_time: z.ZodNumber;
+                end_time: z.ZodNumber;
+                content: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">[];
+        }>, {
+            speakerIndex: number;
+            startTime: number;
+            endTime: number;
+            items: {
+                startTime: number;
+                endTime: number;
+                content: string;
+            }[];
+        }, {
+            start_time: number;
+            end_time: number;
+            speaker_index: number;
+            items: z.objectInputType<{
+                start_time: z.ZodNumber;
+                end_time: z.ZodNumber;
+                content: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">[];
+        }>, "many">>;
+    }, "strip", z.ZodTypeAny, {
+        uuid: string;
+        duration: number;
+        title: string;
+        created_at: string;
+        updated_at: string;
+        direction: string;
+        locale: string;
+        is_video: boolean;
+        visible: boolean;
+        performed_at: string;
+        leexi_url: string;
+        description?: string | null | undefined;
+        video_archived_at?: string | null | undefined;
+        audio_archived_at?: string | null | undefined;
+        transcript_archived_at?: string | null | undefined;
+        completions_archived_at?: string | null | undefined;
+        source?: string | null | undefined;
+        source_id?: string | null | undefined;
+        recording_url?: string | null | undefined;
+        transcript_url?: string | null | undefined;
+        summary?: string | null | undefined;
+        conversation_type?: z.objectOutputType<{
+            uuid: z.ZodString;
+            slug: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough"> | null | undefined;
+        deal?: unknown;
+        meeting_event?: {
+            uuid: string;
+            title: string;
+            meetingUrl: string | null;
+            meetingProvider: string | null;
+            internal: boolean;
+            direction: string;
+            startTime: string;
+            endTime: string;
+        } | null | undefined;
+        feedbacks?: unknown[] | undefined;
+        owner?: z.objectOutputType<{
+            uuid: z.ZodString;
+            name: z.ZodString;
+            email: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough"> | null | undefined;
+        participating_users?: z.objectOutputType<{
+            uuid: z.ZodString;
+            name: z.ZodString;
+            email: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        customer_phone_numbers?: string[] | undefined;
+        customer_email_addresses?: string[] | undefined;
+        speakers?: {
+            uuid: string;
+            index: number;
+            duration: number;
+            longestMonologue: number;
+            name: string;
+            isUser: boolean;
+            phoneNumber: string | null;
+            emailAddress: string | null;
+        }[] | undefined;
+        prompts?: z.objectOutputType<{
+            uuid: z.ZodString;
+            title: z.ZodString;
+            category: z.ZodString;
+            completions: z.ZodArray<z.ZodString, "many">;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        chapters?: {
+            uuid: string;
+            index: number;
+            title: string;
+            text: string;
+            startTime: number;
+        }[] | undefined;
+        scorecards?: unknown[] | undefined;
+        tags?: unknown[] | undefined;
+        tasks?: {
+            uuid: string;
+            active: boolean;
+            subject: string;
+            description: string | null;
+            status: string;
+            done: boolean;
+            createdAt: string;
+            updatedAt: string;
+        }[] | undefined;
+        simple_transcript?: string | undefined;
+        call_topics?: {
+            uuid: string;
+            startTime: number;
+            endTime: number;
+            keyphrase: string;
+            topicName: string;
+        }[] | undefined;
+        transcript?: {
+            speakerIndex: number;
+            startTime: number;
+            endTime: number;
+            items: {
+                startTime: number;
+                endTime: number;
+                content: string;
+            }[];
+        }[] | undefined;
+    }, {
+        uuid: string;
+        duration: number;
+        title: string;
+        created_at: string;
+        updated_at: string;
+        direction: string;
+        locale: string;
+        is_video: boolean;
+        visible: boolean;
+        performed_at: string;
+        leexi_url: string;
+        description?: string | null | undefined;
+        video_archived_at?: string | null | undefined;
+        audio_archived_at?: string | null | undefined;
+        transcript_archived_at?: string | null | undefined;
+        completions_archived_at?: string | null | undefined;
+        source?: string | null | undefined;
+        source_id?: string | null | undefined;
+        recording_url?: string | null | undefined;
+        transcript_url?: string | null | undefined;
+        summary?: string | null | undefined;
+        conversation_type?: z.objectInputType<{
+            uuid: z.ZodString;
+            slug: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough"> | null | undefined;
+        deal?: unknown;
+        meeting_event?: z.objectInputType<{
+            uuid: z.ZodString;
+            title: z.ZodString;
+            meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            internal: z.ZodBoolean;
+            direction: z.ZodString;
+            start_time: z.ZodString;
+            end_time: z.ZodString;
+        }, z.ZodTypeAny, "passthrough"> | null | undefined;
+        feedbacks?: unknown[] | undefined;
+        owner?: z.objectInputType<{
+            uuid: z.ZodString;
+            name: z.ZodString;
+            email: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough"> | null | undefined;
+        participating_users?: z.objectInputType<{
+            uuid: z.ZodString;
+            name: z.ZodString;
+            email: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        customer_phone_numbers?: string[] | undefined;
+        customer_email_addresses?: string[] | undefined;
+        speakers?: z.objectInputType<{
+            uuid: z.ZodString;
+            index: z.ZodNumber;
+            duration: z.ZodNumber;
+            longest_monologue: z.ZodNumber;
+            name: z.ZodString;
+            is_user: z.ZodBoolean;
+            phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            email_address: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        prompts?: z.objectInputType<{
+            uuid: z.ZodString;
+            title: z.ZodString;
+            category: z.ZodString;
+            completions: z.ZodArray<z.ZodString, "many">;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        chapters?: z.objectInputType<{
+            uuid: z.ZodString;
+            index: z.ZodNumber;
+            title: z.ZodString;
+            text: z.ZodString;
+            start_time: z.ZodNumber;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        scorecards?: unknown[] | undefined;
+        tags?: unknown[] | undefined;
+        tasks?: z.objectInputType<{
+            uuid: z.ZodString;
+            active: z.ZodBoolean;
+            subject: z.ZodString;
+            description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            status: z.ZodString;
+            done: z.ZodBoolean;
+            created_at: z.ZodString;
+            updated_at: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        simple_transcript?: string | undefined;
+        call_topics?: z.objectInputType<{
+            uuid: z.ZodString;
+            start_time: z.ZodNumber;
+            end_time: z.ZodNumber;
+            keyphrase: z.ZodString;
+            topic_name: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        transcript?: {
+            start_time: number;
+            end_time: number;
+            speaker_index: number;
+            items: z.objectInputType<{
+                start_time: z.ZodNumber;
+                end_time: z.ZodNumber;
+                content: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">[];
+        }[] | undefined;
+    }>, {
+        uuid: string;
+        locale: string;
+        duration: number;
+        direction: string;
+        isVideo: boolean;
+        visible: boolean;
+        title: string;
+        description: string | null;
+        createdAt: string;
+        updatedAt: string;
+        performedAt: string;
+        leexiUrl: string;
+        videoArchivedAt: string | null;
+        audioArchivedAt: string | null;
+        transcriptArchivedAt: string | null;
+        completionsArchivedAt: string | null;
+        source: string | null;
+        sourceId: string | null;
+        recordingUrl: string | null;
+        transcriptUrl: string | null;
+        summary: string | null;
+        conversationType: z.objectOutputType<{
+            uuid: z.ZodString;
+            slug: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough"> | null;
+        deal: {} | null;
+        meetingEvent: {
+            uuid: string;
+            title: string;
+            meetingUrl: string | null;
+            meetingProvider: string | null;
+            internal: boolean;
+            direction: string;
+            startTime: string;
+            endTime: string;
+        } | null;
+        feedbacks: unknown[];
+        owner: z.objectOutputType<{
+            uuid: z.ZodString;
+            name: z.ZodString;
+            email: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough"> | null;
+        participatingUsers: z.objectOutputType<{
+            uuid: z.ZodString;
+            name: z.ZodString;
+            email: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough">[];
+        customerPhoneNumbers: string[];
+        customerEmailAddresses: string[];
+        speakers: {
+            uuid: string;
+            index: number;
+            duration: number;
+            longestMonologue: number;
+            name: string;
+            isUser: boolean;
+            phoneNumber: string | null;
+            emailAddress: string | null;
+        }[];
+        prompts: z.objectOutputType<{
+            uuid: z.ZodString;
+            title: z.ZodString;
+            category: z.ZodString;
+            completions: z.ZodArray<z.ZodString, "many">;
+        }, z.ZodTypeAny, "passthrough">[];
+        chapters: {
+            uuid: string;
+            index: number;
+            title: string;
+            text: string;
+            startTime: number;
+        }[];
+        scorecards: unknown[];
+        tags: unknown[];
+        tasks: {
+            uuid: string;
+            active: boolean;
+            subject: string;
+            description: string | null;
+            status: string;
+            done: boolean;
+            createdAt: string;
+            updatedAt: string;
+        }[];
+        simpleTranscript: string;
+        callTopics: {
+            uuid: string;
+            startTime: number;
+            endTime: number;
+            keyphrase: string;
+            topicName: string;
+        }[];
+        transcript: {
+            speakerIndex: number;
+            startTime: number;
+            endTime: number;
+            items: {
+                startTime: number;
+                endTime: number;
+                content: string;
+            }[];
+        }[];
+    }, {
+        uuid: string;
+        duration: number;
+        title: string;
+        created_at: string;
+        updated_at: string;
+        direction: string;
+        locale: string;
+        is_video: boolean;
+        visible: boolean;
+        performed_at: string;
+        leexi_url: string;
+        description?: string | null | undefined;
+        video_archived_at?: string | null | undefined;
+        audio_archived_at?: string | null | undefined;
+        transcript_archived_at?: string | null | undefined;
+        completions_archived_at?: string | null | undefined;
+        source?: string | null | undefined;
+        source_id?: string | null | undefined;
+        recording_url?: string | null | undefined;
+        transcript_url?: string | null | undefined;
+        summary?: string | null | undefined;
+        conversation_type?: z.objectInputType<{
+            uuid: z.ZodString;
+            slug: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough"> | null | undefined;
+        deal?: unknown;
+        meeting_event?: z.objectInputType<{
+            uuid: z.ZodString;
+            title: z.ZodString;
+            meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            internal: z.ZodBoolean;
+            direction: z.ZodString;
+            start_time: z.ZodString;
+            end_time: z.ZodString;
+        }, z.ZodTypeAny, "passthrough"> | null | undefined;
+        feedbacks?: unknown[] | undefined;
+        owner?: z.objectInputType<{
+            uuid: z.ZodString;
+            name: z.ZodString;
+            email: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough"> | null | undefined;
+        participating_users?: z.objectInputType<{
+            uuid: z.ZodString;
+            name: z.ZodString;
+            email: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        customer_phone_numbers?: string[] | undefined;
+        customer_email_addresses?: string[] | undefined;
+        speakers?: z.objectInputType<{
+            uuid: z.ZodString;
+            index: z.ZodNumber;
+            duration: z.ZodNumber;
+            longest_monologue: z.ZodNumber;
+            name: z.ZodString;
+            is_user: z.ZodBoolean;
+            phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            email_address: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        prompts?: z.objectInputType<{
+            uuid: z.ZodString;
+            title: z.ZodString;
+            category: z.ZodString;
+            completions: z.ZodArray<z.ZodString, "many">;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        chapters?: z.objectInputType<{
+            uuid: z.ZodString;
+            index: z.ZodNumber;
+            title: z.ZodString;
+            text: z.ZodString;
+            start_time: z.ZodNumber;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        scorecards?: unknown[] | undefined;
+        tags?: unknown[] | undefined;
+        tasks?: z.objectInputType<{
+            uuid: z.ZodString;
+            active: z.ZodBoolean;
+            subject: z.ZodString;
+            description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            status: z.ZodString;
+            done: z.ZodBoolean;
+            created_at: z.ZodString;
+            updated_at: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        simple_transcript?: string | undefined;
+        call_topics?: z.objectInputType<{
+            uuid: z.ZodString;
+            start_time: z.ZodNumber;
+            end_time: z.ZodNumber;
+            keyphrase: z.ZodString;
+            topic_name: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        transcript?: {
+            start_time: number;
+            end_time: number;
+            speaker_index: number;
+            items: z.objectInputType<{
+                start_time: z.ZodNumber;
+                end_time: z.ZodNumber;
+                content: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">[];
+        }[] | undefined;
+    }>;
+}, "strip", z.ZodTypeAny, {
+    data: {
+        uuid: string;
+        locale: string;
+        duration: number;
+        direction: string;
+        isVideo: boolean;
+        visible: boolean;
+        title: string;
+        description: string | null;
+        createdAt: string;
+        updatedAt: string;
+        performedAt: string;
+        leexiUrl: string;
+        videoArchivedAt: string | null;
+        audioArchivedAt: string | null;
+        transcriptArchivedAt: string | null;
+        completionsArchivedAt: string | null;
+        source: string | null;
+        sourceId: string | null;
+        recordingUrl: string | null;
+        transcriptUrl: string | null;
+        summary: string | null;
+        conversationType: z.objectOutputType<{
+            uuid: z.ZodString;
+            slug: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough"> | null;
+        deal: {} | null;
+        meetingEvent: {
+            uuid: string;
+            title: string;
+            meetingUrl: string | null;
+            meetingProvider: string | null;
+            internal: boolean;
+            direction: string;
+            startTime: string;
+            endTime: string;
+        } | null;
+        feedbacks: unknown[];
+        owner: z.objectOutputType<{
+            uuid: z.ZodString;
+            name: z.ZodString;
+            email: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough"> | null;
+        participatingUsers: z.objectOutputType<{
+            uuid: z.ZodString;
+            name: z.ZodString;
+            email: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough">[];
+        customerPhoneNumbers: string[];
+        customerEmailAddresses: string[];
+        speakers: {
+            uuid: string;
+            index: number;
+            duration: number;
+            longestMonologue: number;
+            name: string;
+            isUser: boolean;
+            phoneNumber: string | null;
+            emailAddress: string | null;
+        }[];
+        prompts: z.objectOutputType<{
+            uuid: z.ZodString;
+            title: z.ZodString;
+            category: z.ZodString;
+            completions: z.ZodArray<z.ZodString, "many">;
+        }, z.ZodTypeAny, "passthrough">[];
+        chapters: {
+            uuid: string;
+            index: number;
+            title: string;
+            text: string;
+            startTime: number;
+        }[];
+        scorecards: unknown[];
+        tags: unknown[];
+        tasks: {
+            uuid: string;
+            active: boolean;
+            subject: string;
+            description: string | null;
+            status: string;
+            done: boolean;
+            createdAt: string;
+            updatedAt: string;
+        }[];
+        simpleTranscript: string;
+        callTopics: {
+            uuid: string;
+            startTime: number;
+            endTime: number;
+            keyphrase: string;
+            topicName: string;
+        }[];
+        transcript: {
+            speakerIndex: number;
+            startTime: number;
+            endTime: number;
+            items: {
+                startTime: number;
+                endTime: number;
+                content: string;
+            }[];
+        }[];
+    };
+}, {
+    data: {
+        uuid: string;
+        duration: number;
+        title: string;
+        created_at: string;
+        updated_at: string;
+        direction: string;
+        locale: string;
+        is_video: boolean;
+        visible: boolean;
+        performed_at: string;
+        leexi_url: string;
+        description?: string | null | undefined;
+        video_archived_at?: string | null | undefined;
+        audio_archived_at?: string | null | undefined;
+        transcript_archived_at?: string | null | undefined;
+        completions_archived_at?: string | null | undefined;
+        source?: string | null | undefined;
+        source_id?: string | null | undefined;
+        recording_url?: string | null | undefined;
+        transcript_url?: string | null | undefined;
+        summary?: string | null | undefined;
+        conversation_type?: z.objectInputType<{
+            uuid: z.ZodString;
+            slug: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough"> | null | undefined;
+        deal?: unknown;
+        meeting_event?: z.objectInputType<{
+            uuid: z.ZodString;
+            title: z.ZodString;
+            meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            internal: z.ZodBoolean;
+            direction: z.ZodString;
+            start_time: z.ZodString;
+            end_time: z.ZodString;
+        }, z.ZodTypeAny, "passthrough"> | null | undefined;
+        feedbacks?: unknown[] | undefined;
+        owner?: z.objectInputType<{
+            uuid: z.ZodString;
+            name: z.ZodString;
+            email: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough"> | null | undefined;
+        participating_users?: z.objectInputType<{
+            uuid: z.ZodString;
+            name: z.ZodString;
+            email: z.ZodString;
+            active: z.ZodBoolean;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        customer_phone_numbers?: string[] | undefined;
+        customer_email_addresses?: string[] | undefined;
+        speakers?: z.objectInputType<{
+            uuid: z.ZodString;
+            index: z.ZodNumber;
+            duration: z.ZodNumber;
+            longest_monologue: z.ZodNumber;
+            name: z.ZodString;
+            is_user: z.ZodBoolean;
+            phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            email_address: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        prompts?: z.objectInputType<{
+            uuid: z.ZodString;
+            title: z.ZodString;
+            category: z.ZodString;
+            completions: z.ZodArray<z.ZodString, "many">;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        chapters?: z.objectInputType<{
+            uuid: z.ZodString;
+            index: z.ZodNumber;
+            title: z.ZodString;
+            text: z.ZodString;
+            start_time: z.ZodNumber;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        scorecards?: unknown[] | undefined;
+        tags?: unknown[] | undefined;
+        tasks?: z.objectInputType<{
+            uuid: z.ZodString;
+            active: z.ZodBoolean;
+            subject: z.ZodString;
+            description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+            status: z.ZodString;
+            done: z.ZodBoolean;
+            created_at: z.ZodString;
+            updated_at: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        simple_transcript?: string | undefined;
+        call_topics?: z.objectInputType<{
+            uuid: z.ZodString;
+            start_time: z.ZodNumber;
+            end_time: z.ZodNumber;
+            keyphrase: z.ZodString;
+            topic_name: z.ZodString;
+        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        transcript?: {
+            start_time: number;
+            end_time: number;
+            speaker_index: number;
+            items: z.objectInputType<{
+                start_time: z.ZodNumber;
+                end_time: z.ZodNumber;
+                content: z.ZodString;
+            }, z.ZodTypeAny, "passthrough">[];
+        }[] | undefined;
+    };
+}>;
+export type CallDetailResponse = z.infer<typeof CallDetailResponseSchema>;

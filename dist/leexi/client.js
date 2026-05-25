@@ -3,7 +3,7 @@
 // Features: HTTP Basic Auth (key_id + secret), Zod response parsing, retry on 429/5xx.
 import { LeexiApiError } from "../errors.js";
 import { callDetailUrl, callsListUrl } from "./endpoints.js";
-import { CallDetailSchema, CallsListSchema } from "./types.js";
+import { CallDetailResponseSchema, CallsListResponseSchema, } from "./types.js";
 export class LeexiClient {
     apiKeyId;
     apiKey;
@@ -18,17 +18,22 @@ export class LeexiClient {
         this.maxRetries = opts.maxRetries ?? 2;
         this.retryDelayMs = opts.retryDelayMs ?? 500;
     }
-    /** Returns a paginated list of calls, optionally filtered by date. */
+    /** Returns a paginated list of calls with real pagination shape. */
     async listCalls(params) {
         const url = callsListUrl(this.baseUrl, params);
         const json = await this.fetchJson(url);
-        return CallsListSchema.parse(json);
+        const parsed = CallsListResponseSchema.parse(json);
+        return { calls: parsed.data, pagination: parsed.pagination };
     }
-    /** Returns full detail for a single call by UUID. */
+    /**
+     * Returns full detail for a single call by UUID.
+     * Unwraps the `{ data: CallDetail }` wrapper — callers receive the call directly.
+     */
     async getCall(uuid) {
         const url = callDetailUrl(this.baseUrl, uuid);
         const json = await this.fetchJson(url);
-        return CallDetailSchema.parse(json);
+        const parsed = CallDetailResponseSchema.parse(json);
+        return parsed.data;
     }
     /**
      * Executes a GET request with retry logic.
@@ -45,7 +50,7 @@ export class LeexiClient {
                         // Leexi public API uses HTTP Basic Auth: base64(KEY_ID:KEY_SECRET)
                         authorization: `Basic ${Buffer.from(`${this.apiKeyId}:${this.apiKey}`).toString("base64")}`,
                         accept: "application/json",
-                        "user-agent": "leexi-mcp/0.3.0",
+                        "user-agent": "leexi-mcp/0.4.0",
                     },
                 });
                 // Determine if we should retry (429 rate-limit or 5xx server error).
