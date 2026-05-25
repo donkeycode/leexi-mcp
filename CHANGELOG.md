@@ -4,6 +4,15 @@ All notable changes to `@donkeycode/leexi-mcp` will be documented here. Format i
 
 ## [Unreleased]
 
+## [0.4.1] — 2026-05-25
+
+### Fixed
+- **Plugin install broken**: `dist/index.js` referenced `zod`, `undici`, etc. from `node_modules/` which isn't shipped with the plugin cache. Now `pnpm build` produces a fully self-contained `dist/index.js` (~680 KB) with all runtime deps bundled via esbuild.
+
+### Added
+- `scripts/bundle.mjs`: esbuild bundling step (ESM + CJS interop shim).
+- `esbuild` as direct devDependency.
+
 ## [0.4.0] — 2026-05-25
 
 ### Changed (BREAKING)
