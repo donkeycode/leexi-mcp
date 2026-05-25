@@ -28,13 +28,22 @@ interface AnyTool {
 }
 
 // ---------------------------------------------------------------------------
-// Server bootstrap
+// BuildServer result — returned without connecting to any transport.
+// Exported so tests can wire request handlers without touching stdio.
 // ---------------------------------------------------------------------------
+export interface BuildServerResult {
+  server: Server;
+  tools: AnyTool[];
+  store: ProcessedStore;
+}
 
-export async function startServer(config: Config): Promise<void> {
+// ---------------------------------------------------------------------------
+// buildServer — creates the MCP Server and registers all request handlers.
+// Does NOT connect to any transport; call server.connect(transport) yourself.
+// ---------------------------------------------------------------------------
+export function buildServer(config: Config): BuildServerResult {
   const client = new LeexiClient({ apiKey: config.apiKey, baseUrl: config.baseUrl });
   const store = new ProcessedStore(config.stateFile);
-  await store.load();
 
   // Each tool has its own concrete I/O/P shape; cast to AnyTool[] for uniform
   // dispatch. The structural interface ensures all required members are present.
@@ -81,6 +90,19 @@ export async function startServer(config: Config): Promise<void> {
       content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }],
     };
   });
+
+  return { server, tools, store };
+}
+
+// ---------------------------------------------------------------------------
+// startServer — backward-compatible entry point used by src/index.ts.
+// Builds the server, loads the store, then connects to stdio transport.
+// ---------------------------------------------------------------------------
+export async function startServer(config: Config): Promise<void> {
+  const { server, store } = buildServer(config);
+
+  // Load persisted processed-call state before accepting requests.
+  await store.load();
 
   const transport = new StdioServerTransport();
   await server.connect(transport);
