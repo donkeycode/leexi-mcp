@@ -242,6 +242,53 @@ describe("Leexi schemas", () => {
     expect(parsed.title).toBe("Detail sans durée");
   });
 
+  // v0.4.11 — régression : l'API Leexi renvoie parfois simple_transcript et
+  // transcript à null sur des calls historiques (call archivé sans transcript
+  // disponible, call très court interrompu). Avant v0.4.11 CallDetailSchema
+  // rejetait ces calls → bloquait la routine sur le call corrompu.
+  it("CallDetailSchema accepts null on simple_transcript and transcript (historical calls)", () => {
+    const raw = {
+      uuid: "call-no-transcript",
+      locale: "fr-FR",
+      duration: 120,
+      direction: "outbound",
+      is_video: true,
+      visible: true,
+      title: "Call sans transcript",
+      created_at: "2024-05-06T07:00:00Z",
+      updated_at: "2026-05-06T02:00:00Z",
+      performed_at: "2024-05-06T06:30:00Z",
+      leexi_url: "https://app.leexi.ai/calls/call-no-transcript",
+      simple_transcript: null,
+      transcript: null,
+      call_topics: null,
+    };
+    const parsed = CallDetailSchema.parse(raw);
+    expect(parsed.simpleTranscript).toBe("");
+    expect(parsed.transcript).toEqual([]);
+    expect(parsed.callTopics).toEqual([]);
+  });
+
+  it("CallSummarySchema accepts null on simple_transcript (historical calls)", () => {
+    const raw = {
+      uuid: "call-summary-no-transcript",
+      locale: "fr-FR",
+      duration: 60,
+      direction: "outbound",
+      is_video: true,
+      visible: true,
+      title: "Summary sans transcript",
+      created_at: "2024-05-06T07:00:00Z",
+      updated_at: "2026-05-06T02:00:00Z",
+      performed_at: "2024-05-06T06:30:00Z",
+      leexi_url: "https://app.leexi.ai/calls/call-summary-no-transcript",
+      simple_transcript: null,
+    };
+    const parsed = CallSummarySchema.parse(raw);
+    expect(parsed.simpleTranscript).toBe("");
+    expect(parsed.title).toBe("Summary sans transcript");
+  });
+
   it("SpeakerSchema accepts null on duration and longest_monologue (historical empty speakers)", () => {
     const raw = {
       uuid: "speaker-empty",

@@ -19547,7 +19547,7 @@ var CallSummarySchema = external_exports.object({
   scorecards: external_exports.array(external_exports.unknown()).optional(),
   tags: external_exports.array(external_exports.unknown()).optional(),
   tasks: external_exports.array(TaskSchema2).optional(),
-  simple_transcript: external_exports.string().optional()
+  simple_transcript: external_exports.string().nullish()
 }).transform((raw) => ({
   uuid: raw.uuid,
   // v0.4.8 — passer null tel quel ; les consommateurs (routine, fiches
@@ -19629,11 +19629,13 @@ var CallDetailSchema = external_exports.object({
   tasks: external_exports.array(TaskSchema2).optional(),
   // simple_transcript: full call text with inline "(HH:MM:SS - HH:MM:SS)" timestamps.
   // Format: "Speaker Name (HH:MM:SS - HH:MM:SS)\nText...\n\n"
-  simple_transcript: external_exports.string().optional(),
+  // v0.4.11 — nullish() : certains calls historiques renvoient null (pas que undefined).
+  simple_transcript: external_exports.string().nullish(),
   // call_topics: detail-only. Semantic keyphrases with timestamps.
-  call_topics: external_exports.array(CallTopicSchema).optional(),
+  call_topics: external_exports.array(CallTopicSchema).nullish(),
   // transcript: detail-only. Word-level utterance array.
-  transcript: external_exports.array(TranscriptUtteranceSchema).optional()
+  // v0.4.11 — nullish() : certains calls historiques renvoient null.
+  transcript: external_exports.array(TranscriptUtteranceSchema).nullish()
 }).transform((raw) => ({
   uuid: raw.uuid,
   // v0.4.8 — cf. CallSummarySchema : null passé tel quel.

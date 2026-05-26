@@ -618,7 +618,7 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
         created_at: z.ZodString;
         updated_at: z.ZodString;
     }, z.ZodTypeAny, "passthrough">>, "many">>;
-    simple_transcript: z.ZodOptional<z.ZodString>;
+    simple_transcript: z.ZodOptional<z.ZodNullable<z.ZodString>>;
 }, "strip", z.ZodTypeAny, {
     created_at: string;
     performed_at: string;
@@ -707,7 +707,7 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
         createdAt: string;
         updatedAt: string;
     }[] | undefined;
-    simple_transcript?: string | undefined;
+    simple_transcript?: string | null | undefined;
 }, {
     created_at: string;
     performed_at: string;
@@ -796,7 +796,7 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
         created_at: z.ZodString;
         updated_at: z.ZodString;
     }, z.ZodTypeAny, "passthrough">[] | undefined;
-    simple_transcript?: string | undefined;
+    simple_transcript?: string | null | undefined;
 }>, {
     uuid: string;
     locale: string | null;
@@ -974,7 +974,7 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
         created_at: z.ZodString;
         updated_at: z.ZodString;
     }, z.ZodTypeAny, "passthrough">[] | undefined;
-    simple_transcript?: string | undefined;
+    simple_transcript?: string | null | undefined;
 }>;
 export type CallSummary = z.infer<typeof CallSummarySchema>;
 export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
@@ -1235,8 +1235,8 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
         created_at: z.ZodString;
         updated_at: z.ZodString;
     }, z.ZodTypeAny, "passthrough">>, "many">>;
-    simple_transcript: z.ZodOptional<z.ZodString>;
-    call_topics: z.ZodOptional<z.ZodArray<z.ZodEffects<z.ZodObject<{
+    simple_transcript: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+    call_topics: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodEffects<z.ZodObject<{
         uuid: z.ZodString;
         start_time: z.ZodNumber;
         end_time: z.ZodNumber;
@@ -1266,8 +1266,8 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
         end_time: z.ZodNumber;
         keyphrase: z.ZodString;
         topic_name: z.ZodString;
-    }, z.ZodTypeAny, "passthrough">>, "many">>;
-    transcript: z.ZodOptional<z.ZodArray<z.ZodEffects<z.ZodObject<{
+    }, z.ZodTypeAny, "passthrough">>, "many">>>;
+    transcript: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodEffects<z.ZodObject<{
         speaker_index: z.ZodNumber;
         start_time: z.ZodNumber;
         end_time: z.ZodNumber;
@@ -1328,7 +1328,7 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
         start_time: number;
         end_time: number;
         speaker_index: number;
-    }>, "many">>;
+    }>, "many">>>;
 }, "strip", z.ZodTypeAny, {
     created_at: string;
     performed_at: string;
@@ -1417,14 +1417,14 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
         createdAt: string;
         updatedAt: string;
     }[] | undefined;
-    simple_transcript?: string | undefined;
+    simple_transcript?: string | null | undefined;
     call_topics?: {
         uuid: string;
         startTime: number;
         endTime: number;
         keyphrase: string;
         topicName: string;
-    }[] | undefined;
+    }[] | null | undefined;
     transcript?: {
         speakerIndex: number;
         startTime: number;
@@ -1434,7 +1434,7 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
             endTime: number;
             content: string;
         }[];
-    }[] | undefined;
+    }[] | null | undefined;
 }, {
     created_at: string;
     performed_at: string;
@@ -1523,14 +1523,14 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
         created_at: z.ZodString;
         updated_at: z.ZodString;
     }, z.ZodTypeAny, "passthrough">[] | undefined;
-    simple_transcript?: string | undefined;
+    simple_transcript?: string | null | undefined;
     call_topics?: z.objectInputType<{
         uuid: z.ZodString;
         start_time: z.ZodNumber;
         end_time: z.ZodNumber;
         keyphrase: z.ZodString;
         topic_name: z.ZodString;
-    }, z.ZodTypeAny, "passthrough">[] | undefined;
+    }, z.ZodTypeAny, "passthrough">[] | null | undefined;
     transcript?: {
         items: z.objectInputType<{
             start_time: z.ZodNumber;
@@ -1540,7 +1540,7 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
         start_time: number;
         end_time: number;
         speaker_index: number;
-    }[] | undefined;
+    }[] | null | undefined;
 }>, {
     uuid: string;
     locale: string | null;
@@ -1735,14 +1735,14 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
         created_at: z.ZodString;
         updated_at: z.ZodString;
     }, z.ZodTypeAny, "passthrough">[] | undefined;
-    simple_transcript?: string | undefined;
+    simple_transcript?: string | null | undefined;
     call_topics?: z.objectInputType<{
         uuid: z.ZodString;
         start_time: z.ZodNumber;
         end_time: z.ZodNumber;
         keyphrase: z.ZodString;
         topic_name: z.ZodString;
-    }, z.ZodTypeAny, "passthrough">[] | undefined;
+    }, z.ZodTypeAny, "passthrough">[] | null | undefined;
     transcript?: {
         items: z.objectInputType<{
             start_time: z.ZodNumber;
@@ -1752,7 +1752,7 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
         start_time: number;
         end_time: number;
         speaker_index: number;
-    }[] | undefined;
+    }[] | null | undefined;
 }>;
 export type CallDetail = z.infer<typeof CallDetailSchema>;
 /** Response shape for GET /v1/calls */
@@ -2015,7 +2015,7 @@ export declare const CallsListResponseSchema: z.ZodObject<{
             created_at: z.ZodString;
             updated_at: z.ZodString;
         }, z.ZodTypeAny, "passthrough">>, "many">>;
-        simple_transcript: z.ZodOptional<z.ZodString>;
+        simple_transcript: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     }, "strip", z.ZodTypeAny, {
         created_at: string;
         performed_at: string;
@@ -2104,7 +2104,7 @@ export declare const CallsListResponseSchema: z.ZodObject<{
             createdAt: string;
             updatedAt: string;
         }[] | undefined;
-        simple_transcript?: string | undefined;
+        simple_transcript?: string | null | undefined;
     }, {
         created_at: string;
         performed_at: string;
@@ -2193,7 +2193,7 @@ export declare const CallsListResponseSchema: z.ZodObject<{
             created_at: z.ZodString;
             updated_at: z.ZodString;
         }, z.ZodTypeAny, "passthrough">[] | undefined;
-        simple_transcript?: string | undefined;
+        simple_transcript?: string | null | undefined;
     }>, {
         uuid: string;
         locale: string | null;
@@ -2371,7 +2371,7 @@ export declare const CallsListResponseSchema: z.ZodObject<{
             created_at: z.ZodString;
             updated_at: z.ZodString;
         }, z.ZodTypeAny, "passthrough">[] | undefined;
-        simple_transcript?: string | undefined;
+        simple_transcript?: string | null | undefined;
     }>, "many">;
     pagination: z.ZodObject<{
         page: z.ZodNumber;
@@ -2571,7 +2571,7 @@ export declare const CallsListResponseSchema: z.ZodObject<{
             created_at: z.ZodString;
             updated_at: z.ZodString;
         }, z.ZodTypeAny, "passthrough">[] | undefined;
-        simple_transcript?: string | undefined;
+        simple_transcript?: string | null | undefined;
     }[];
     pagination: {
         items: number;
@@ -2840,8 +2840,8 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
             created_at: z.ZodString;
             updated_at: z.ZodString;
         }, z.ZodTypeAny, "passthrough">>, "many">>;
-        simple_transcript: z.ZodOptional<z.ZodString>;
-        call_topics: z.ZodOptional<z.ZodArray<z.ZodEffects<z.ZodObject<{
+        simple_transcript: z.ZodOptional<z.ZodNullable<z.ZodString>>;
+        call_topics: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodEffects<z.ZodObject<{
             uuid: z.ZodString;
             start_time: z.ZodNumber;
             end_time: z.ZodNumber;
@@ -2871,8 +2871,8 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
             end_time: z.ZodNumber;
             keyphrase: z.ZodString;
             topic_name: z.ZodString;
-        }, z.ZodTypeAny, "passthrough">>, "many">>;
-        transcript: z.ZodOptional<z.ZodArray<z.ZodEffects<z.ZodObject<{
+        }, z.ZodTypeAny, "passthrough">>, "many">>>;
+        transcript: z.ZodOptional<z.ZodNullable<z.ZodArray<z.ZodEffects<z.ZodObject<{
             speaker_index: z.ZodNumber;
             start_time: z.ZodNumber;
             end_time: z.ZodNumber;
@@ -2933,7 +2933,7 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
             start_time: number;
             end_time: number;
             speaker_index: number;
-        }>, "many">>;
+        }>, "many">>>;
     }, "strip", z.ZodTypeAny, {
         created_at: string;
         performed_at: string;
@@ -3022,14 +3022,14 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
             createdAt: string;
             updatedAt: string;
         }[] | undefined;
-        simple_transcript?: string | undefined;
+        simple_transcript?: string | null | undefined;
         call_topics?: {
             uuid: string;
             startTime: number;
             endTime: number;
             keyphrase: string;
             topicName: string;
-        }[] | undefined;
+        }[] | null | undefined;
         transcript?: {
             speakerIndex: number;
             startTime: number;
@@ -3039,7 +3039,7 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
                 endTime: number;
                 content: string;
             }[];
-        }[] | undefined;
+        }[] | null | undefined;
     }, {
         created_at: string;
         performed_at: string;
@@ -3128,14 +3128,14 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
             created_at: z.ZodString;
             updated_at: z.ZodString;
         }, z.ZodTypeAny, "passthrough">[] | undefined;
-        simple_transcript?: string | undefined;
+        simple_transcript?: string | null | undefined;
         call_topics?: z.objectInputType<{
             uuid: z.ZodString;
             start_time: z.ZodNumber;
             end_time: z.ZodNumber;
             keyphrase: z.ZodString;
             topic_name: z.ZodString;
-        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        }, z.ZodTypeAny, "passthrough">[] | null | undefined;
         transcript?: {
             items: z.objectInputType<{
                 start_time: z.ZodNumber;
@@ -3145,7 +3145,7 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
             start_time: number;
             end_time: number;
             speaker_index: number;
-        }[] | undefined;
+        }[] | null | undefined;
     }>, {
         uuid: string;
         locale: string | null;
@@ -3340,14 +3340,14 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
             created_at: z.ZodString;
             updated_at: z.ZodString;
         }, z.ZodTypeAny, "passthrough">[] | undefined;
-        simple_transcript?: string | undefined;
+        simple_transcript?: string | null | undefined;
         call_topics?: z.objectInputType<{
             uuid: z.ZodString;
             start_time: z.ZodNumber;
             end_time: z.ZodNumber;
             keyphrase: z.ZodString;
             topic_name: z.ZodString;
-        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        }, z.ZodTypeAny, "passthrough">[] | null | undefined;
         transcript?: {
             items: z.objectInputType<{
                 start_time: z.ZodNumber;
@@ -3357,7 +3357,7 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
             start_time: number;
             end_time: number;
             speaker_index: number;
-        }[] | undefined;
+        }[] | null | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
     data: {
@@ -3556,14 +3556,14 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
             created_at: z.ZodString;
             updated_at: z.ZodString;
         }, z.ZodTypeAny, "passthrough">[] | undefined;
-        simple_transcript?: string | undefined;
+        simple_transcript?: string | null | undefined;
         call_topics?: z.objectInputType<{
             uuid: z.ZodString;
             start_time: z.ZodNumber;
             end_time: z.ZodNumber;
             keyphrase: z.ZodString;
             topic_name: z.ZodString;
-        }, z.ZodTypeAny, "passthrough">[] | undefined;
+        }, z.ZodTypeAny, "passthrough">[] | null | undefined;
         transcript?: {
             items: z.objectInputType<{
                 start_time: z.ZodNumber;
@@ -3573,7 +3573,7 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
             start_time: number;
             end_time: number;
             speaker_index: number;
-        }[] | undefined;
+        }[] | null | undefined;
     };
 }>;
 export type CallDetailResponse = z.infer<typeof CallDetailResponseSchema>;

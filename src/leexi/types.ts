@@ -265,7 +265,7 @@ export const CallSummarySchema = z
     scorecards: z.array(z.unknown()).optional(),
     tags: z.array(z.unknown()).optional(),
     tasks: z.array(TaskSchema).optional(),
-    simple_transcript: z.string().optional(),
+    simple_transcript: z.string().nullish(),
   })
   .transform((raw) => ({
     uuid: raw.uuid,
@@ -357,11 +357,13 @@ export const CallDetailSchema = z
     tasks: z.array(TaskSchema).optional(),
     // simple_transcript: full call text with inline "(HH:MM:SS - HH:MM:SS)" timestamps.
     // Format: "Speaker Name (HH:MM:SS - HH:MM:SS)\nText...\n\n"
-    simple_transcript: z.string().optional(),
+    // v0.4.11 — nullish() : certains calls historiques renvoient null (pas que undefined).
+    simple_transcript: z.string().nullish(),
     // call_topics: detail-only. Semantic keyphrases with timestamps.
-    call_topics: z.array(CallTopicSchema).optional(),
+    call_topics: z.array(CallTopicSchema).nullish(),
     // transcript: detail-only. Word-level utterance array.
-    transcript: z.array(TranscriptUtteranceSchema).optional(),
+    // v0.4.11 — nullish() : certains calls historiques renvoient null.
+    transcript: z.array(TranscriptUtteranceSchema).nullish(),
   })
   .transform((raw) => ({
     uuid: raw.uuid,

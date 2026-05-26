@@ -4,6 +4,46 @@ All notable changes to `@donkeycode/leexi-mcp` will be documented here. Format i
 
 ## [Unreleased]
 
+## [0.4.11] — 2026-05-26
+
+### Fixed (bloquant reprise historique, suite v0.4.10)
+
+- **`simple_transcript: null` et `transcript: null` acceptés sur `CallDetailSchema`** (et `simple_transcript: null` sur `CallSummarySchema`).
+
+L'API Leexi renvoie parfois `simple_transcript: null` et `transcript: null` sur des calls historiques :
+- Calls archivés sans transcript disponible
+- Calls très courts interrompus avant transcription
+- Calls dont la transcription a échoué côté Leexi STT
+
+Avant v0.4.11, ces calls faisaient exploser `CallDetailSchema` avec :
+```
+data.simple_transcript : Expected string, received null
+data.transcript        : Expected array, received null
+```
+ce qui bloquait `leexi_get_call` sur le UUID corrompu et empêchait la routine d'avancer.
+
+`call_topics` est aussi passé en `nullish()` par cohérence (même symptôme attendu).
+
+### Patch technique
+
+`src/leexi/types.ts` :
+- `CallSummarySchema.simple_transcript: z.string().nullish()` (au lieu de `.optional()`).
+- `CallDetailSchema.simple_transcript: z.string().nullish()`.
+- `CallDetailSchema.transcript: z.array(...).nullish()`.
+- `CallDetailSchema.call_topics: z.array(...).nullish()`.
+
+La transformation `raw.simple_transcript ?? ""` et `raw.transcript ?? []` reste inchangée — le composant aval voit toujours une string vide et un array vide pour les champs null.
+
+### Tests
+
+`tests/leexi/types.test.ts` : nouveaux cas régression :
+- `CallDetailSchema accepts null on simple_transcript and transcript`.
+- `CallSummarySchema accepts null on simple_transcript`.
+
+### Contexte (call qui a révélé le bug)
+
+UUID `28d454d1-8e32-47c8-aae8-c0976ecaa822` (Dynabuy, 2024-05-06) — détecté pendant batch 6 de la reprise historique. Quarantaine créée dans `_Automation/Leexi/quarantine/` en attendant cette release.
+
 ## [0.4.10] — 2026-05-26
 
 ### Fixed (bloquant reprise historique, suite v0.4.8/9)
