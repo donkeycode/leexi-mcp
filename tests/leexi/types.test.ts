@@ -199,6 +199,64 @@ describe("Leexi schemas", () => {
     expect(parsed.title).toBe("Chapitre 1: Introduction");
   });
 
+  // v0.4.10 — régression : l'API Leexi renvoie parfois duration à null
+  // sur des calls historiques (calls archivés sans recalcul, calls très
+  // courts/vides). Avant v0.4.10 ces calls faisaient exploser CallSummarySchema
+  // et CallDetailSchema et bloquaient leexi_list_calls sur la page contenant
+  // le call corrompu. Idem pour speakers[].duration et speakers[].longest_monologue.
+  it("CallSummarySchema accepts null on duration (historical calls)", () => {
+    const raw = {
+      uuid: "call-historical",
+      locale: "fr-FR",
+      duration: null,
+      direction: "outbound",
+      is_video: true,
+      visible: true,
+      title: "Call sans durée",
+      created_at: "2024-05-17T09:00:00Z",
+      updated_at: "2026-05-17T02:00:00Z",
+      performed_at: "2024-05-17T08:00:00Z",
+      leexi_url: "https://app.leexi.ai/calls/call-historical",
+    };
+    const parsed = CallSummarySchema.parse(raw);
+    expect(parsed.duration).toBeNull();
+    expect(parsed.title).toBe("Call sans durée");
+  });
+
+  it("CallDetailSchema accepts null on duration (historical calls)", () => {
+    const raw = {
+      uuid: "call-detail-historical",
+      locale: "fr-FR",
+      duration: null,
+      direction: "outbound",
+      is_video: true,
+      visible: true,
+      title: "Detail sans durée",
+      created_at: "2024-05-17T09:00:00Z",
+      updated_at: "2026-05-17T02:00:00Z",
+      performed_at: "2024-05-17T08:00:00Z",
+      leexi_url: "https://app.leexi.ai/calls/call-detail-historical",
+    };
+    const parsed = CallDetailSchema.parse(raw);
+    expect(parsed.duration).toBeNull();
+    expect(parsed.title).toBe("Detail sans durée");
+  });
+
+  it("SpeakerSchema accepts null on duration and longest_monologue (historical empty speakers)", () => {
+    const raw = {
+      uuid: "speaker-empty",
+      index: 0,
+      duration: null,
+      longest_monologue: null,
+      name: "Speaker 1",
+      is_user: false,
+    };
+    const parsed = SpeakerSchema.parse(raw);
+    expect(parsed.duration).toBeNull();
+    expect(parsed.longestMonologue).toBeNull();
+    expect(parsed.name).toBe("Speaker 1");
+  });
+
   it("TaskSchema transforms created_at/updated_at to camelCase", () => {
     const raw = {
       uuid: "task-1",

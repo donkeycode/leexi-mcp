@@ -4,6 +4,25 @@ All notable changes to `@donkeycode/leexi-mcp` will be documented here. Format i
 
 ## [Unreleased]
 
+## [0.4.10] — 2026-05-26
+
+### Fixed (bloquant reprise historique, suite v0.4.8/9)
+
+- **`duration: null` accepté sur `CallSummarySchema` + `CallDetailSchema` + `SpeakerSchema`**.
+
+L'API Leexi renvoie parfois `duration: null` (et `longest_monologue: null` côté speakers) sur des calls historiques :
+- Calls archivés sans recalcul de durée par speaker
+- Calls très courts ou vides (Speaker 1/2/3 sans parole détectée)
+- Calls importés avant détection complète des durées
+
+Avant v0.4.10, ces calls **bloquaient toute la page** `leexi_list_calls` qui les contenait (un seul call corrompu = la page entière inutilisable). Découvert pendant la reprise historique 2024-05 où plusieurs calls de la même journée plantaient le polling chronologique.
+
+- Schémas changés : `z.number().nonnegative()` → `z.number().nullable()` (3 occurrences : `Speaker`, `CallSummary`, `CallDetail`).
+- Transforms changés : `duration: raw.duration` → `duration: raw.duration ?? null`.
+- Régression tests ajoutés : `CallSummarySchema accepts null on duration`, `CallDetailSchema accepts null on duration`, `SpeakerSchema accepts null on duration and longest_monologue`.
+
+Même pattern que v0.4.8 (title/locale/direction nullable) et v0.4.9 (chapters[].start_time nullable). À chaque page de reprise historique on découvre un nouveau champ nullable côté API Leexi — leur OpenAPI sous-spec ne reflète pas la réalité.
+
 ## [0.4.9] — 2026-05-26
 
 ### Fixed (bloquant reprise historique, suite v0.4.8)

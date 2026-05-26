@@ -21,8 +21,8 @@ export type UserRef = z.infer<typeof UserRefSchema>;
 export declare const SpeakerSchema: z.ZodEffects<z.ZodObject<{
     uuid: z.ZodString;
     index: z.ZodNumber;
-    duration: z.ZodNumber;
-    longest_monologue: z.ZodNumber;
+    duration: z.ZodNullable<z.ZodNumber>;
+    longest_monologue: z.ZodNullable<z.ZodNumber>;
     name: z.ZodString;
     is_user: z.ZodBoolean;
     phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -30,8 +30,8 @@ export declare const SpeakerSchema: z.ZodEffects<z.ZodObject<{
 }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
     uuid: z.ZodString;
     index: z.ZodNumber;
-    duration: z.ZodNumber;
-    longest_monologue: z.ZodNumber;
+    duration: z.ZodNullable<z.ZodNumber>;
+    longest_monologue: z.ZodNullable<z.ZodNumber>;
     name: z.ZodString;
     is_user: z.ZodBoolean;
     phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -39,8 +39,8 @@ export declare const SpeakerSchema: z.ZodEffects<z.ZodObject<{
 }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
     uuid: z.ZodString;
     index: z.ZodNumber;
-    duration: z.ZodNumber;
-    longest_monologue: z.ZodNumber;
+    duration: z.ZodNullable<z.ZodNumber>;
+    longest_monologue: z.ZodNullable<z.ZodNumber>;
     name: z.ZodString;
     is_user: z.ZodBoolean;
     phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -48,8 +48,8 @@ export declare const SpeakerSchema: z.ZodEffects<z.ZodObject<{
 }, z.ZodTypeAny, "passthrough">>, {
     uuid: string;
     index: number;
-    duration: number;
-    longestMonologue: number;
+    duration: number | null;
+    longestMonologue: number | null;
     name: string;
     isUser: boolean;
     phoneNumber: string | null;
@@ -57,8 +57,8 @@ export declare const SpeakerSchema: z.ZodEffects<z.ZodObject<{
 }, z.objectInputType<{
     uuid: z.ZodString;
     index: z.ZodNumber;
-    duration: z.ZodNumber;
-    longest_monologue: z.ZodNumber;
+    duration: z.ZodNullable<z.ZodNumber>;
+    longest_monologue: z.ZodNullable<z.ZodNumber>;
     name: z.ZodString;
     is_user: z.ZodBoolean;
     phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -363,7 +363,7 @@ export type Pagination = z.infer<typeof PaginationSchema>;
 export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
     uuid: z.ZodString;
     locale: z.ZodNullable<z.ZodString>;
-    duration: z.ZodNumber;
+    duration: z.ZodNullable<z.ZodNumber>;
     direction: z.ZodNullable<z.ZodString>;
     is_video: z.ZodBoolean;
     visible: z.ZodBoolean;
@@ -480,8 +480,8 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
     speakers: z.ZodOptional<z.ZodArray<z.ZodEffects<z.ZodObject<{
         uuid: z.ZodString;
         index: z.ZodNumber;
-        duration: z.ZodNumber;
-        longest_monologue: z.ZodNumber;
+        duration: z.ZodNullable<z.ZodNumber>;
+        longest_monologue: z.ZodNullable<z.ZodNumber>;
         name: z.ZodString;
         is_user: z.ZodBoolean;
         phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -489,8 +489,8 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
     }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
         uuid: z.ZodString;
         index: z.ZodNumber;
-        duration: z.ZodNumber;
-        longest_monologue: z.ZodNumber;
+        duration: z.ZodNullable<z.ZodNumber>;
+        longest_monologue: z.ZodNullable<z.ZodNumber>;
         name: z.ZodString;
         is_user: z.ZodBoolean;
         phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -498,8 +498,8 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
     }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
         uuid: z.ZodString;
         index: z.ZodNumber;
-        duration: z.ZodNumber;
-        longest_monologue: z.ZodNumber;
+        duration: z.ZodNullable<z.ZodNumber>;
+        longest_monologue: z.ZodNullable<z.ZodNumber>;
         name: z.ZodString;
         is_user: z.ZodBoolean;
         phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -507,8 +507,8 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
     }, z.ZodTypeAny, "passthrough">>, {
         uuid: string;
         index: number;
-        duration: number;
-        longestMonologue: number;
+        duration: number | null;
+        longestMonologue: number | null;
         name: string;
         isUser: boolean;
         phoneNumber: string | null;
@@ -516,8 +516,8 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
     }, z.objectInputType<{
         uuid: z.ZodString;
         index: z.ZodNumber;
-        duration: z.ZodNumber;
-        longest_monologue: z.ZodNumber;
+        duration: z.ZodNullable<z.ZodNumber>;
+        longest_monologue: z.ZodNullable<z.ZodNumber>;
         name: z.ZodString;
         is_user: z.ZodBoolean;
         phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -624,7 +624,7 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
     performed_at: string;
     updated_at: string;
     uuid: string;
-    duration: number;
+    duration: number | null;
     title: string | null;
     direction: string | null;
     locale: string | null;
@@ -675,8 +675,8 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
     speakers?: {
         uuid: string;
         index: number;
-        duration: number;
-        longestMonologue: number;
+        duration: number | null;
+        longestMonologue: number | null;
         name: string;
         isUser: boolean;
         phoneNumber: string | null;
@@ -713,7 +713,7 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
     performed_at: string;
     updated_at: string;
     uuid: string;
-    duration: number;
+    duration: number | null;
     title: string | null;
     direction: string | null;
     locale: string | null;
@@ -764,8 +764,8 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
     speakers?: z.objectInputType<{
         uuid: z.ZodString;
         index: z.ZodNumber;
-        duration: z.ZodNumber;
-        longest_monologue: z.ZodNumber;
+        duration: z.ZodNullable<z.ZodNumber>;
+        longest_monologue: z.ZodNullable<z.ZodNumber>;
         name: z.ZodString;
         is_user: z.ZodBoolean;
         phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -800,7 +800,7 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
 }>, {
     uuid: string;
     locale: string | null;
-    duration: number;
+    duration: number | null;
     direction: string | null;
     isVideo: boolean;
     visible: boolean;
@@ -853,8 +853,8 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
     speakers: {
         uuid: string;
         index: number;
-        duration: number;
-        longestMonologue: number;
+        duration: number | null;
+        longestMonologue: number | null;
         name: string;
         isUser: boolean;
         phoneNumber: string | null;
@@ -891,7 +891,7 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
     performed_at: string;
     updated_at: string;
     uuid: string;
-    duration: number;
+    duration: number | null;
     title: string | null;
     direction: string | null;
     locale: string | null;
@@ -942,8 +942,8 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
     speakers?: z.objectInputType<{
         uuid: z.ZodString;
         index: z.ZodNumber;
-        duration: z.ZodNumber;
-        longest_monologue: z.ZodNumber;
+        duration: z.ZodNullable<z.ZodNumber>;
+        longest_monologue: z.ZodNullable<z.ZodNumber>;
         name: z.ZodString;
         is_user: z.ZodBoolean;
         phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -980,7 +980,7 @@ export type CallSummary = z.infer<typeof CallSummarySchema>;
 export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
     uuid: z.ZodString;
     locale: z.ZodNullable<z.ZodString>;
-    duration: z.ZodNumber;
+    duration: z.ZodNullable<z.ZodNumber>;
     direction: z.ZodNullable<z.ZodString>;
     is_video: z.ZodBoolean;
     visible: z.ZodBoolean;
@@ -1097,8 +1097,8 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
     speakers: z.ZodOptional<z.ZodArray<z.ZodEffects<z.ZodObject<{
         uuid: z.ZodString;
         index: z.ZodNumber;
-        duration: z.ZodNumber;
-        longest_monologue: z.ZodNumber;
+        duration: z.ZodNullable<z.ZodNumber>;
+        longest_monologue: z.ZodNullable<z.ZodNumber>;
         name: z.ZodString;
         is_user: z.ZodBoolean;
         phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -1106,8 +1106,8 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
     }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
         uuid: z.ZodString;
         index: z.ZodNumber;
-        duration: z.ZodNumber;
-        longest_monologue: z.ZodNumber;
+        duration: z.ZodNullable<z.ZodNumber>;
+        longest_monologue: z.ZodNullable<z.ZodNumber>;
         name: z.ZodString;
         is_user: z.ZodBoolean;
         phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -1115,8 +1115,8 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
     }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
         uuid: z.ZodString;
         index: z.ZodNumber;
-        duration: z.ZodNumber;
-        longest_monologue: z.ZodNumber;
+        duration: z.ZodNullable<z.ZodNumber>;
+        longest_monologue: z.ZodNullable<z.ZodNumber>;
         name: z.ZodString;
         is_user: z.ZodBoolean;
         phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -1124,8 +1124,8 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
     }, z.ZodTypeAny, "passthrough">>, {
         uuid: string;
         index: number;
-        duration: number;
-        longestMonologue: number;
+        duration: number | null;
+        longestMonologue: number | null;
         name: string;
         isUser: boolean;
         phoneNumber: string | null;
@@ -1133,8 +1133,8 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
     }, z.objectInputType<{
         uuid: z.ZodString;
         index: z.ZodNumber;
-        duration: z.ZodNumber;
-        longest_monologue: z.ZodNumber;
+        duration: z.ZodNullable<z.ZodNumber>;
+        longest_monologue: z.ZodNullable<z.ZodNumber>;
         name: z.ZodString;
         is_user: z.ZodBoolean;
         phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -1334,7 +1334,7 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
     performed_at: string;
     updated_at: string;
     uuid: string;
-    duration: number;
+    duration: number | null;
     title: string | null;
     direction: string | null;
     locale: string | null;
@@ -1385,8 +1385,8 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
     speakers?: {
         uuid: string;
         index: number;
-        duration: number;
-        longestMonologue: number;
+        duration: number | null;
+        longestMonologue: number | null;
         name: string;
         isUser: boolean;
         phoneNumber: string | null;
@@ -1440,7 +1440,7 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
     performed_at: string;
     updated_at: string;
     uuid: string;
-    duration: number;
+    duration: number | null;
     title: string | null;
     direction: string | null;
     locale: string | null;
@@ -1491,8 +1491,8 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
     speakers?: z.objectInputType<{
         uuid: z.ZodString;
         index: z.ZodNumber;
-        duration: z.ZodNumber;
-        longest_monologue: z.ZodNumber;
+        duration: z.ZodNullable<z.ZodNumber>;
+        longest_monologue: z.ZodNullable<z.ZodNumber>;
         name: z.ZodString;
         is_user: z.ZodBoolean;
         phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -1544,7 +1544,7 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
 }>, {
     uuid: string;
     locale: string | null;
-    duration: number;
+    duration: number | null;
     direction: string | null;
     isVideo: boolean;
     visible: boolean;
@@ -1597,8 +1597,8 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
     speakers: {
         uuid: string;
         index: number;
-        duration: number;
-        longestMonologue: number;
+        duration: number | null;
+        longestMonologue: number | null;
         name: string;
         isUser: boolean;
         phoneNumber: string | null;
@@ -1652,7 +1652,7 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
     performed_at: string;
     updated_at: string;
     uuid: string;
-    duration: number;
+    duration: number | null;
     title: string | null;
     direction: string | null;
     locale: string | null;
@@ -1703,8 +1703,8 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
     speakers?: z.objectInputType<{
         uuid: z.ZodString;
         index: z.ZodNumber;
-        duration: z.ZodNumber;
-        longest_monologue: z.ZodNumber;
+        duration: z.ZodNullable<z.ZodNumber>;
+        longest_monologue: z.ZodNullable<z.ZodNumber>;
         name: z.ZodString;
         is_user: z.ZodBoolean;
         phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -1760,7 +1760,7 @@ export declare const CallsListResponseSchema: z.ZodObject<{
     data: z.ZodArray<z.ZodEffects<z.ZodObject<{
         uuid: z.ZodString;
         locale: z.ZodNullable<z.ZodString>;
-        duration: z.ZodNumber;
+        duration: z.ZodNullable<z.ZodNumber>;
         direction: z.ZodNullable<z.ZodString>;
         is_video: z.ZodBoolean;
         visible: z.ZodBoolean;
@@ -1877,8 +1877,8 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         speakers: z.ZodOptional<z.ZodArray<z.ZodEffects<z.ZodObject<{
             uuid: z.ZodString;
             index: z.ZodNumber;
-            duration: z.ZodNumber;
-            longest_monologue: z.ZodNumber;
+            duration: z.ZodNullable<z.ZodNumber>;
+            longest_monologue: z.ZodNullable<z.ZodNumber>;
             name: z.ZodString;
             is_user: z.ZodBoolean;
             phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -1886,8 +1886,8 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
             uuid: z.ZodString;
             index: z.ZodNumber;
-            duration: z.ZodNumber;
-            longest_monologue: z.ZodNumber;
+            duration: z.ZodNullable<z.ZodNumber>;
+            longest_monologue: z.ZodNullable<z.ZodNumber>;
             name: z.ZodString;
             is_user: z.ZodBoolean;
             phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -1895,8 +1895,8 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
             uuid: z.ZodString;
             index: z.ZodNumber;
-            duration: z.ZodNumber;
-            longest_monologue: z.ZodNumber;
+            duration: z.ZodNullable<z.ZodNumber>;
+            longest_monologue: z.ZodNullable<z.ZodNumber>;
             name: z.ZodString;
             is_user: z.ZodBoolean;
             phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -1904,8 +1904,8 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         }, z.ZodTypeAny, "passthrough">>, {
             uuid: string;
             index: number;
-            duration: number;
-            longestMonologue: number;
+            duration: number | null;
+            longestMonologue: number | null;
             name: string;
             isUser: boolean;
             phoneNumber: string | null;
@@ -1913,8 +1913,8 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         }, z.objectInputType<{
             uuid: z.ZodString;
             index: z.ZodNumber;
-            duration: z.ZodNumber;
-            longest_monologue: z.ZodNumber;
+            duration: z.ZodNullable<z.ZodNumber>;
+            longest_monologue: z.ZodNullable<z.ZodNumber>;
             name: z.ZodString;
             is_user: z.ZodBoolean;
             phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -2021,7 +2021,7 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         performed_at: string;
         updated_at: string;
         uuid: string;
-        duration: number;
+        duration: number | null;
         title: string | null;
         direction: string | null;
         locale: string | null;
@@ -2072,8 +2072,8 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         speakers?: {
             uuid: string;
             index: number;
-            duration: number;
-            longestMonologue: number;
+            duration: number | null;
+            longestMonologue: number | null;
             name: string;
             isUser: boolean;
             phoneNumber: string | null;
@@ -2110,7 +2110,7 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         performed_at: string;
         updated_at: string;
         uuid: string;
-        duration: number;
+        duration: number | null;
         title: string | null;
         direction: string | null;
         locale: string | null;
@@ -2161,8 +2161,8 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         speakers?: z.objectInputType<{
             uuid: z.ZodString;
             index: z.ZodNumber;
-            duration: z.ZodNumber;
-            longest_monologue: z.ZodNumber;
+            duration: z.ZodNullable<z.ZodNumber>;
+            longest_monologue: z.ZodNullable<z.ZodNumber>;
             name: z.ZodString;
             is_user: z.ZodBoolean;
             phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -2197,7 +2197,7 @@ export declare const CallsListResponseSchema: z.ZodObject<{
     }>, {
         uuid: string;
         locale: string | null;
-        duration: number;
+        duration: number | null;
         direction: string | null;
         isVideo: boolean;
         visible: boolean;
@@ -2250,8 +2250,8 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         speakers: {
             uuid: string;
             index: number;
-            duration: number;
-            longestMonologue: number;
+            duration: number | null;
+            longestMonologue: number | null;
             name: string;
             isUser: boolean;
             phoneNumber: string | null;
@@ -2288,7 +2288,7 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         performed_at: string;
         updated_at: string;
         uuid: string;
-        duration: number;
+        duration: number | null;
         title: string | null;
         direction: string | null;
         locale: string | null;
@@ -2339,8 +2339,8 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         speakers?: z.objectInputType<{
             uuid: z.ZodString;
             index: z.ZodNumber;
-            duration: z.ZodNumber;
-            longest_monologue: z.ZodNumber;
+            duration: z.ZodNullable<z.ZodNumber>;
+            longest_monologue: z.ZodNullable<z.ZodNumber>;
             name: z.ZodString;
             is_user: z.ZodBoolean;
             phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -2390,7 +2390,7 @@ export declare const CallsListResponseSchema: z.ZodObject<{
     data: {
         uuid: string;
         locale: string | null;
-        duration: number;
+        duration: number | null;
         direction: string | null;
         isVideo: boolean;
         visible: boolean;
@@ -2443,8 +2443,8 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         speakers: {
             uuid: string;
             index: number;
-            duration: number;
-            longestMonologue: number;
+            duration: number | null;
+            longestMonologue: number | null;
             name: string;
             isUser: boolean;
             phoneNumber: string | null;
@@ -2488,7 +2488,7 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         performed_at: string;
         updated_at: string;
         uuid: string;
-        duration: number;
+        duration: number | null;
         title: string | null;
         direction: string | null;
         locale: string | null;
@@ -2539,8 +2539,8 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         speakers?: z.objectInputType<{
             uuid: z.ZodString;
             index: z.ZodNumber;
-            duration: z.ZodNumber;
-            longest_monologue: z.ZodNumber;
+            duration: z.ZodNullable<z.ZodNumber>;
+            longest_monologue: z.ZodNullable<z.ZodNumber>;
             name: z.ZodString;
             is_user: z.ZodBoolean;
             phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -2585,7 +2585,7 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
     data: z.ZodEffects<z.ZodObject<{
         uuid: z.ZodString;
         locale: z.ZodNullable<z.ZodString>;
-        duration: z.ZodNumber;
+        duration: z.ZodNullable<z.ZodNumber>;
         direction: z.ZodNullable<z.ZodString>;
         is_video: z.ZodBoolean;
         visible: z.ZodBoolean;
@@ -2702,8 +2702,8 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
         speakers: z.ZodOptional<z.ZodArray<z.ZodEffects<z.ZodObject<{
             uuid: z.ZodString;
             index: z.ZodNumber;
-            duration: z.ZodNumber;
-            longest_monologue: z.ZodNumber;
+            duration: z.ZodNullable<z.ZodNumber>;
+            longest_monologue: z.ZodNullable<z.ZodNumber>;
             name: z.ZodString;
             is_user: z.ZodBoolean;
             phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -2711,8 +2711,8 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
         }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
             uuid: z.ZodString;
             index: z.ZodNumber;
-            duration: z.ZodNumber;
-            longest_monologue: z.ZodNumber;
+            duration: z.ZodNullable<z.ZodNumber>;
+            longest_monologue: z.ZodNullable<z.ZodNumber>;
             name: z.ZodString;
             is_user: z.ZodBoolean;
             phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -2720,8 +2720,8 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
         }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
             uuid: z.ZodString;
             index: z.ZodNumber;
-            duration: z.ZodNumber;
-            longest_monologue: z.ZodNumber;
+            duration: z.ZodNullable<z.ZodNumber>;
+            longest_monologue: z.ZodNullable<z.ZodNumber>;
             name: z.ZodString;
             is_user: z.ZodBoolean;
             phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -2729,8 +2729,8 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
         }, z.ZodTypeAny, "passthrough">>, {
             uuid: string;
             index: number;
-            duration: number;
-            longestMonologue: number;
+            duration: number | null;
+            longestMonologue: number | null;
             name: string;
             isUser: boolean;
             phoneNumber: string | null;
@@ -2738,8 +2738,8 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
         }, z.objectInputType<{
             uuid: z.ZodString;
             index: z.ZodNumber;
-            duration: z.ZodNumber;
-            longest_monologue: z.ZodNumber;
+            duration: z.ZodNullable<z.ZodNumber>;
+            longest_monologue: z.ZodNullable<z.ZodNumber>;
             name: z.ZodString;
             is_user: z.ZodBoolean;
             phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -2939,7 +2939,7 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
         performed_at: string;
         updated_at: string;
         uuid: string;
-        duration: number;
+        duration: number | null;
         title: string | null;
         direction: string | null;
         locale: string | null;
@@ -2990,8 +2990,8 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
         speakers?: {
             uuid: string;
             index: number;
-            duration: number;
-            longestMonologue: number;
+            duration: number | null;
+            longestMonologue: number | null;
             name: string;
             isUser: boolean;
             phoneNumber: string | null;
@@ -3045,7 +3045,7 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
         performed_at: string;
         updated_at: string;
         uuid: string;
-        duration: number;
+        duration: number | null;
         title: string | null;
         direction: string | null;
         locale: string | null;
@@ -3096,8 +3096,8 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
         speakers?: z.objectInputType<{
             uuid: z.ZodString;
             index: z.ZodNumber;
-            duration: z.ZodNumber;
-            longest_monologue: z.ZodNumber;
+            duration: z.ZodNullable<z.ZodNumber>;
+            longest_monologue: z.ZodNullable<z.ZodNumber>;
             name: z.ZodString;
             is_user: z.ZodBoolean;
             phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -3149,7 +3149,7 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
     }>, {
         uuid: string;
         locale: string | null;
-        duration: number;
+        duration: number | null;
         direction: string | null;
         isVideo: boolean;
         visible: boolean;
@@ -3202,8 +3202,8 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
         speakers: {
             uuid: string;
             index: number;
-            duration: number;
-            longestMonologue: number;
+            duration: number | null;
+            longestMonologue: number | null;
             name: string;
             isUser: boolean;
             phoneNumber: string | null;
@@ -3257,7 +3257,7 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
         performed_at: string;
         updated_at: string;
         uuid: string;
-        duration: number;
+        duration: number | null;
         title: string | null;
         direction: string | null;
         locale: string | null;
@@ -3308,8 +3308,8 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
         speakers?: z.objectInputType<{
             uuid: z.ZodString;
             index: z.ZodNumber;
-            duration: z.ZodNumber;
-            longest_monologue: z.ZodNumber;
+            duration: z.ZodNullable<z.ZodNumber>;
+            longest_monologue: z.ZodNullable<z.ZodNumber>;
             name: z.ZodString;
             is_user: z.ZodBoolean;
             phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;
@@ -3363,7 +3363,7 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
     data: {
         uuid: string;
         locale: string | null;
-        duration: number;
+        duration: number | null;
         direction: string | null;
         isVideo: boolean;
         visible: boolean;
@@ -3416,8 +3416,8 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
         speakers: {
             uuid: string;
             index: number;
-            duration: number;
-            longestMonologue: number;
+            duration: number | null;
+            longestMonologue: number | null;
             name: string;
             isUser: boolean;
             phoneNumber: string | null;
@@ -3473,7 +3473,7 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
         performed_at: string;
         updated_at: string;
         uuid: string;
-        duration: number;
+        duration: number | null;
         title: string | null;
         direction: string | null;
         locale: string | null;
@@ -3524,8 +3524,8 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
         speakers?: z.objectInputType<{
             uuid: z.ZodString;
             index: z.ZodNumber;
-            duration: z.ZodNumber;
-            longest_monologue: z.ZodNumber;
+            duration: z.ZodNullable<z.ZodNumber>;
+            longest_monologue: z.ZodNullable<z.ZodNumber>;
             name: z.ZodString;
             is_user: z.ZodBoolean;
             phone_number: z.ZodOptional<z.ZodNullable<z.ZodString>>;

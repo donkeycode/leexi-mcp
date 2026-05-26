@@ -19377,8 +19377,14 @@ var UserRefSchema = external_exports.object({
 var SpeakerSchema = external_exports.object({
   uuid: external_exports.string(),
   index: external_exports.number().int(),
-  duration: external_exports.number(),
-  longest_monologue: external_exports.number(),
+  // v0.4.10 — l'API renvoie null sur certains calls historiques (speakers
+  // génériques "Speaker 1/2/3" sans parole détectée, ou calls avec audio
+  // archivé sans recalcul des durées par speaker). Avant v0.4.10 ces calls
+  // faisaient exploser CallSummarySchema/CallDetailSchema et bloquaient
+  // leexi_list_calls sur la page contenant le call corrompu (régression
+  // identique à title/locale/direction v0.4.8 et chapters.start_time v0.4.9).
+  duration: external_exports.number().nullable(),
+  longest_monologue: external_exports.number().nullable(),
   name: external_exports.string(),
   is_user: external_exports.boolean(),
   phone_number: external_exports.string().nullable().optional(),
@@ -19386,8 +19392,8 @@ var SpeakerSchema = external_exports.object({
 }).passthrough().transform((raw) => ({
   uuid: raw.uuid,
   index: raw.index,
-  duration: raw.duration,
-  longestMonologue: raw.longest_monologue,
+  duration: raw.duration ?? null,
+  longestMonologue: raw.longest_monologue ?? null,
   name: raw.name,
   isUser: raw.is_user,
   phoneNumber: raw.phone_number ?? null,
@@ -19503,7 +19509,12 @@ var CallSummarySchema = external_exports.object({
   // imports, calls sans meeting_event). Avant v0.4.8 ces calls faisaient
   // exploser le schéma et bloquaient toute reprise chronologique.
   locale: external_exports.string().nullable(),
-  duration: external_exports.number().nonnegative(),
+  // v0.4.10 — l'API renvoie null sur certains calls historiques (calls
+  // archivés sans recalcul de durée, calls très courts/vides). Avant v0.4.10
+  // ces calls bloquaient leexi_list_calls sur la page contenant le call
+  // corrompu (régression identique à title/locale/direction v0.4.8 et
+  // chapters.start_time v0.4.9).
+  duration: external_exports.number().nullable(),
   direction: external_exports.string().nullable(),
   is_video: external_exports.boolean(),
   visible: external_exports.boolean(),
@@ -19543,7 +19554,7 @@ var CallSummarySchema = external_exports.object({
   // Obsidian) doivent gérer les fallbacks d'affichage eux-mêmes (ex:
   // title null → "(Sans titre — <uuid>)" dans le nom de fichier).
   locale: raw.locale ?? null,
-  duration: raw.duration,
+  duration: raw.duration ?? null,
   direction: raw.direction ?? null,
   isVideo: raw.is_video,
   visible: raw.visible,
@@ -19582,7 +19593,8 @@ var CallDetailSchema = external_exports.object({
   uuid: external_exports.string().min(1),
   // v0.4.8 — cf. CallSummarySchema : nullable pour les calls historiques.
   locale: external_exports.string().nullable(),
-  duration: external_exports.number().nonnegative(),
+  // v0.4.10 — cf. CallSummarySchema : nullable pour les calls historiques.
+  duration: external_exports.number().nullable(),
   direction: external_exports.string().nullable(),
   is_video: external_exports.boolean(),
   visible: external_exports.boolean(),
@@ -19626,7 +19638,7 @@ var CallDetailSchema = external_exports.object({
   uuid: raw.uuid,
   // v0.4.8 — cf. CallSummarySchema : null passé tel quel.
   locale: raw.locale ?? null,
-  duration: raw.duration,
+  duration: raw.duration ?? null,
   direction: raw.direction ?? null,
   isVideo: raw.is_video,
   visible: raw.visible,

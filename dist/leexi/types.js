@@ -19,8 +19,14 @@ export const SpeakerSchema = z
     .object({
     uuid: z.string(),
     index: z.number().int(),
-    duration: z.number(),
-    longest_monologue: z.number(),
+    // v0.4.10 — l'API renvoie null sur certains calls historiques (speakers
+    // génériques "Speaker 1/2/3" sans parole détectée, ou calls avec audio
+    // archivé sans recalcul des durées par speaker). Avant v0.4.10 ces calls
+    // faisaient exploser CallSummarySchema/CallDetailSchema et bloquaient
+    // leexi_list_calls sur la page contenant le call corrompu (régression
+    // identique à title/locale/direction v0.4.8 et chapters.start_time v0.4.9).
+    duration: z.number().nullable(),
+    longest_monologue: z.number().nullable(),
     name: z.string(),
     is_user: z.boolean(),
     phone_number: z.string().nullable().optional(),
@@ -30,8 +36,8 @@ export const SpeakerSchema = z
     .transform((raw) => ({
     uuid: raw.uuid,
     index: raw.index,
-    duration: raw.duration,
-    longestMonologue: raw.longest_monologue,
+    duration: raw.duration ?? null,
+    longestMonologue: raw.longest_monologue ?? null,
     name: raw.name,
     isUser: raw.is_user,
     phoneNumber: raw.phone_number ?? null,
@@ -185,7 +191,12 @@ export const CallSummarySchema = z
     // imports, calls sans meeting_event). Avant v0.4.8 ces calls faisaient
     // exploser le schéma et bloquaient toute reprise chronologique.
     locale: z.string().nullable(),
-    duration: z.number().nonnegative(),
+    // v0.4.10 — l'API renvoie null sur certains calls historiques (calls
+    // archivés sans recalcul de durée, calls très courts/vides). Avant v0.4.10
+    // ces calls bloquaient leexi_list_calls sur la page contenant le call
+    // corrompu (régression identique à title/locale/direction v0.4.8 et
+    // chapters.start_time v0.4.9).
+    duration: z.number().nullable(),
     direction: z.string().nullable(),
     is_video: z.boolean(),
     visible: z.boolean(),
@@ -226,7 +237,7 @@ export const CallSummarySchema = z
     // Obsidian) doivent gérer les fallbacks d'affichage eux-mêmes (ex:
     // title null → "(Sans titre — <uuid>)" dans le nom de fichier).
     locale: raw.locale ?? null,
-    duration: raw.duration,
+    duration: raw.duration ?? null,
     direction: raw.direction ?? null,
     isVideo: raw.is_video,
     visible: raw.visible,
@@ -270,7 +281,8 @@ export const CallDetailSchema = z
     uuid: z.string().min(1),
     // v0.4.8 — cf. CallSummarySchema : nullable pour les calls historiques.
     locale: z.string().nullable(),
-    duration: z.number().nonnegative(),
+    // v0.4.10 — cf. CallSummarySchema : nullable pour les calls historiques.
+    duration: z.number().nullable(),
     direction: z.string().nullable(),
     is_video: z.boolean(),
     visible: z.boolean(),
@@ -315,7 +327,7 @@ export const CallDetailSchema = z
     uuid: raw.uuid,
     // v0.4.8 — cf. CallSummarySchema : null passé tel quel.
     locale: raw.locale ?? null,
-    duration: raw.duration,
+    duration: raw.duration ?? null,
     direction: raw.direction ?? null,
     isVideo: raw.is_video,
     visible: raw.visible,
