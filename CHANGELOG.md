@@ -4,6 +4,20 @@ All notable changes to `@donkeycode/leexi-mcp` will be documented here. Format i
 
 ## [Unreleased]
 
+## [0.4.8] — 2026-05-26
+
+### Fixed (bloquant reprise historique)
+
+- **`title`, `locale`, `direction` peuvent désormais être `null`** dans le schéma Zod. Avant v0.4.8 ces 3 champs étaient déclarés `z.string()` (non-nullable), ce qui faisait planter le parsing de tout call historique où l'API renvoyait `null` sur l'un d'eux (anciens imports, calls sans meeting_event détecté, etc.). Symptôme : la reprise chronologique `--since=2024-03-26 --sort_order=asc` s'arrêtait dès le premier vieux call mal formé avec une `ZodError: Expected string, received null`. Le tool reste utilisable même quand l'API renvoie un call dont le titre n'a pas été généré.
+
+### Changed (type-level breaking, runtime safe)
+
+- Le type TS de `CallSummary.title` / `.locale` / `.direction` (et idem sur `CallDetail`) passe de `string` à `string | null`. Les consommateurs (la routine v0.8.x qui construit `{YYYY-MM-DD} {TITRE}.md`) doivent prévoir un fallback côté affichage — un patch routine suivra pour gérer `title null` → `"(Sans titre — <uuid-court>)"`.
+
+### Tests
+
+- 64 tests (was 62). +2 régressions ajoutées dans `tests/leexi/types.test.ts` : `CallSummarySchema` et `CallDetailSchema` parsent désormais des payloads avec `title/locale/direction: null` et retournent `null` dans les champs camelCase.
+
 ## [0.4.7] — 2026-05-26
 
 ### Fixed (bug majeur)

@@ -19495,12 +19495,15 @@ var PaginationSchema = external_exports.object({
 });
 var CallSummarySchema = external_exports.object({
   uuid: external_exports.string().min(1),
-  locale: external_exports.string(),
+  // v0.4.8 — l'API renvoie null sur certains calls historiques (anciens
+  // imports, calls sans meeting_event). Avant v0.4.8 ces calls faisaient
+  // exploser le schéma et bloquaient toute reprise chronologique.
+  locale: external_exports.string().nullable(),
   duration: external_exports.number().nonnegative(),
-  direction: external_exports.string(),
+  direction: external_exports.string().nullable(),
   is_video: external_exports.boolean(),
   visible: external_exports.boolean(),
-  title: external_exports.string(),
+  title: external_exports.string().nullable(),
   description: external_exports.string().nullable().optional(),
   created_at: external_exports.string(),
   updated_at: external_exports.string(),
@@ -19532,12 +19535,15 @@ var CallSummarySchema = external_exports.object({
   simple_transcript: external_exports.string().optional()
 }).transform((raw) => ({
   uuid: raw.uuid,
-  locale: raw.locale,
+  // v0.4.8 — passer null tel quel ; les consommateurs (routine, fiches
+  // Obsidian) doivent gérer les fallbacks d'affichage eux-mêmes (ex:
+  // title null → "(Sans titre — <uuid>)" dans le nom de fichier).
+  locale: raw.locale ?? null,
   duration: raw.duration,
-  direction: raw.direction,
+  direction: raw.direction ?? null,
   isVideo: raw.is_video,
   visible: raw.visible,
-  title: raw.title,
+  title: raw.title ?? null,
   description: raw.description ?? null,
   createdAt: raw.created_at,
   updatedAt: raw.updated_at,
@@ -19570,12 +19576,13 @@ var CallSummarySchema = external_exports.object({
 }));
 var CallDetailSchema = external_exports.object({
   uuid: external_exports.string().min(1),
-  locale: external_exports.string(),
+  // v0.4.8 — cf. CallSummarySchema : nullable pour les calls historiques.
+  locale: external_exports.string().nullable(),
   duration: external_exports.number().nonnegative(),
-  direction: external_exports.string(),
+  direction: external_exports.string().nullable(),
   is_video: external_exports.boolean(),
   visible: external_exports.boolean(),
-  title: external_exports.string(),
+  title: external_exports.string().nullable(),
   description: external_exports.string().nullable().optional(),
   created_at: external_exports.string(),
   updated_at: external_exports.string(),
@@ -19613,12 +19620,13 @@ var CallDetailSchema = external_exports.object({
   transcript: external_exports.array(TranscriptUtteranceSchema).optional()
 }).transform((raw) => ({
   uuid: raw.uuid,
-  locale: raw.locale,
+  // v0.4.8 — cf. CallSummarySchema : null passé tel quel.
+  locale: raw.locale ?? null,
   duration: raw.duration,
-  direction: raw.direction,
+  direction: raw.direction ?? null,
   isVideo: raw.is_video,
   visible: raw.visible,
-  title: raw.title,
+  title: raw.title ?? null,
   description: raw.description ?? null,
   createdAt: raw.created_at,
   updatedAt: raw.updated_at,

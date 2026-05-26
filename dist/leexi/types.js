@@ -177,12 +177,15 @@ export const PaginationSchema = z.object({
 export const CallSummarySchema = z
     .object({
     uuid: z.string().min(1),
-    locale: z.string(),
+    // v0.4.8 — l'API renvoie null sur certains calls historiques (anciens
+    // imports, calls sans meeting_event). Avant v0.4.8 ces calls faisaient
+    // exploser le schéma et bloquaient toute reprise chronologique.
+    locale: z.string().nullable(),
     duration: z.number().nonnegative(),
-    direction: z.string(),
+    direction: z.string().nullable(),
     is_video: z.boolean(),
     visible: z.boolean(),
-    title: z.string(),
+    title: z.string().nullable(),
     description: z.string().nullable().optional(),
     created_at: z.string(),
     updated_at: z.string(),
@@ -215,12 +218,15 @@ export const CallSummarySchema = z
 })
     .transform((raw) => ({
     uuid: raw.uuid,
-    locale: raw.locale,
+    // v0.4.8 — passer null tel quel ; les consommateurs (routine, fiches
+    // Obsidian) doivent gérer les fallbacks d'affichage eux-mêmes (ex:
+    // title null → "(Sans titre — <uuid>)" dans le nom de fichier).
+    locale: raw.locale ?? null,
     duration: raw.duration,
-    direction: raw.direction,
+    direction: raw.direction ?? null,
     isVideo: raw.is_video,
     visible: raw.visible,
-    title: raw.title,
+    title: raw.title ?? null,
     description: raw.description ?? null,
     createdAt: raw.created_at,
     updatedAt: raw.updated_at,
@@ -258,12 +264,13 @@ export const CallSummarySchema = z
 export const CallDetailSchema = z
     .object({
     uuid: z.string().min(1),
-    locale: z.string(),
+    // v0.4.8 — cf. CallSummarySchema : nullable pour les calls historiques.
+    locale: z.string().nullable(),
     duration: z.number().nonnegative(),
-    direction: z.string(),
+    direction: z.string().nullable(),
     is_video: z.boolean(),
     visible: z.boolean(),
-    title: z.string(),
+    title: z.string().nullable(),
     description: z.string().nullable().optional(),
     created_at: z.string(),
     updated_at: z.string(),
@@ -302,12 +309,13 @@ export const CallDetailSchema = z
 })
     .transform((raw) => ({
     uuid: raw.uuid,
-    locale: raw.locale,
+    // v0.4.8 — cf. CallSummarySchema : null passé tel quel.
+    locale: raw.locale ?? null,
     duration: raw.duration,
-    direction: raw.direction,
+    direction: raw.direction ?? null,
     isVideo: raw.is_video,
     visible: raw.visible,
-    title: raw.title,
+    title: raw.title ?? null,
     description: raw.description ?? null,
     createdAt: raw.created_at,
     updatedAt: raw.updated_at,

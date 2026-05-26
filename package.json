@@ -1,6 +1,6 @@
 {
   "name": "@donkeycode/leexi-mcp",
-  "version": "0.4.7",
+  "version": "0.4.8",
   "description": "DonkeyCode MCP server for Leexi (AI Notetaker) \u2014 exposes calls, transcripts, and processing state.",
   "license": "MIT",
   "author": "DonkeyCode <hello@donkeycode.com>",

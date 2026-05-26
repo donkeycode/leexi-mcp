@@ -199,6 +199,54 @@ describe("Leexi schemas", () => {
     expect(parsed.description).toBeNull();
   });
 
+  // v0.4.8 — régression : l'API Leexi renvoie parfois title/locale/direction
+  // à null sur des calls historiques (ex: imports anciens, calls sans
+  // meeting_event détecté). Avant v0.4.8 le schéma rejetait ces calls →
+  // bloquait la reprise chronologique dès qu'on tombait sur un vieux call.
+  it("CallSummarySchema accepts null on title/locale/direction (historical calls)", () => {
+    const rawWithNulls = {
+      uuid: "old-call-uuid",
+      locale: null,
+      duration: 1200,
+      direction: null,
+      is_video: false,
+      visible: true,
+      title: null,
+      created_at: "2024-03-26T10:00:00Z",
+      updated_at: "2024-03-26T10:00:00Z",
+      performed_at: "2024-03-26T10:00:00Z",
+      leexi_url: "https://app.leexi.ai/calls/old-call-uuid",
+    };
+    const parsed = CallSummarySchema.parse(rawWithNulls);
+    expect(parsed.title).toBeNull();
+    expect(parsed.locale).toBeNull();
+    expect(parsed.direction).toBeNull();
+    // The other required fields still parse correctly
+    expect(parsed.uuid).toBe("old-call-uuid");
+    expect(parsed.duration).toBe(1200);
+    expect(parsed.performedAt).toBe("2024-03-26T10:00:00Z");
+  });
+
+  it("CallDetailSchema accepts null on title/locale/direction (historical calls)", () => {
+    const rawWithNulls = {
+      uuid: "old-detail-uuid",
+      locale: null,
+      duration: 600,
+      direction: null,
+      is_video: false,
+      visible: true,
+      title: null,
+      created_at: "2024-04-01T10:00:00Z",
+      updated_at: "2024-04-01T10:00:00Z",
+      performed_at: "2024-04-01T10:00:00Z",
+      leexi_url: "https://app.leexi.ai/calls/old-detail-uuid",
+    };
+    const parsed = CallDetailSchema.parse(rawWithNulls);
+    expect(parsed.title).toBeNull();
+    expect(parsed.locale).toBeNull();
+    expect(parsed.direction).toBeNull();
+  });
+
   it("SpeakerSchema handles absent optional phone/email fields", () => {
     const raw = {
       uuid: "spk-2",

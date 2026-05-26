@@ -362,12 +362,12 @@ export declare const PaginationSchema: z.ZodObject<{
 export type Pagination = z.infer<typeof PaginationSchema>;
 export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
     uuid: z.ZodString;
-    locale: z.ZodString;
+    locale: z.ZodNullable<z.ZodString>;
     duration: z.ZodNumber;
-    direction: z.ZodString;
+    direction: z.ZodNullable<z.ZodString>;
     is_video: z.ZodBoolean;
     visible: z.ZodBoolean;
-    title: z.ZodString;
+    title: z.ZodNullable<z.ZodString>;
     description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     created_at: z.ZodString;
     updated_at: z.ZodString;
@@ -625,9 +625,9 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
     updated_at: string;
     uuid: string;
     duration: number;
-    title: string;
-    direction: string;
-    locale: string;
+    title: string | null;
+    direction: string | null;
+    locale: string | null;
     is_video: boolean;
     visible: boolean;
     leexi_url: string;
@@ -714,9 +714,9 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
     updated_at: string;
     uuid: string;
     duration: number;
-    title: string;
-    direction: string;
-    locale: string;
+    title: string | null;
+    direction: string | null;
+    locale: string | null;
     is_video: boolean;
     visible: boolean;
     leexi_url: string;
@@ -799,12 +799,12 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
     simple_transcript?: string | undefined;
 }>, {
     uuid: string;
-    locale: string;
+    locale: string | null;
     duration: number;
-    direction: string;
+    direction: string | null;
     isVideo: boolean;
     visible: boolean;
-    title: string;
+    title: string | null;
     description: string | null;
     createdAt: string;
     updatedAt: string;
@@ -892,9 +892,9 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
     updated_at: string;
     uuid: string;
     duration: number;
-    title: string;
-    direction: string;
-    locale: string;
+    title: string | null;
+    direction: string | null;
+    locale: string | null;
     is_video: boolean;
     visible: boolean;
     leexi_url: string;
@@ -979,12 +979,12 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
 export type CallSummary = z.infer<typeof CallSummarySchema>;
 export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
     uuid: z.ZodString;
-    locale: z.ZodString;
+    locale: z.ZodNullable<z.ZodString>;
     duration: z.ZodNumber;
-    direction: z.ZodString;
+    direction: z.ZodNullable<z.ZodString>;
     is_video: z.ZodBoolean;
     visible: z.ZodBoolean;
-    title: z.ZodString;
+    title: z.ZodNullable<z.ZodString>;
     description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     created_at: z.ZodString;
     updated_at: z.ZodString;
@@ -1335,9 +1335,9 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
     updated_at: string;
     uuid: string;
     duration: number;
-    title: string;
-    direction: string;
-    locale: string;
+    title: string | null;
+    direction: string | null;
+    locale: string | null;
     is_video: boolean;
     visible: boolean;
     leexi_url: string;
@@ -1441,9 +1441,9 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
     updated_at: string;
     uuid: string;
     duration: number;
-    title: string;
-    direction: string;
-    locale: string;
+    title: string | null;
+    direction: string | null;
+    locale: string | null;
     is_video: boolean;
     visible: boolean;
     leexi_url: string;
@@ -1543,12 +1543,12 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
     }[] | undefined;
 }>, {
     uuid: string;
-    locale: string;
+    locale: string | null;
     duration: number;
-    direction: string;
+    direction: string | null;
     isVideo: boolean;
     visible: boolean;
-    title: string;
+    title: string | null;
     description: string | null;
     createdAt: string;
     updatedAt: string;
@@ -1653,9 +1653,9 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
     updated_at: string;
     uuid: string;
     duration: number;
-    title: string;
-    direction: string;
-    locale: string;
+    title: string | null;
+    direction: string | null;
+    locale: string | null;
     is_video: boolean;
     visible: boolean;
     leexi_url: string;
@@ -1759,12 +1759,12 @@ export type CallDetail = z.infer<typeof CallDetailSchema>;
 export declare const CallsListResponseSchema: z.ZodObject<{
     data: z.ZodArray<z.ZodEffects<z.ZodObject<{
         uuid: z.ZodString;
-        locale: z.ZodString;
+        locale: z.ZodNullable<z.ZodString>;
         duration: z.ZodNumber;
-        direction: z.ZodString;
+        direction: z.ZodNullable<z.ZodString>;
         is_video: z.ZodBoolean;
         visible: z.ZodBoolean;
-        title: z.ZodString;
+        title: z.ZodNullable<z.ZodString>;
         description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         created_at: z.ZodString;
         updated_at: z.ZodString;
@@ -2022,9 +2022,9 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         updated_at: string;
         uuid: string;
         duration: number;
-        title: string;
-        direction: string;
-        locale: string;
+        title: string | null;
+        direction: string | null;
+        locale: string | null;
         is_video: boolean;
         visible: boolean;
         leexi_url: string;
@@ -2111,9 +2111,9 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         updated_at: string;
         uuid: string;
         duration: number;
-        title: string;
-        direction: string;
-        locale: string;
+        title: string | null;
+        direction: string | null;
+        locale: string | null;
         is_video: boolean;
         visible: boolean;
         leexi_url: string;
@@ -2196,12 +2196,12 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         simple_transcript?: string | undefined;
     }>, {
         uuid: string;
-        locale: string;
+        locale: string | null;
         duration: number;
-        direction: string;
+        direction: string | null;
         isVideo: boolean;
         visible: boolean;
-        title: string;
+        title: string | null;
         description: string | null;
         createdAt: string;
         updatedAt: string;
@@ -2289,9 +2289,9 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         updated_at: string;
         uuid: string;
         duration: number;
-        title: string;
-        direction: string;
-        locale: string;
+        title: string | null;
+        direction: string | null;
+        locale: string | null;
         is_video: boolean;
         visible: boolean;
         leexi_url: string;
@@ -2389,12 +2389,12 @@ export declare const CallsListResponseSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     data: {
         uuid: string;
-        locale: string;
+        locale: string | null;
         duration: number;
-        direction: string;
+        direction: string | null;
         isVideo: boolean;
         visible: boolean;
-        title: string;
+        title: string | null;
         description: string | null;
         createdAt: string;
         updatedAt: string;
@@ -2489,9 +2489,9 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         updated_at: string;
         uuid: string;
         duration: number;
-        title: string;
-        direction: string;
-        locale: string;
+        title: string | null;
+        direction: string | null;
+        locale: string | null;
         is_video: boolean;
         visible: boolean;
         leexi_url: string;
@@ -2584,12 +2584,12 @@ export type CallsListResponse = z.infer<typeof CallsListResponseSchema>;
 export declare const CallDetailResponseSchema: z.ZodObject<{
     data: z.ZodEffects<z.ZodObject<{
         uuid: z.ZodString;
-        locale: z.ZodString;
+        locale: z.ZodNullable<z.ZodString>;
         duration: z.ZodNumber;
-        direction: z.ZodString;
+        direction: z.ZodNullable<z.ZodString>;
         is_video: z.ZodBoolean;
         visible: z.ZodBoolean;
-        title: z.ZodString;
+        title: z.ZodNullable<z.ZodString>;
         description: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         created_at: z.ZodString;
         updated_at: z.ZodString;
@@ -2940,9 +2940,9 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
         updated_at: string;
         uuid: string;
         duration: number;
-        title: string;
-        direction: string;
-        locale: string;
+        title: string | null;
+        direction: string | null;
+        locale: string | null;
         is_video: boolean;
         visible: boolean;
         leexi_url: string;
@@ -3046,9 +3046,9 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
         updated_at: string;
         uuid: string;
         duration: number;
-        title: string;
-        direction: string;
-        locale: string;
+        title: string | null;
+        direction: string | null;
+        locale: string | null;
         is_video: boolean;
         visible: boolean;
         leexi_url: string;
@@ -3148,12 +3148,12 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
         }[] | undefined;
     }>, {
         uuid: string;
-        locale: string;
+        locale: string | null;
         duration: number;
-        direction: string;
+        direction: string | null;
         isVideo: boolean;
         visible: boolean;
-        title: string;
+        title: string | null;
         description: string | null;
         createdAt: string;
         updatedAt: string;
@@ -3258,9 +3258,9 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
         updated_at: string;
         uuid: string;
         duration: number;
-        title: string;
-        direction: string;
-        locale: string;
+        title: string | null;
+        direction: string | null;
+        locale: string | null;
         is_video: boolean;
         visible: boolean;
         leexi_url: string;
@@ -3362,12 +3362,12 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     data: {
         uuid: string;
-        locale: string;
+        locale: string | null;
         duration: number;
-        direction: string;
+        direction: string | null;
         isVideo: boolean;
         visible: boolean;
-        title: string;
+        title: string | null;
         description: string | null;
         createdAt: string;
         updatedAt: string;
@@ -3474,9 +3474,9 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
         updated_at: string;
         uuid: string;
         duration: number;
-        title: string;
-        direction: string;
-        locale: string;
+        title: string | null;
+        direction: string | null;
+        locale: string | null;
         is_video: boolean;
         visible: boolean;
         leexi_url: string;
