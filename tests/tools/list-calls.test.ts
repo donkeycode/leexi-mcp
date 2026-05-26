@@ -112,9 +112,7 @@ describe("leexi_list_calls tool", () => {
         a.performed_at > b.performed_at ? -1 : 1,
       ),
     };
-    mswServer.use(
-      http.get(`${BASE_URL}/calls`, () => HttpResponse.json(apiResponse)),
-    );
+    mswServer.use(http.get(`${BASE_URL}/calls`, () => HttpResponse.json(apiResponse)));
 
     const tool = createListCallsTool(client, store);
     const result = await tool.handler({}); // default sort_order = asc
@@ -135,9 +133,7 @@ describe("leexi_list_calls tool", () => {
         a.performed_at < b.performed_at ? -1 : 1,
       ),
     };
-    mswServer.use(
-      http.get(`${BASE_URL}/calls`, () => HttpResponse.json(apiResponse)),
-    );
+    mswServer.use(http.get(`${BASE_URL}/calls`, () => HttpResponse.json(apiResponse)));
 
     const tool = createListCallsTool(client, store);
     const result = await tool.handler({ sort_order: "desc" });

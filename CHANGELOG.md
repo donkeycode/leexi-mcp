@@ -4,6 +4,12 @@ All notable changes to `@donkeycode/leexi-mcp` will be documented here. Format i
 
 ## [Unreleased]
 
+## [0.4.6] — 2026-05-26
+
+### Fixed
+
+- Biome format violation introduite par les tests v0.4.5 (CI rouge). `pnpm format` appliqué sur `tests/tools/list-calls.test.ts` — 2 endroits où `mswServer.use(http.get(...))` était sur 3 lignes au lieu d'1. 60/60 tests + biome check passent désormais.
+
 ## [0.4.5] — 2026-05-26
 
 ### Added
