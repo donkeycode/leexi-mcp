@@ -19398,13 +19398,17 @@ var ChapterSchema = external_exports.object({
   index: external_exports.number().int(),
   title: external_exports.string(),
   text: external_exports.string(),
-  start_time: external_exports.number()
+  // v0.4.9 — l'API renvoie null sur des calls historiques (chaptering
+  // généré sans timeline). Avant v0.4.9 ces calls faisaient exploser
+  // CallSummarySchema/CallDetailSchema et bloquaient leexi_list_calls
+  // sur la page contenant le call corrompu.
+  start_time: external_exports.number().nullable()
 }).passthrough().transform((raw) => ({
   uuid: raw.uuid,
   index: raw.index,
   title: raw.title,
   text: raw.text,
-  startTime: raw.start_time
+  startTime: raw.start_time ?? null
 }));
 var TaskSchema2 = external_exports.object({
   uuid: external_exports.string(),

@@ -71,31 +71,31 @@ export declare const ChapterSchema: z.ZodEffects<z.ZodObject<{
     index: z.ZodNumber;
     title: z.ZodString;
     text: z.ZodString;
-    start_time: z.ZodNumber;
+    start_time: z.ZodNullable<z.ZodNumber>;
 }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
     uuid: z.ZodString;
     index: z.ZodNumber;
     title: z.ZodString;
     text: z.ZodString;
-    start_time: z.ZodNumber;
+    start_time: z.ZodNullable<z.ZodNumber>;
 }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
     uuid: z.ZodString;
     index: z.ZodNumber;
     title: z.ZodString;
     text: z.ZodString;
-    start_time: z.ZodNumber;
+    start_time: z.ZodNullable<z.ZodNumber>;
 }, z.ZodTypeAny, "passthrough">>, {
     uuid: string;
     index: number;
     title: string;
     text: string;
-    startTime: number;
+    startTime: number | null;
 }, z.objectInputType<{
     uuid: z.ZodString;
     index: z.ZodNumber;
     title: z.ZodString;
     text: z.ZodString;
-    start_time: z.ZodNumber;
+    start_time: z.ZodNullable<z.ZodNumber>;
 }, z.ZodTypeAny, "passthrough">>;
 export type Chapter = z.infer<typeof ChapterSchema>;
 /** A task (action item) extracted by Leexi AI. */
@@ -544,31 +544,31 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
         index: z.ZodNumber;
         title: z.ZodString;
         text: z.ZodString;
-        start_time: z.ZodNumber;
+        start_time: z.ZodNullable<z.ZodNumber>;
     }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
         uuid: z.ZodString;
         index: z.ZodNumber;
         title: z.ZodString;
         text: z.ZodString;
-        start_time: z.ZodNumber;
+        start_time: z.ZodNullable<z.ZodNumber>;
     }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
         uuid: z.ZodString;
         index: z.ZodNumber;
         title: z.ZodString;
         text: z.ZodString;
-        start_time: z.ZodNumber;
+        start_time: z.ZodNullable<z.ZodNumber>;
     }, z.ZodTypeAny, "passthrough">>, {
         uuid: string;
         index: number;
         title: string;
         text: string;
-        startTime: number;
+        startTime: number | null;
     }, z.objectInputType<{
         uuid: z.ZodString;
         index: z.ZodNumber;
         title: z.ZodString;
         text: z.ZodString;
-        start_time: z.ZodNumber;
+        start_time: z.ZodNullable<z.ZodNumber>;
     }, z.ZodTypeAny, "passthrough">>, "many">>;
     scorecards: z.ZodOptional<z.ZodArray<z.ZodUnknown, "many">>;
     tags: z.ZodOptional<z.ZodArray<z.ZodUnknown, "many">>;
@@ -693,7 +693,7 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
         index: number;
         title: string;
         text: string;
-        startTime: number;
+        startTime: number | null;
     }[] | undefined;
     scorecards?: unknown[] | undefined;
     tags?: unknown[] | undefined;
@@ -782,7 +782,7 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
         index: z.ZodNumber;
         title: z.ZodString;
         text: z.ZodString;
-        start_time: z.ZodNumber;
+        start_time: z.ZodNullable<z.ZodNumber>;
     }, z.ZodTypeAny, "passthrough">[] | undefined;
     scorecards?: unknown[] | undefined;
     tags?: unknown[] | undefined;
@@ -871,7 +871,7 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
         index: number;
         title: string;
         text: string;
-        startTime: number;
+        startTime: number | null;
     }[];
     scorecards: unknown[];
     tags: unknown[];
@@ -960,7 +960,7 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
         index: z.ZodNumber;
         title: z.ZodString;
         text: z.ZodString;
-        start_time: z.ZodNumber;
+        start_time: z.ZodNullable<z.ZodNumber>;
     }, z.ZodTypeAny, "passthrough">[] | undefined;
     scorecards?: unknown[] | undefined;
     tags?: unknown[] | undefined;
@@ -1161,31 +1161,31 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
         index: z.ZodNumber;
         title: z.ZodString;
         text: z.ZodString;
-        start_time: z.ZodNumber;
+        start_time: z.ZodNullable<z.ZodNumber>;
     }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
         uuid: z.ZodString;
         index: z.ZodNumber;
         title: z.ZodString;
         text: z.ZodString;
-        start_time: z.ZodNumber;
+        start_time: z.ZodNullable<z.ZodNumber>;
     }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
         uuid: z.ZodString;
         index: z.ZodNumber;
         title: z.ZodString;
         text: z.ZodString;
-        start_time: z.ZodNumber;
+        start_time: z.ZodNullable<z.ZodNumber>;
     }, z.ZodTypeAny, "passthrough">>, {
         uuid: string;
         index: number;
         title: string;
         text: string;
-        startTime: number;
+        startTime: number | null;
     }, z.objectInputType<{
         uuid: z.ZodString;
         index: z.ZodNumber;
         title: z.ZodString;
         text: z.ZodString;
-        start_time: z.ZodNumber;
+        start_time: z.ZodNullable<z.ZodNumber>;
     }, z.ZodTypeAny, "passthrough">>, "many">>;
     scorecards: z.ZodOptional<z.ZodArray<z.ZodUnknown, "many">>;
     tags: z.ZodOptional<z.ZodArray<z.ZodUnknown, "many">>;
@@ -1403,7 +1403,7 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
         index: number;
         title: string;
         text: string;
-        startTime: number;
+        startTime: number | null;
     }[] | undefined;
     scorecards?: unknown[] | undefined;
     tags?: unknown[] | undefined;
@@ -1509,7 +1509,7 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
         index: z.ZodNumber;
         title: z.ZodString;
         text: z.ZodString;
-        start_time: z.ZodNumber;
+        start_time: z.ZodNullable<z.ZodNumber>;
     }, z.ZodTypeAny, "passthrough">[] | undefined;
     scorecards?: unknown[] | undefined;
     tags?: unknown[] | undefined;
@@ -1615,7 +1615,7 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
         index: number;
         title: string;
         text: string;
-        startTime: number;
+        startTime: number | null;
     }[];
     scorecards: unknown[];
     tags: unknown[];
@@ -1721,7 +1721,7 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
         index: z.ZodNumber;
         title: z.ZodString;
         text: z.ZodString;
-        start_time: z.ZodNumber;
+        start_time: z.ZodNullable<z.ZodNumber>;
     }, z.ZodTypeAny, "passthrough">[] | undefined;
     scorecards?: unknown[] | undefined;
     tags?: unknown[] | undefined;
@@ -1941,31 +1941,31 @@ export declare const CallsListResponseSchema: z.ZodObject<{
             index: z.ZodNumber;
             title: z.ZodString;
             text: z.ZodString;
-            start_time: z.ZodNumber;
+            start_time: z.ZodNullable<z.ZodNumber>;
         }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
             uuid: z.ZodString;
             index: z.ZodNumber;
             title: z.ZodString;
             text: z.ZodString;
-            start_time: z.ZodNumber;
+            start_time: z.ZodNullable<z.ZodNumber>;
         }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
             uuid: z.ZodString;
             index: z.ZodNumber;
             title: z.ZodString;
             text: z.ZodString;
-            start_time: z.ZodNumber;
+            start_time: z.ZodNullable<z.ZodNumber>;
         }, z.ZodTypeAny, "passthrough">>, {
             uuid: string;
             index: number;
             title: string;
             text: string;
-            startTime: number;
+            startTime: number | null;
         }, z.objectInputType<{
             uuid: z.ZodString;
             index: z.ZodNumber;
             title: z.ZodString;
             text: z.ZodString;
-            start_time: z.ZodNumber;
+            start_time: z.ZodNullable<z.ZodNumber>;
         }, z.ZodTypeAny, "passthrough">>, "many">>;
         scorecards: z.ZodOptional<z.ZodArray<z.ZodUnknown, "many">>;
         tags: z.ZodOptional<z.ZodArray<z.ZodUnknown, "many">>;
@@ -2090,7 +2090,7 @@ export declare const CallsListResponseSchema: z.ZodObject<{
             index: number;
             title: string;
             text: string;
-            startTime: number;
+            startTime: number | null;
         }[] | undefined;
         scorecards?: unknown[] | undefined;
         tags?: unknown[] | undefined;
@@ -2179,7 +2179,7 @@ export declare const CallsListResponseSchema: z.ZodObject<{
             index: z.ZodNumber;
             title: z.ZodString;
             text: z.ZodString;
-            start_time: z.ZodNumber;
+            start_time: z.ZodNullable<z.ZodNumber>;
         }, z.ZodTypeAny, "passthrough">[] | undefined;
         scorecards?: unknown[] | undefined;
         tags?: unknown[] | undefined;
@@ -2268,7 +2268,7 @@ export declare const CallsListResponseSchema: z.ZodObject<{
             index: number;
             title: string;
             text: string;
-            startTime: number;
+            startTime: number | null;
         }[];
         scorecards: unknown[];
         tags: unknown[];
@@ -2357,7 +2357,7 @@ export declare const CallsListResponseSchema: z.ZodObject<{
             index: z.ZodNumber;
             title: z.ZodString;
             text: z.ZodString;
-            start_time: z.ZodNumber;
+            start_time: z.ZodNullable<z.ZodNumber>;
         }, z.ZodTypeAny, "passthrough">[] | undefined;
         scorecards?: unknown[] | undefined;
         tags?: unknown[] | undefined;
@@ -2461,7 +2461,7 @@ export declare const CallsListResponseSchema: z.ZodObject<{
             index: number;
             title: string;
             text: string;
-            startTime: number;
+            startTime: number | null;
         }[];
         scorecards: unknown[];
         tags: unknown[];
@@ -2557,7 +2557,7 @@ export declare const CallsListResponseSchema: z.ZodObject<{
             index: z.ZodNumber;
             title: z.ZodString;
             text: z.ZodString;
-            start_time: z.ZodNumber;
+            start_time: z.ZodNullable<z.ZodNumber>;
         }, z.ZodTypeAny, "passthrough">[] | undefined;
         scorecards?: unknown[] | undefined;
         tags?: unknown[] | undefined;
@@ -2766,31 +2766,31 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
             index: z.ZodNumber;
             title: z.ZodString;
             text: z.ZodString;
-            start_time: z.ZodNumber;
+            start_time: z.ZodNullable<z.ZodNumber>;
         }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
             uuid: z.ZodString;
             index: z.ZodNumber;
             title: z.ZodString;
             text: z.ZodString;
-            start_time: z.ZodNumber;
+            start_time: z.ZodNullable<z.ZodNumber>;
         }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
             uuid: z.ZodString;
             index: z.ZodNumber;
             title: z.ZodString;
             text: z.ZodString;
-            start_time: z.ZodNumber;
+            start_time: z.ZodNullable<z.ZodNumber>;
         }, z.ZodTypeAny, "passthrough">>, {
             uuid: string;
             index: number;
             title: string;
             text: string;
-            startTime: number;
+            startTime: number | null;
         }, z.objectInputType<{
             uuid: z.ZodString;
             index: z.ZodNumber;
             title: z.ZodString;
             text: z.ZodString;
-            start_time: z.ZodNumber;
+            start_time: z.ZodNullable<z.ZodNumber>;
         }, z.ZodTypeAny, "passthrough">>, "many">>;
         scorecards: z.ZodOptional<z.ZodArray<z.ZodUnknown, "many">>;
         tags: z.ZodOptional<z.ZodArray<z.ZodUnknown, "many">>;
@@ -3008,7 +3008,7 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
             index: number;
             title: string;
             text: string;
-            startTime: number;
+            startTime: number | null;
         }[] | undefined;
         scorecards?: unknown[] | undefined;
         tags?: unknown[] | undefined;
@@ -3114,7 +3114,7 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
             index: z.ZodNumber;
             title: z.ZodString;
             text: z.ZodString;
-            start_time: z.ZodNumber;
+            start_time: z.ZodNullable<z.ZodNumber>;
         }, z.ZodTypeAny, "passthrough">[] | undefined;
         scorecards?: unknown[] | undefined;
         tags?: unknown[] | undefined;
@@ -3220,7 +3220,7 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
             index: number;
             title: string;
             text: string;
-            startTime: number;
+            startTime: number | null;
         }[];
         scorecards: unknown[];
         tags: unknown[];
@@ -3326,7 +3326,7 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
             index: z.ZodNumber;
             title: z.ZodString;
             text: z.ZodString;
-            start_time: z.ZodNumber;
+            start_time: z.ZodNullable<z.ZodNumber>;
         }, z.ZodTypeAny, "passthrough">[] | undefined;
         scorecards?: unknown[] | undefined;
         tags?: unknown[] | undefined;
@@ -3434,7 +3434,7 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
             index: number;
             title: string;
             text: string;
-            startTime: number;
+            startTime: number | null;
         }[];
         scorecards: unknown[];
         tags: unknown[];
@@ -3542,7 +3542,7 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
             index: z.ZodNumber;
             title: z.ZodString;
             text: z.ZodString;
-            start_time: z.ZodNumber;
+            start_time: z.ZodNullable<z.ZodNumber>;
         }, z.ZodTypeAny, "passthrough">[] | undefined;
         scorecards?: unknown[] | undefined;
         tags?: unknown[] | undefined;

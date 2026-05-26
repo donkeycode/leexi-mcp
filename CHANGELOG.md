@@ -4,6 +4,16 @@ All notable changes to `@donkeycode/leexi-mcp` will be documented here. Format i
 
 ## [Unreleased]
 
+## [0.4.9] — 2026-05-26
+
+### Fixed (bloquant reprise historique, suite v0.4.8)
+
+- **`chapters[].start_time` peut désormais être `null`** dans le schéma Zod. Avant v0.4.9 ce champ était déclaré `z.number()` (non-nullable), ce qui faisait planter `leexi_list_calls` dès qu'une page contenait un call historique dont les chapitres n'ont pas de timeline temporelle (chaptering généré sans timestamps). Symptôme observable : `leexi_list_calls --limit=10 --sort_order=asc --since=2024-04-03` retournait `MCP error -32603: chapters[0..N].start_time Expected number, received null` au lieu du payload, bloquant toute la page (et pas seulement le call corrompu). Découvert sur un call du 2024-04-05 dont les 9 chapitres avaient `start_time: null`.
+
+### Tests
+
+- +1 régression dans `tests/leexi/types.test.ts` : `ChapterSchema` accepte `start_time: null` et le propage en `startTime: null` côté camelCase.
+
 ## [0.4.8] — 2026-05-26
 
 ### Fixed (bloquant reprise historique)

@@ -182,6 +182,23 @@ describe("Leexi schemas", () => {
     expect(parsed.title).toBe("Chapter 1");
   });
 
+  // v0.4.9 — régression : l'API Leexi renvoie parfois chapters[].start_time
+  // à null sur des calls historiques (chaptering généré sans timeline).
+  // Avant v0.4.9 ces calls faisaient exploser CallSummarySchema et bloquaient
+  // leexi_list_calls sur la page contenant le call corrompu.
+  it("ChapterSchema accepts null on start_time (historical calls)", () => {
+    const raw = {
+      uuid: "ch-historical",
+      index: 0,
+      title: "Chapitre 1: Introduction",
+      text: "Salutations entre les participants.",
+      start_time: null,
+    };
+    const parsed = ChapterSchema.parse(raw);
+    expect(parsed.startTime).toBeNull();
+    expect(parsed.title).toBe("Chapitre 1: Introduction");
+  });
+
   it("TaskSchema transforms created_at/updated_at to camelCase", () => {
     const raw = {
       uuid: "task-1",

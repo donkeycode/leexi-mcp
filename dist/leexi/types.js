@@ -44,7 +44,11 @@ export const ChapterSchema = z
     index: z.number().int(),
     title: z.string(),
     text: z.string(),
-    start_time: z.number(),
+    // v0.4.9 — l'API renvoie null sur des calls historiques (chaptering
+    // généré sans timeline). Avant v0.4.9 ces calls faisaient exploser
+    // CallSummarySchema/CallDetailSchema et bloquaient leexi_list_calls
+    // sur la page contenant le call corrompu.
+    start_time: z.number().nullable(),
 })
     .passthrough()
     .transform((raw) => ({
@@ -52,7 +56,7 @@ export const ChapterSchema = z
     index: raw.index,
     title: raw.title,
     text: raw.text,
-    startTime: raw.start_time,
+    startTime: raw.start_time ?? null,
 }));
 /** A task (action item) extracted by Leexi AI. */
 export const TaskSchema = z
