@@ -19848,12 +19848,24 @@ var ListCallsInputSchema = external_exports.object({
    * - "full" : garde tous les champs (comportement legacy v0.4.3-).
    *   Utile uniquement pour debug ou exports massifs.
    */
-  fields: external_exports.enum(["summary", "full"]).default("summary")
+  fields: external_exports.enum(["summary", "full"]).default("summary"),
+  /**
+   * v0.4.5 — tri par performed_at appliqué CÔTÉ TOOL (après réception API).
+   * - "asc" (défaut) : du plus ancien au plus récent. Critique pour la reprise
+   *   historique : les fiches client se construisent dans l'ordre logique
+   *   (R1 → R2 → kickoff → steerco) au lieu de l'inverse.
+   * - "desc" : du plus récent au plus ancien. Utile pour "qu'est-ce qui s'est
+   *   passé hier" ou polling continu.
+   *
+   * Important : le tri est appliqué AVANT le filter only_unprocessed et AVANT
+   * le strip fields, sur l'ensemble retourné par l'API pour cette page.
+   */
+  sort_order: external_exports.enum(["asc", "desc"]).default("asc")
 });
 function createListCallsTool(client, store) {
   return {
     name: "leexi_list_calls",
-    description: "List Leexi calls (paginated). Default fields='summary' returns lightweight metadata only (uuid, title, performed_at, duration, locale, owner, speakers, leexi_url, summary text) \u2014 recommended for any listing/filtering use case. Pass fields='full' to include simple_transcript, chapters, tasks, prompts (~30KB extra per call, only for debug/export). Use only_unprocessed=true to skip calls already marked processed by this MCP. Pagination uses { page, items, count }.",
+    description: "List Leexi calls (paginated, sorted ASC by performed_at by default). Default sort_order='asc' (oldest first) is critical for historical backfills so that client timelines build in chronological order (R1 \u2192 R2 \u2192 kickoff). Pass 'desc' for newest-first polling. Default fields='summary' returns lightweight metadata only (uuid, title, performed_at, duration, locale, owner, speakers, leexi_url, summary text) \u2014 recommended for any listing/filtering. Pass fields='full' to include simple_transcript, chapters, tasks, prompts (~30KB extra per call, only for debug/export). Use only_unprocessed=true to skip calls already marked processed by this MCP. Pagination uses { page, items, count }.",
     inputSchema: ListCallsInputSchema,
     handler: async (rawInput) => {
       const input = ListCallsInputSchema.parse(rawInput);
@@ -19864,6 +19876,7 @@ function createListCallsTool(client, store) {
       };
       const list = await client.listCalls(listParams);
       let calls = list.calls;
+      calls = sortCalls(calls, input.sort_order);
       if (input.only_unprocessed) {
         const filtered = [];
         for (const call of calls) {
@@ -19880,6 +19893,14 @@ function createListCallsTool(client, store) {
       };
     }
   };
+}
+function sortCalls(calls, order) {
+  const dir = order === "asc" ? 1 : -1;
+  return [...calls].sort((a, b) => {
+    if (a.performedAt < b.performedAt) return -1 * dir;
+    if (a.performedAt > b.performedAt) return 1 * dir;
+    return 0;
+  });
 }
 function stripHeavyFields(call) {
   return {

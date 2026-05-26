@@ -4,6 +4,20 @@ All notable changes to `@donkeycode/leexi-mcp` will be documented here. Format i
 
 ## [Unreleased]
 
+## [0.4.5] — 2026-05-26
+
+### Added
+
+- **`sort_order: "asc" | "desc"`** param on `leexi_list_calls` (default `"asc"`). Tri par `performed_at` appliqué CÔTÉ TOOL (après réception de l'API), pour garantir l'ordre chronologique indépendamment de ce que renvoie l'API Leexi. Critique pour la reprise historique : les fiches client se construisent dans l'ordre logique (R1 → R2 → kickoff → steerco) au lieu de l'inverse.
+
+### Why
+
+- L'orchestrateur côté skill (`leexi-routine` v0.8.0) demandait à Claude de trier ASC via prompt Markdown — pas fiable, Claude pouvait l'oublier au runtime. Hardcoder le tri dans le code du tool garantit le comportement. Le param `sort_order` reste configurable pour les cas où on veut le contraire (polling continu newest-first).
+
+### Tests
+
+- 60 tests (was 58). +2 couvrant sort ASC default + sort DESC explicit, avec API qui retourne dans l'ordre inverse pour valider le re-sort.
+
 ## [0.4.4] — 2026-05-26
 
 ### Added

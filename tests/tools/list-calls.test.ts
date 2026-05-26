@@ -102,6 +102,51 @@ describe("leexi_list_calls tool", () => {
     expect(result.calls[0]?.prompts).toEqual([]);
   });
 
+  it("sorts calls ASC by performed_at by default", async () => {
+    // Fixture has 2 calls; we control their order by mocking the API response.
+    const f = fixture("calls-list.json");
+    // Force the API to return them in DESC order to ensure we sort.
+    const apiResponse = {
+      ...f,
+      data: [...f.data].sort((a: { performed_at: string }, b: { performed_at: string }) =>
+        a.performed_at > b.performed_at ? -1 : 1,
+      ),
+    };
+    mswServer.use(
+      http.get(`${BASE_URL}/calls`, () => HttpResponse.json(apiResponse)),
+    );
+
+    const tool = createListCallsTool(client, store);
+    const result = await tool.handler({}); // default sort_order = asc
+
+    // Expect ASC (oldest first)
+    expect(result.calls.length).toBeGreaterThanOrEqual(2);
+    const t0 = result.calls[0]?.performedAt;
+    const t1 = result.calls[1]?.performedAt;
+    expect(t0 && t1 && t0 <= t1).toBe(true);
+  });
+
+  it("sorts calls DESC when sort_order='desc'", async () => {
+    const f = fixture("calls-list.json");
+    // Force ASC from the API to ensure we re-sort DESC.
+    const apiResponse = {
+      ...f,
+      data: [...f.data].sort((a: { performed_at: string }, b: { performed_at: string }) =>
+        a.performed_at < b.performed_at ? -1 : 1,
+      ),
+    };
+    mswServer.use(
+      http.get(`${BASE_URL}/calls`, () => HttpResponse.json(apiResponse)),
+    );
+
+    const tool = createListCallsTool(client, store);
+    const result = await tool.handler({ sort_order: "desc" });
+
+    const t0 = result.calls[0]?.performedAt;
+    const t1 = result.calls[1]?.performedAt;
+    expect(t0 && t1 && t0 >= t1).toBe(true);
+  });
+
   it("keeps all fields when fields='full'", async () => {
     mswServer.use(
       http.get(`${BASE_URL}/calls`, () => HttpResponse.json(fixture("calls-list.json"))),
