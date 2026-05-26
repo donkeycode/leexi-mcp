@@ -13,8 +13,8 @@ vi.mock("../src/leexi/client.js", () => {
   return {
     LeexiClient: vi.fn().mockImplementation(() => ({
       listCalls: vi.fn().mockResolvedValue({
-        data: [],
-        meta: { page: 1, per_page: 50, total: 0 },
+        calls: [],
+        pagination: { page: 1, items: 0, count: 0 },
       }),
       getCall: vi.fn().mockResolvedValue({
         uuid: "call-abc-123",

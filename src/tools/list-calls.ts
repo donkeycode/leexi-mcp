@@ -11,7 +11,18 @@ import type { ProcessedStore } from "../store/processed-store.js";
 // ---------------------------------------------------------------------------
 
 export const ListCallsInputSchema = z.object({
-  since: z.string().datetime().optional(),
+  /**
+   * Borne inférieure de filtrage sur `performed_at`. ISO datetime ou `YYYY-MM-DD`.
+   * Mappé en interne sur `date_filter=performed_at` + `from=<since>` côté API.
+   * Avant v0.4.7 on envoyait `since` brut → ignoré par l'API.
+   */
+  since: z.string().optional(),
+  /**
+   * Borne supérieure (optionnelle) de filtrage sur `performed_at`. Utile pour
+   * traiter une plage précise (ex: tous les calls de juin 2025 →
+   * `since: "2025-06-01", until: "2025-06-30"`).
+   */
+  until: z.string().optional(),
   limit: z.number().int().positive().max(100).default(50),
   page: z.number().int().positive().optional(),
   only_unprocessed: z.boolean().default(false),
@@ -24,15 +35,16 @@ export const ListCallsInputSchema = z.object({
    */
   fields: z.enum(["summary", "full"]).default("summary"),
   /**
-   * v0.4.5 — tri par performed_at appliqué CÔTÉ TOOL (après réception API).
-   * - "asc" (défaut) : du plus ancien au plus récent. Critique pour la reprise
-   *   historique : les fiches client se construisent dans l'ordre logique
-   *   (R1 → R2 → kickoff → steerco) au lieu de l'inverse.
-   * - "desc" : du plus récent au plus ancien. Utile pour "qu'est-ce qui s'est
-   *   passé hier" ou polling continu.
+   * v0.4.7 — tri appliqué CÔTÉ API (param `order=performed_at <dir>`).
+   * - "asc" (défaut) : du plus ancien au plus récent sur TOUT l'historique.
+   *   La page 1 retourne réellement les calls les plus anciens, pas la
+   *   fenêtre DESC inversée comme en v0.4.5-0.4.6.
+   * - "desc" : du plus récent au plus ancien (polling quotidien).
    *
-   * Important : le tri est appliqué AVANT le filter only_unprocessed et AVANT
-   * le strip fields, sur l'ensemble retourné par l'API pour cette page.
+   * Avant v0.4.7 le tri était une illusion : l'API ignore `sort_order`
+   * (le vrai nom est `order`), renvoyait toujours DESC, puis le tool
+   * réinversait localement les 10 items de la page courante — ce qui
+   * donnait "les 10 plus récents triés ASC", pas "le plus ancien d'abord".
    */
   sort_order: z.enum(["asc", "desc"]).default("asc"),
 });
@@ -77,29 +89,39 @@ export function createListCallsTool(
   return {
     name: "leexi_list_calls",
     description:
-      "List Leexi calls (paginated, sorted ASC by performed_at by default). " +
-      "Default sort_order='asc' (oldest first) is critical for historical backfills so that client timelines build in chronological order (R1 → R2 → kickoff). Pass 'desc' for newest-first polling. " +
+      "List Leexi calls. Sorted by performed_at (default: ASC, oldest first). " +
+      "Default sort_order='asc' is critical for historical backfills: page 1 returns the oldest calls of your entire history (not just the oldest 10 of the recent page). Pass 'desc' for newest-first polling. " +
+      "since/until = ISO datetime or YYYY-MM-DD, filter on performed_at (mapped to API params date_filter=performed_at + from/to). " +
       "Default fields='summary' returns lightweight metadata only (uuid, title, performed_at, duration, locale, owner, speakers, leexi_url, summary text) — recommended for any listing/filtering. Pass fields='full' to include simple_transcript, chapters, tasks, prompts (~30KB extra per call, only for debug/export). " +
-      "Use only_unprocessed=true to skip calls already marked processed by this MCP. Pagination uses { page, items, count }.",
+      "Use only_unprocessed=true to skip calls already marked processed by this MCP. Pagination uses { page, items, count } — items up to 100.",
     inputSchema: ListCallsInputSchema,
     handler: async (rawInput) => {
       // Parse to apply Zod defaults before using the values.
       const input: ParsedInput = ListCallsInputSchema.parse(rawInput);
 
-      // Build params object; omit undefined fields to satisfy exactOptionalPropertyTypes.
+      // v0.4.7 — mapper l'API publique du tool sur les vrais noms de params Leexi :
+      //   limit       → items
+      //   sort_order  → order ("performed_at asc"|"performed_at desc")
+      //   since/until → date_filter=performed_at + from/to
       const listParams: Parameters<typeof client.listCalls>[0] = {
-        limit: input.limit,
-        ...(input.since !== undefined ? { since: input.since } : {}),
+        items: input.limit,
+        order: `performed_at ${input.sort_order}`,
         ...(input.page !== undefined ? { page: input.page } : {}),
+        ...(input.since !== undefined || input.until !== undefined
+          ? {
+              dateFilter: "performed_at" as const,
+              ...(input.since !== undefined ? { from: input.since } : {}),
+              ...(input.until !== undefined ? { to: input.until } : {}),
+            }
+          : {}),
       };
       const list = await client.listCalls(listParams);
 
       let calls = list.calls;
 
-      // v0.4.5 — Sort by performed_at locally. ASC by default for historical
-      // backfill correctness. The Leexi API may return calls in arbitrary
-      // order (typically DESC), so we re-sort here to guarantee the contract.
-      calls = sortCalls(calls, input.sort_order);
+      // v0.4.7 — plus de tri local : l'API trie déjà via `order`. Le tri
+      // côté tool des v0.4.5-0.4.6 était un mensonge (ne triait que la
+      // page courante, pas l'historique).
 
       if (input.only_unprocessed) {
         const filtered: CallSummary[] = [];
@@ -121,19 +143,6 @@ export function createListCallsTool(
       };
     },
   };
-}
-
-// ---------------------------------------------------------------------------
-// sortCalls — guarantees chronological order regardless of API behavior.
-// performedAt is ISO-8601 so string comparison is correct.
-// ---------------------------------------------------------------------------
-function sortCalls(calls: CallSummary[], order: "asc" | "desc"): CallSummary[] {
-  const dir = order === "asc" ? 1 : -1;
-  return [...calls].sort((a, b) => {
-    if (a.performedAt < b.performedAt) return -1 * dir;
-    if (a.performedAt > b.performedAt) return 1 * dir;
-    return 0;
-  });
 }
 
 // ---------------------------------------------------------------------------

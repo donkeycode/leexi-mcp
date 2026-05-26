@@ -309,23 +309,23 @@ export declare const TranscriptUtteranceSchema: z.ZodEffects<z.ZodObject<{
         content: z.ZodString;
     }, z.ZodTypeAny, "passthrough">>, "many">;
 }, "strip", z.ZodTypeAny, {
-    start_time: number;
-    end_time: number;
-    speaker_index: number;
     items: {
         startTime: number;
         endTime: number;
         content: string;
     }[];
-}, {
     start_time: number;
     end_time: number;
     speaker_index: number;
+}, {
     items: z.objectInputType<{
         start_time: z.ZodNumber;
         end_time: z.ZodNumber;
         content: z.ZodString;
     }, z.ZodTypeAny, "passthrough">[];
+    start_time: number;
+    end_time: number;
+    speaker_index: number;
 }>, {
     speakerIndex: number;
     startTime: number;
@@ -336,14 +336,14 @@ export declare const TranscriptUtteranceSchema: z.ZodEffects<z.ZodObject<{
         content: string;
     }[];
 }, {
-    start_time: number;
-    end_time: number;
-    speaker_index: number;
     items: z.objectInputType<{
         start_time: z.ZodNumber;
         end_time: z.ZodNumber;
         content: z.ZodString;
     }, z.ZodTypeAny, "passthrough">[];
+    start_time: number;
+    end_time: number;
+    speaker_index: number;
 }>;
 export type TranscriptUtterance = z.infer<typeof TranscriptUtteranceSchema>;
 export declare const PaginationSchema: z.ZodObject<{
@@ -351,12 +351,12 @@ export declare const PaginationSchema: z.ZodObject<{
     items: z.ZodNumber;
     count: z.ZodNumber;
 }, "strip", z.ZodTypeAny, {
-    page: number;
     items: number;
+    page: number;
     count: number;
 }, {
-    page: number;
     items: number;
+    page: number;
     count: number;
 }>;
 export type Pagination = z.infer<typeof PaginationSchema>;
@@ -620,16 +620,16 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
     }, z.ZodTypeAny, "passthrough">>, "many">>;
     simple_transcript: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
+    created_at: string;
+    performed_at: string;
+    updated_at: string;
     uuid: string;
     duration: number;
     title: string;
-    created_at: string;
-    updated_at: string;
     direction: string;
     locale: string;
     is_video: boolean;
     visible: boolean;
-    performed_at: string;
     leexi_url: string;
     description?: string | null | undefined;
     video_archived_at?: string | null | undefined;
@@ -709,16 +709,16 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
     }[] | undefined;
     simple_transcript?: string | undefined;
 }, {
+    created_at: string;
+    performed_at: string;
+    updated_at: string;
     uuid: string;
     duration: number;
     title: string;
-    created_at: string;
-    updated_at: string;
     direction: string;
     locale: string;
     is_video: boolean;
     visible: boolean;
-    performed_at: string;
     leexi_url: string;
     description?: string | null | undefined;
     video_archived_at?: string | null | undefined;
@@ -887,16 +887,16 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
     }[];
     simpleTranscript: string;
 }, {
+    created_at: string;
+    performed_at: string;
+    updated_at: string;
     uuid: string;
     duration: number;
     title: string;
-    created_at: string;
-    updated_at: string;
     direction: string;
     locale: string;
     is_video: boolean;
     visible: boolean;
-    performed_at: string;
     leexi_url: string;
     description?: string | null | undefined;
     video_archived_at?: string | null | undefined;
@@ -1293,23 +1293,23 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
             content: z.ZodString;
         }, z.ZodTypeAny, "passthrough">>, "many">;
     }, "strip", z.ZodTypeAny, {
-        start_time: number;
-        end_time: number;
-        speaker_index: number;
         items: {
             startTime: number;
             endTime: number;
             content: string;
         }[];
-    }, {
         start_time: number;
         end_time: number;
         speaker_index: number;
+    }, {
         items: z.objectInputType<{
             start_time: z.ZodNumber;
             end_time: z.ZodNumber;
             content: z.ZodString;
         }, z.ZodTypeAny, "passthrough">[];
+        start_time: number;
+        end_time: number;
+        speaker_index: number;
     }>, {
         speakerIndex: number;
         startTime: number;
@@ -1320,26 +1320,26 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
             content: string;
         }[];
     }, {
-        start_time: number;
-        end_time: number;
-        speaker_index: number;
         items: z.objectInputType<{
             start_time: z.ZodNumber;
             end_time: z.ZodNumber;
             content: z.ZodString;
         }, z.ZodTypeAny, "passthrough">[];
+        start_time: number;
+        end_time: number;
+        speaker_index: number;
     }>, "many">>;
 }, "strip", z.ZodTypeAny, {
+    created_at: string;
+    performed_at: string;
+    updated_at: string;
     uuid: string;
     duration: number;
     title: string;
-    created_at: string;
-    updated_at: string;
     direction: string;
     locale: string;
     is_video: boolean;
     visible: boolean;
-    performed_at: string;
     leexi_url: string;
     description?: string | null | undefined;
     video_archived_at?: string | null | undefined;
@@ -1436,16 +1436,16 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
         }[];
     }[] | undefined;
 }, {
+    created_at: string;
+    performed_at: string;
+    updated_at: string;
     uuid: string;
     duration: number;
     title: string;
-    created_at: string;
-    updated_at: string;
     direction: string;
     locale: string;
     is_video: boolean;
     visible: boolean;
-    performed_at: string;
     leexi_url: string;
     description?: string | null | undefined;
     video_archived_at?: string | null | undefined;
@@ -1532,14 +1532,14 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
         topic_name: z.ZodString;
     }, z.ZodTypeAny, "passthrough">[] | undefined;
     transcript?: {
-        start_time: number;
-        end_time: number;
-        speaker_index: number;
         items: z.objectInputType<{
             start_time: z.ZodNumber;
             end_time: z.ZodNumber;
             content: z.ZodString;
         }, z.ZodTypeAny, "passthrough">[];
+        start_time: number;
+        end_time: number;
+        speaker_index: number;
     }[] | undefined;
 }>, {
     uuid: string;
@@ -1648,16 +1648,16 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
         }[];
     }[];
 }, {
+    created_at: string;
+    performed_at: string;
+    updated_at: string;
     uuid: string;
     duration: number;
     title: string;
-    created_at: string;
-    updated_at: string;
     direction: string;
     locale: string;
     is_video: boolean;
     visible: boolean;
-    performed_at: string;
     leexi_url: string;
     description?: string | null | undefined;
     video_archived_at?: string | null | undefined;
@@ -1744,14 +1744,14 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
         topic_name: z.ZodString;
     }, z.ZodTypeAny, "passthrough">[] | undefined;
     transcript?: {
-        start_time: number;
-        end_time: number;
-        speaker_index: number;
         items: z.objectInputType<{
             start_time: z.ZodNumber;
             end_time: z.ZodNumber;
             content: z.ZodString;
         }, z.ZodTypeAny, "passthrough">[];
+        start_time: number;
+        end_time: number;
+        speaker_index: number;
     }[] | undefined;
 }>;
 export type CallDetail = z.infer<typeof CallDetailSchema>;
@@ -2017,16 +2017,16 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         }, z.ZodTypeAny, "passthrough">>, "many">>;
         simple_transcript: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
+        created_at: string;
+        performed_at: string;
+        updated_at: string;
         uuid: string;
         duration: number;
         title: string;
-        created_at: string;
-        updated_at: string;
         direction: string;
         locale: string;
         is_video: boolean;
         visible: boolean;
-        performed_at: string;
         leexi_url: string;
         description?: string | null | undefined;
         video_archived_at?: string | null | undefined;
@@ -2106,16 +2106,16 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         }[] | undefined;
         simple_transcript?: string | undefined;
     }, {
+        created_at: string;
+        performed_at: string;
+        updated_at: string;
         uuid: string;
         duration: number;
         title: string;
-        created_at: string;
-        updated_at: string;
         direction: string;
         locale: string;
         is_video: boolean;
         visible: boolean;
-        performed_at: string;
         leexi_url: string;
         description?: string | null | undefined;
         video_archived_at?: string | null | undefined;
@@ -2284,16 +2284,16 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         }[];
         simpleTranscript: string;
     }, {
+        created_at: string;
+        performed_at: string;
+        updated_at: string;
         uuid: string;
         duration: number;
         title: string;
-        created_at: string;
-        updated_at: string;
         direction: string;
         locale: string;
         is_video: boolean;
         visible: boolean;
-        performed_at: string;
         leexi_url: string;
         description?: string | null | undefined;
         video_archived_at?: string | null | undefined;
@@ -2378,12 +2378,12 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         items: z.ZodNumber;
         count: z.ZodNumber;
     }, "strip", z.ZodTypeAny, {
-        page: number;
         items: number;
+        page: number;
         count: number;
     }, {
-        page: number;
         items: number;
+        page: number;
         count: number;
     }>;
 }, "strip", z.ZodTypeAny, {
@@ -2478,22 +2478,22 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         simpleTranscript: string;
     }[];
     pagination: {
-        page: number;
         items: number;
+        page: number;
         count: number;
     };
 }, {
     data: {
+        created_at: string;
+        performed_at: string;
+        updated_at: string;
         uuid: string;
         duration: number;
         title: string;
-        created_at: string;
-        updated_at: string;
         direction: string;
         locale: string;
         is_video: boolean;
         visible: boolean;
-        performed_at: string;
         leexi_url: string;
         description?: string | null | undefined;
         video_archived_at?: string | null | undefined;
@@ -2574,8 +2574,8 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         simple_transcript?: string | undefined;
     }[];
     pagination: {
-        page: number;
         items: number;
+        page: number;
         count: number;
     };
 }>;
@@ -2898,23 +2898,23 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
                 content: z.ZodString;
             }, z.ZodTypeAny, "passthrough">>, "many">;
         }, "strip", z.ZodTypeAny, {
-            start_time: number;
-            end_time: number;
-            speaker_index: number;
             items: {
                 startTime: number;
                 endTime: number;
                 content: string;
             }[];
-        }, {
             start_time: number;
             end_time: number;
             speaker_index: number;
+        }, {
             items: z.objectInputType<{
                 start_time: z.ZodNumber;
                 end_time: z.ZodNumber;
                 content: z.ZodString;
             }, z.ZodTypeAny, "passthrough">[];
+            start_time: number;
+            end_time: number;
+            speaker_index: number;
         }>, {
             speakerIndex: number;
             startTime: number;
@@ -2925,26 +2925,26 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
                 content: string;
             }[];
         }, {
-            start_time: number;
-            end_time: number;
-            speaker_index: number;
             items: z.objectInputType<{
                 start_time: z.ZodNumber;
                 end_time: z.ZodNumber;
                 content: z.ZodString;
             }, z.ZodTypeAny, "passthrough">[];
+            start_time: number;
+            end_time: number;
+            speaker_index: number;
         }>, "many">>;
     }, "strip", z.ZodTypeAny, {
+        created_at: string;
+        performed_at: string;
+        updated_at: string;
         uuid: string;
         duration: number;
         title: string;
-        created_at: string;
-        updated_at: string;
         direction: string;
         locale: string;
         is_video: boolean;
         visible: boolean;
-        performed_at: string;
         leexi_url: string;
         description?: string | null | undefined;
         video_archived_at?: string | null | undefined;
@@ -3041,16 +3041,16 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
             }[];
         }[] | undefined;
     }, {
+        created_at: string;
+        performed_at: string;
+        updated_at: string;
         uuid: string;
         duration: number;
         title: string;
-        created_at: string;
-        updated_at: string;
         direction: string;
         locale: string;
         is_video: boolean;
         visible: boolean;
-        performed_at: string;
         leexi_url: string;
         description?: string | null | undefined;
         video_archived_at?: string | null | undefined;
@@ -3137,14 +3137,14 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
             topic_name: z.ZodString;
         }, z.ZodTypeAny, "passthrough">[] | undefined;
         transcript?: {
-            start_time: number;
-            end_time: number;
-            speaker_index: number;
             items: z.objectInputType<{
                 start_time: z.ZodNumber;
                 end_time: z.ZodNumber;
                 content: z.ZodString;
             }, z.ZodTypeAny, "passthrough">[];
+            start_time: number;
+            end_time: number;
+            speaker_index: number;
         }[] | undefined;
     }>, {
         uuid: string;
@@ -3253,16 +3253,16 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
             }[];
         }[];
     }, {
+        created_at: string;
+        performed_at: string;
+        updated_at: string;
         uuid: string;
         duration: number;
         title: string;
-        created_at: string;
-        updated_at: string;
         direction: string;
         locale: string;
         is_video: boolean;
         visible: boolean;
-        performed_at: string;
         leexi_url: string;
         description?: string | null | undefined;
         video_archived_at?: string | null | undefined;
@@ -3349,14 +3349,14 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
             topic_name: z.ZodString;
         }, z.ZodTypeAny, "passthrough">[] | undefined;
         transcript?: {
-            start_time: number;
-            end_time: number;
-            speaker_index: number;
             items: z.objectInputType<{
                 start_time: z.ZodNumber;
                 end_time: z.ZodNumber;
                 content: z.ZodString;
             }, z.ZodTypeAny, "passthrough">[];
+            start_time: number;
+            end_time: number;
+            speaker_index: number;
         }[] | undefined;
     }>;
 }, "strip", z.ZodTypeAny, {
@@ -3469,16 +3469,16 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
     };
 }, {
     data: {
+        created_at: string;
+        performed_at: string;
+        updated_at: string;
         uuid: string;
         duration: number;
         title: string;
-        created_at: string;
-        updated_at: string;
         direction: string;
         locale: string;
         is_video: boolean;
         visible: boolean;
-        performed_at: string;
         leexi_url: string;
         description?: string | null | undefined;
         video_archived_at?: string | null | undefined;
@@ -3565,14 +3565,14 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
             topic_name: z.ZodString;
         }, z.ZodTypeAny, "passthrough">[] | undefined;
         transcript?: {
-            start_time: number;
-            end_time: number;
-            speaker_index: number;
             items: z.objectInputType<{
                 start_time: z.ZodNumber;
                 end_time: z.ZodNumber;
                 content: z.ZodString;
             }, z.ZodTypeAny, "passthrough">[];
+            start_time: number;
+            end_time: number;
+            speaker_index: number;
         }[] | undefined;
     };
 }>;

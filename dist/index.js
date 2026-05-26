@@ -19355,9 +19355,12 @@ var StdioServerTransport = class {
 // src/leexi/endpoints.ts
 function callsListUrl(baseUrl, params) {
   const url = new URL(`${baseUrl}/calls`);
-  if (params.since) url.searchParams.set("since", params.since);
-  if (params.limit !== void 0) url.searchParams.set("per_page", String(params.limit));
+  if (params.items !== void 0) url.searchParams.set("items", String(params.items));
   if (params.page !== void 0) url.searchParams.set("page", String(params.page));
+  if (params.order) url.searchParams.set("order", params.order);
+  if (params.dateFilter) url.searchParams.set("date_filter", params.dateFilter);
+  if (params.from) url.searchParams.set("from", params.from);
+  if (params.to) url.searchParams.set("to", params.to);
   return url.toString();
 }
 function callDetailUrl(baseUrl, uuid2) {
@@ -19837,7 +19840,18 @@ function createGetCallTool(client) {
 
 // src/tools/list-calls.ts
 var ListCallsInputSchema = external_exports.object({
-  since: external_exports.string().datetime().optional(),
+  /**
+   * Borne inférieure de filtrage sur `performed_at`. ISO datetime ou `YYYY-MM-DD`.
+   * Mappé en interne sur `date_filter=performed_at` + `from=<since>` côté API.
+   * Avant v0.4.7 on envoyait `since` brut → ignoré par l'API.
+   */
+  since: external_exports.string().optional(),
+  /**
+   * Borne supérieure (optionnelle) de filtrage sur `performed_at`. Utile pour
+   * traiter une plage précise (ex: tous les calls de juin 2025 →
+   * `since: "2025-06-01", until: "2025-06-30"`).
+   */
+  until: external_exports.string().optional(),
   limit: external_exports.number().int().positive().max(100).default(50),
   page: external_exports.number().int().positive().optional(),
   only_unprocessed: external_exports.boolean().default(false),
@@ -19850,33 +19864,38 @@ var ListCallsInputSchema = external_exports.object({
    */
   fields: external_exports.enum(["summary", "full"]).default("summary"),
   /**
-   * v0.4.5 — tri par performed_at appliqué CÔTÉ TOOL (après réception API).
-   * - "asc" (défaut) : du plus ancien au plus récent. Critique pour la reprise
-   *   historique : les fiches client se construisent dans l'ordre logique
-   *   (R1 → R2 → kickoff → steerco) au lieu de l'inverse.
-   * - "desc" : du plus récent au plus ancien. Utile pour "qu'est-ce qui s'est
-   *   passé hier" ou polling continu.
+   * v0.4.7 — tri appliqué CÔTÉ API (param `order=performed_at <dir>`).
+   * - "asc" (défaut) : du plus ancien au plus récent sur TOUT l'historique.
+   *   La page 1 retourne réellement les calls les plus anciens, pas la
+   *   fenêtre DESC inversée comme en v0.4.5-0.4.6.
+   * - "desc" : du plus récent au plus ancien (polling quotidien).
    *
-   * Important : le tri est appliqué AVANT le filter only_unprocessed et AVANT
-   * le strip fields, sur l'ensemble retourné par l'API pour cette page.
+   * Avant v0.4.7 le tri était une illusion : l'API ignore `sort_order`
+   * (le vrai nom est `order`), renvoyait toujours DESC, puis le tool
+   * réinversait localement les 10 items de la page courante — ce qui
+   * donnait "les 10 plus récents triés ASC", pas "le plus ancien d'abord".
    */
   sort_order: external_exports.enum(["asc", "desc"]).default("asc")
 });
 function createListCallsTool(client, store) {
   return {
     name: "leexi_list_calls",
-    description: "List Leexi calls (paginated, sorted ASC by performed_at by default). Default sort_order='asc' (oldest first) is critical for historical backfills so that client timelines build in chronological order (R1 \u2192 R2 \u2192 kickoff). Pass 'desc' for newest-first polling. Default fields='summary' returns lightweight metadata only (uuid, title, performed_at, duration, locale, owner, speakers, leexi_url, summary text) \u2014 recommended for any listing/filtering. Pass fields='full' to include simple_transcript, chapters, tasks, prompts (~30KB extra per call, only for debug/export). Use only_unprocessed=true to skip calls already marked processed by this MCP. Pagination uses { page, items, count }.",
+    description: "List Leexi calls. Sorted by performed_at (default: ASC, oldest first). Default sort_order='asc' is critical for historical backfills: page 1 returns the oldest calls of your entire history (not just the oldest 10 of the recent page). Pass 'desc' for newest-first polling. since/until = ISO datetime or YYYY-MM-DD, filter on performed_at (mapped to API params date_filter=performed_at + from/to). Default fields='summary' returns lightweight metadata only (uuid, title, performed_at, duration, locale, owner, speakers, leexi_url, summary text) \u2014 recommended for any listing/filtering. Pass fields='full' to include simple_transcript, chapters, tasks, prompts (~30KB extra per call, only for debug/export). Use only_unprocessed=true to skip calls already marked processed by this MCP. Pagination uses { page, items, count } \u2014 items up to 100.",
     inputSchema: ListCallsInputSchema,
     handler: async (rawInput) => {
       const input = ListCallsInputSchema.parse(rawInput);
       const listParams = {
-        limit: input.limit,
-        ...input.since !== void 0 ? { since: input.since } : {},
-        ...input.page !== void 0 ? { page: input.page } : {}
+        items: input.limit,
+        order: `performed_at ${input.sort_order}`,
+        ...input.page !== void 0 ? { page: input.page } : {},
+        ...input.since !== void 0 || input.until !== void 0 ? {
+          dateFilter: "performed_at",
+          ...input.since !== void 0 ? { from: input.since } : {},
+          ...input.until !== void 0 ? { to: input.until } : {}
+        } : {}
       };
       const list = await client.listCalls(listParams);
       let calls = list.calls;
-      calls = sortCalls(calls, input.sort_order);
       if (input.only_unprocessed) {
         const filtered = [];
         for (const call of calls) {
@@ -19893,14 +19912,6 @@ function createListCallsTool(client, store) {
       };
     }
   };
-}
-function sortCalls(calls, order) {
-  const dir = order === "asc" ? 1 : -1;
-  return [...calls].sort((a, b) => {
-    if (a.performedAt < b.performedAt) return -1 * dir;
-    if (a.performedAt > b.performedAt) return 1 * dir;
-    return 0;
-  });
 }
 function stripHeavyFields(call) {
   return {

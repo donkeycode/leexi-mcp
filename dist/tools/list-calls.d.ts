@@ -3,7 +3,18 @@ import type { LeexiClient } from "../leexi/client.js";
 import type { CallSummary, Pagination } from "../leexi/types.js";
 import type { ProcessedStore } from "../store/processed-store.js";
 export declare const ListCallsInputSchema: z.ZodObject<{
+    /**
+     * Borne inférieure de filtrage sur `performed_at`. ISO datetime ou `YYYY-MM-DD`.
+     * Mappé en interne sur `date_filter=performed_at` + `from=<since>` côté API.
+     * Avant v0.4.7 on envoyait `since` brut → ignoré par l'API.
+     */
     since: z.ZodOptional<z.ZodString>;
+    /**
+     * Borne supérieure (optionnelle) de filtrage sur `performed_at`. Utile pour
+     * traiter une plage précise (ex: tous les calls de juin 2025 →
+     * `since: "2025-06-01", until: "2025-06-30"`).
+     */
+    until: z.ZodOptional<z.ZodString>;
     limit: z.ZodDefault<z.ZodNumber>;
     page: z.ZodOptional<z.ZodNumber>;
     only_unprocessed: z.ZodDefault<z.ZodBoolean>;
@@ -16,15 +27,16 @@ export declare const ListCallsInputSchema: z.ZodObject<{
      */
     fields: z.ZodDefault<z.ZodEnum<["summary", "full"]>>;
     /**
-     * v0.4.5 — tri par performed_at appliqué CÔTÉ TOOL (après réception API).
-     * - "asc" (défaut) : du plus ancien au plus récent. Critique pour la reprise
-     *   historique : les fiches client se construisent dans l'ordre logique
-     *   (R1 → R2 → kickoff → steerco) au lieu de l'inverse.
-     * - "desc" : du plus récent au plus ancien. Utile pour "qu'est-ce qui s'est
-     *   passé hier" ou polling continu.
+     * v0.4.7 — tri appliqué CÔTÉ API (param `order=performed_at <dir>`).
+     * - "asc" (défaut) : du plus ancien au plus récent sur TOUT l'historique.
+     *   La page 1 retourne réellement les calls les plus anciens, pas la
+     *   fenêtre DESC inversée comme en v0.4.5-0.4.6.
+     * - "desc" : du plus récent au plus ancien (polling quotidien).
      *
-     * Important : le tri est appliqué AVANT le filter only_unprocessed et AVANT
-     * le strip fields, sur l'ensemble retourné par l'API pour cette page.
+     * Avant v0.4.7 le tri était une illusion : l'API ignore `sort_order`
+     * (le vrai nom est `order`), renvoyait toujours DESC, puis le tool
+     * réinversait localement les 10 items de la page courante — ce qui
+     * donnait "les 10 plus récents triés ASC", pas "le plus ancien d'abord".
      */
     sort_order: z.ZodDefault<z.ZodEnum<["asc", "desc"]>>;
 }, "strip", z.ZodTypeAny, {
@@ -32,11 +44,13 @@ export declare const ListCallsInputSchema: z.ZodObject<{
     only_unprocessed: boolean;
     fields: "summary" | "full";
     sort_order: "asc" | "desc";
-    since?: string | undefined;
     page?: number | undefined;
+    since?: string | undefined;
+    until?: string | undefined;
 }, {
-    since?: string | undefined;
     page?: number | undefined;
+    since?: string | undefined;
+    until?: string | undefined;
     limit?: number | undefined;
     only_unprocessed?: boolean | undefined;
     fields?: "summary" | "full" | undefined;

@@ -11,9 +11,12 @@ interface ClientOptions {
     retryDelayMs?: number;
 }
 interface ListParams {
-    since?: string;
-    limit?: number;
+    items?: number;
     page?: number;
+    order?: string;
+    dateFilter?: "created_at" | "performed_at" | "updated_at";
+    from?: string;
+    to?: string;
 }
 export interface CallsList {
     calls: CallSummary[];

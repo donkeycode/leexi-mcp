@@ -4,6 +4,27 @@ All notable changes to `@donkeycode/leexi-mcp` will be documented here. Format i
 
 ## [Unreleased]
 
+## [0.4.7] — 2026-05-26
+
+### Fixed (bug majeur)
+
+- **Le tri par `performed_at` est maintenant RÉEL sur tout l'historique**, plus juste sur la page courante. Avant v0.4.7 le `sort_order: "asc"` était un mensonge contractuel : l'API ignorait le paramètre (car le bon nom est `order`, pas `sort_order`), renvoyait toujours du DESC, et le tool réinversait localement les 10 calls reçus → on obtenait "les 10 plus récents triés ASC" au lieu de "le plus ancien d'abord". Symptôme observable : sur 864 calls dans l'historique, demander la page 1 ASC renvoyait des calls de mai 2026 au lieu de mars 2024 (1er call réel).
+- **Le paramètre `limit` est maintenant respecté** (jusqu'à 100). Avant v0.4.7 on envoyait `per_page` côté API alors que le vrai nom est `items`, donc l'API tombait sur son défaut (10) quelle que soit la valeur demandée.
+- **Le paramètre `since` filtre maintenant réellement par date**. Avant v0.4.7 on envoyait `since=<ISO>` brut alors que l'API attend `date_filter=performed_at` + `from=<date>`. Conséquence : la routine `--since=2024-05-26 --obsidian-only` recevait la page DESC complète au lieu des plus anciens calls.
+
+### Changed
+
+- `leexi_list_calls` mappe désormais sa façade publique (stable pour les callers) sur les vrais noms de paramètres de l'API publique Leexi (cf. https://docs.public-api.leexi.ai/reference/list-calls) :
+  - `limit` (tool) → `items` (API)
+  - `sort_order: "asc"|"desc"` (tool) → `order: "performed_at asc"|"performed_at desc"` (API)
+  - `since: <ISO>` (tool) → `date_filter=performed_at` + `from=<ISO>` (API)
+- Nouveau paramètre `until: <ISO>` (mapping vers `to=<ISO>`) pour traiter une plage précise (ex: `since: "2025-06-01", until: "2025-06-30"` = juin 2025).
+- Suppression de la fonction `sortCalls` locale — le tri est désormais 100% côté serveur via le param `order`, ce qui garantit sa correction sur tout l'historique paginé.
+
+### Tests
+
+- 62 tests (was 60). Tests `endpoints` réécrits autour des vrais noms de params (items, order, date_filter, from, to). Tests `tools/list-calls` vérifient maintenant que le bon `order=performed_at asc|desc` est envoyé à l'API plutôt que de mocker un re-sort local qui n'existe plus.
+
 ## [0.4.6] — 2026-05-26
 
 ### Fixed

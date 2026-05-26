@@ -31,7 +31,7 @@ describe("LeexiClient.listCalls", () => {
     );
 
     const client = makeClient();
-    const result = await client.listCalls({ limit: 50 });
+    const result = await client.listCalls({ items: 50 });
 
     expect(receivedAuth).toBe(`Basic ${Buffer.from("test-id:test-key").toString("base64")}`);
     // listCalls returns { calls, pagination } — not { data, meta }
@@ -43,7 +43,7 @@ describe("LeexiClient.listCalls", () => {
     expect(result.pagination.count).toBe(864);
   });
 
-  it("forwards since and per_page query params", async () => {
+  it("forwards items, order, date_filter, from, to query params (v0.4.7 API names)", async () => {
     let receivedUrl: string | null = null;
     mswServer.use(
       http.get(`${BASE_URL}/calls`, ({ request }) => {
@@ -52,10 +52,21 @@ describe("LeexiClient.listCalls", () => {
       }),
     );
 
-    await makeClient().listCalls({ since: "2026-05-20T00:00:00Z", limit: 25 });
+    await makeClient().listCalls({
+      items: 25,
+      order: "performed_at asc",
+      dateFilter: "performed_at",
+      from: "2026-05-20T00:00:00Z",
+      to: "2026-05-26",
+    });
 
-    expect(receivedUrl).toContain("since=2026-05-20T00%3A00%3A00Z");
-    expect(receivedUrl).toContain("per_page=25");
+    expect(receivedUrl).toContain("items=25");
+    expect(receivedUrl).toMatch(/order=performed_at(\+|%20)asc/);
+    expect(receivedUrl).toContain("date_filter=performed_at");
+    expect(receivedUrl).toContain("from=2026-05-20T00%3A00%3A00Z");
+    expect(receivedUrl).toContain("to=2026-05-26");
+    expect(receivedUrl).not.toContain("per_page");
+    expect(receivedUrl).not.toContain("since=");
   });
 
   it("throws LeexiApiError on 401", async () => {

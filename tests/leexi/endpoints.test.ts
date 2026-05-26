@@ -11,15 +11,10 @@ describe("callsListUrl", () => {
     expect(url).toBe(`${BASE}/calls`);
   });
 
-  it("adds since as a query param", () => {
-    const url = callsListUrl(BASE, { since: "2026-05-25T10:00:00Z" });
-    // URL class percent-encodes colons in query params
-    expect(url).toContain("since=2026-05-25T10%3A00%3A00Z");
-  });
-
-  it("adds per_page from limit param", () => {
-    const url = callsListUrl(BASE, { limit: 25 });
-    expect(url).toContain("per_page=25");
+  it("adds items query param (mapped from items, not per_page)", () => {
+    const url = callsListUrl(BASE, { items: 25 });
+    expect(url).toContain("items=25");
+    expect(url).not.toContain("per_page");
   });
 
   it("adds page query param", () => {
@@ -27,10 +22,26 @@ describe("callsListUrl", () => {
     expect(url).toContain("page=3");
   });
 
-  it("URL-encodes special chars in since value", () => {
-    const url = callsListUrl(BASE, { since: "2026-05-25T10:00:00Z" });
-    // Colons must be encoded as %3A
-    expect(url).toMatch(/since=.*%3A.*%3A/);
+  it("adds order query param verbatim (Leexi format: '<field> <dir>')", () => {
+    const url = callsListUrl(BASE, { order: "performed_at asc" });
+    // URL class percent-encodes the space as +
+    expect(url).toMatch(/order=performed_at(\+|%20)asc/);
+  });
+
+  it("adds date_filter + from + to when filtering by date range", () => {
+    const url = callsListUrl(BASE, {
+      dateFilter: "performed_at",
+      from: "2025-06-01",
+      to: "2025-06-30",
+    });
+    expect(url).toContain("date_filter=performed_at");
+    expect(url).toContain("from=2025-06-01");
+    expect(url).toContain("to=2025-06-30");
+  });
+
+  it("URL-encodes special chars in from value (ISO datetime)", () => {
+    const url = callsListUrl(BASE, { from: "2026-05-25T10:00:00Z" });
+    expect(url).toMatch(/from=2026-05-25T10%3A00%3A00Z/);
   });
 });
 
