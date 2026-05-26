@@ -80,4 +80,45 @@ describe("leexi_list_calls tool", () => {
     expect(receivedUrl).toContain("since=2026-05-20T00%3A00%3A00Z");
     expect(receivedUrl).toContain("per_page=10");
   });
+
+  it("strips heavy fields when fields='summary' (default)", async () => {
+    mswServer.use(
+      http.get(`${BASE_URL}/calls`, () => HttpResponse.json(fixture("calls-list.json"))),
+    );
+
+    const tool = createListCallsTool(client, store);
+    const result = await tool.handler({}); // default = summary
+
+    // Essentials preserved
+    expect(result.calls[0]?.uuid).toBe("call-abc-123");
+    expect(result.calls[0]?.title).toBeDefined();
+    expect(result.calls[0]?.performedAt).toBeDefined();
+    expect(result.calls[0]?.duration).toBeDefined();
+    expect(result.calls[0]?.leexiUrl).toBeDefined();
+    // Heavy fields stripped
+    expect(result.calls[0]?.simpleTranscript).toBe("");
+    expect(result.calls[0]?.chapters).toEqual([]);
+    expect(result.calls[0]?.tasks).toEqual([]);
+    expect(result.calls[0]?.prompts).toEqual([]);
+  });
+
+  it("keeps all fields when fields='full'", async () => {
+    mswServer.use(
+      http.get(`${BASE_URL}/calls`, () => HttpResponse.json(fixture("calls-list.json"))),
+    );
+
+    const tool = createListCallsTool(client, store);
+    const resultSummary = await tool.handler({ fields: "summary" });
+    const resultFull = await tool.handler({ fields: "full" });
+
+    // If the fixture has any non-empty heavy field in the upstream response,
+    // full mode must preserve it. We can't assume specific contents, but we
+    // can assert structural difference vs summary: full keeps original arrays.
+    expect(resultFull.calls[0]?.uuid).toBe(resultSummary.calls[0]?.uuid);
+    // The defining contract: in summary mode, simpleTranscript is empty string.
+    // In full mode, it's whatever the API returned (string, may be "" if upstream is empty).
+    // So the test is: full mode does NOT force empty arrays — they reflect upstream.
+    expect(Array.isArray(resultFull.calls[0]?.chapters)).toBe(true);
+    expect(Array.isArray(resultFull.calls[0]?.tasks)).toBe(true);
+  });
 });

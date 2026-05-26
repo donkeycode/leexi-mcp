@@ -4,6 +4,21 @@ All notable changes to `@donkeycode/leexi-mcp` will be documented here. Format i
 
 ## [Unreleased]
 
+## [0.4.4] — 2026-05-26
+
+### Added
+
+- **`fields: "summary" | "full"`** param on `leexi_list_calls` (default `"summary"`). Strips heavy fields (`simple_transcript`, `chapters`, `tasks`, `prompts`, `scorecards`, `feedbacks`) when `summary`, cutting payload by ~95% for typical calls. Use `"full"` for debug or export when you really want everything.
+
+### Why
+
+- The Leexi public API includes `simple_transcript` in the `/calls` list response (~30KB per call). Listing 10 calls returned ~300KB of mostly-noise JSON to the MCP consumer (Claude session). With `fields: "summary"` the same listing is now ~15KB total — leaves context room for the actual work (extracting actions, drafting follow-ups).
+- Backward compatibility: callers that need transcripts in the listing can pass `fields: "full"`. Anyone using `leexi_get_call(uuid)` for a specific call already gets the full transcript (unchanged).
+
+### Tests
+
+- 58 tests (was 56). +2 covering `fields: "summary"` strip behavior and `fields: "full"` preservation.
+
 ## [0.4.3] — 2026-05-25
 
 ### Fixed

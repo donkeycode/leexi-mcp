@@ -19840,12 +19840,20 @@ var ListCallsInputSchema = external_exports.object({
   since: external_exports.string().datetime().optional(),
   limit: external_exports.number().int().positive().max(100).default(50),
   page: external_exports.number().int().positive().optional(),
-  only_unprocessed: external_exports.boolean().default(false)
+  only_unprocessed: external_exports.boolean().default(false),
+  /**
+   * v0.4.4 — réduit la payload de listing.
+   * - "summary" (défaut) : strip simple_transcript, chapters, tasks, prompts, scorecards
+   *   → -95% de payload typique. Suffit pour lister/filtrer.
+   * - "full" : garde tous les champs (comportement legacy v0.4.3-).
+   *   Utile uniquement pour debug ou exports massifs.
+   */
+  fields: external_exports.enum(["summary", "full"]).default("summary")
 });
 function createListCallsTool(client, store) {
   return {
     name: "leexi_list_calls",
-    description: "List Leexi calls. Returns call metadata including title, performed_at, duration (float seconds), locale, summary (markdown), chapters, tasks (Leexi-extracted action items), and speakers. Use only_unprocessed=true to skip calls already marked processed by this MCP. Pagination uses { page, items, count }.",
+    description: "List Leexi calls (paginated). Default fields='summary' returns lightweight metadata only (uuid, title, performed_at, duration, locale, owner, speakers, leexi_url, summary text) \u2014 recommended for any listing/filtering use case. Pass fields='full' to include simple_transcript, chapters, tasks, prompts (~30KB extra per call, only for debug/export). Use only_unprocessed=true to skip calls already marked processed by this MCP. Pagination uses { page, items, count }.",
     inputSchema: ListCallsInputSchema,
     handler: async (rawInput) => {
       const input = ListCallsInputSchema.parse(rawInput);
@@ -19863,11 +19871,25 @@ function createListCallsTool(client, store) {
         }
         calls = filtered;
       }
+      if (input.fields === "summary") {
+        calls = calls.map((c) => stripHeavyFields(c));
+      }
       return {
         calls,
         pagination: list.pagination
       };
     }
+  };
+}
+function stripHeavyFields(call) {
+  return {
+    ...call,
+    simpleTranscript: "",
+    chapters: [],
+    tasks: [],
+    prompts: [],
+    scorecards: [],
+    feedbacks: []
   };
 }
 
