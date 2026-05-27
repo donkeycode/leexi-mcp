@@ -5,8 +5,6 @@
       "command": "node",
       "args": ["${CLAUDE_PLUGIN_ROOT}/dist/index.js"],
       "env": {
-        "LEEXI_API_KEY_ID": "${LEEXI_API_KEY_ID}",
-        "LEEXI_API_KEY": "${LEEXI_API_KEY}",
         "LEEXI_API_BASE_URL": "https://public-api.leexi.ai/v1",
         "LEEXI_STATE_FILE": "${HOME}/.local/state/leexi-mcp/processed-calls.json"
       }

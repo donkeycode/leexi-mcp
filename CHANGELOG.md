@@ -4,6 +4,22 @@ All notable changes to `@donkeycode/leexi-mcp` will be documented here. Format i
 
 ## [Unreleased]
 
+## [0.4.16] — 2026-05-27
+
+### Fixed (auth 401 sur child MCP spawn)
+
+- **Retrait de `LEEXI_API_KEY_ID` et `LEEXI_API_KEY` du bloc `env` de `.mcp.json`.**
+  - Avant : `.mcp.json` déclarait `"LEEXI_API_KEY_ID": "${LEEXI_API_KEY_ID}"` (et idem pour `LEEXI_API_KEY`). Claude Code, dans certains scénarios de respawn MCP, passait ces valeurs **littéralement** (la string `"${LEEXI_API_KEY_ID}"`) au child process au lieu de les substituer depuis l'env parent. Résultat : auth Basic `base64("${LEEXI_API_KEY_ID}:${LEEXI_API_KEY}")` → l'API Leexi rejette → 401 sur tous les appels.
+  - Après : les deux vars ne sont plus déclarées dans le bloc `env`. Le child MCP hérite naturellement de l'env complet du parent Claude Code (qui les a depuis le shell profile utilisateur). Plus de substitution douteuse à craindre.
+
+### Prérequis utilisateur
+
+`LEEXI_API_KEY_ID` et `LEEXI_API_KEY` doivent être définies dans le shell profile de l'utilisateur (`~/.zshrc` / `~/.bashrc`) avant le lancement de Claude Code, comme c'était déjà le cas en pratique. Aucun changement de setup côté utilisateur.
+
+### Contexte
+
+Bug observé 27/05/2026 fin d'après-midi après restart Claude Code complet : malgré les fixes v0.4.13/0.4.14/0.4.15 (chemin XDG, reload-auto, expansion `${HOME}`), les appels MCP `leexi_list_calls` et `leexi_get_call` retournaient `401 Unauthorized` depuis la session principale. L'`env | grep LEEXI` montrait pourtant les bonnes valeurs côté Claude Code. Diagnostic : Claude Code passait les `${VAR}` du bloc `env` MCP littéralement plutôt que substitués. Le retrait du mapping force l'héritage env, qui lui fonctionne.
+
 ## [0.4.15] — 2026-05-27
 
 ### Fixed (CRITIQUE — `${HOME}` non substitué par certains launchers MCP)
