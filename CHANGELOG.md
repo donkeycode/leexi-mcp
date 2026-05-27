@@ -4,6 +4,29 @@ All notable changes to `@donkeycode/leexi-mcp` will be documented here. Format i
 
 ## [Unreleased]
 
+## [0.4.12] — 2026-05-27
+
+### Fixed (bloquant reprise historique, suite v0.4.11)
+
+- **`chapters[].title: null` et `chapters[].text: null` acceptés** sur `CallSummarySchema` / `CallDetailSchema`.
+- **`meeting_event.title/direction/start_time/end_time: null` acceptés** (`MeetingEventSchema`).
+
+L'API Leexi renvoie parfois `chapters[].title: null` (et préventif : `text: null`) sur des calls historiques où le chaptering a été généré sans titre dérivé.
+
+Avant v0.4.12, ces calls faisaient exploser `leexi_list_calls` avec :
+
+```
+data[N].chapters[K].title : Expected string, received null
+```
+
+bloquant toute la page contenant le call corrompu. Détecté lors d'une reprise historique sur des batches autour de fin 2024 / début 2025 où plusieurs calls successifs présentent ce pattern.
+
+`text` est aussi passé en `nullable()` par cohérence préventive (même symptôme probable).
+
+### Reproductible
+
+`leexi_list_calls({ only_unprocessed: true, since: "2024-12-05T11:00:00Z", limit: 10 })` plantait sur `data[0]` avant le fix.
+
 ## [0.4.11] — 2026-05-26
 
 ### Fixed (bloquant reprise historique, suite v0.4.10)

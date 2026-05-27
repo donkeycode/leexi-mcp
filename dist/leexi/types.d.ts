@@ -69,32 +69,32 @@ export type Speaker = z.infer<typeof SpeakerSchema>;
 export declare const ChapterSchema: z.ZodEffects<z.ZodObject<{
     uuid: z.ZodString;
     index: z.ZodNumber;
-    title: z.ZodString;
-    text: z.ZodString;
+    title: z.ZodNullable<z.ZodString>;
+    text: z.ZodNullable<z.ZodString>;
     start_time: z.ZodNullable<z.ZodNumber>;
 }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
     uuid: z.ZodString;
     index: z.ZodNumber;
-    title: z.ZodString;
-    text: z.ZodString;
+    title: z.ZodNullable<z.ZodString>;
+    text: z.ZodNullable<z.ZodString>;
     start_time: z.ZodNullable<z.ZodNumber>;
 }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
     uuid: z.ZodString;
     index: z.ZodNumber;
-    title: z.ZodString;
-    text: z.ZodString;
+    title: z.ZodNullable<z.ZodString>;
+    text: z.ZodNullable<z.ZodString>;
     start_time: z.ZodNullable<z.ZodNumber>;
 }, z.ZodTypeAny, "passthrough">>, {
     uuid: string;
     index: number;
-    title: string;
-    text: string;
+    title: string | null;
+    text: string | null;
     startTime: number | null;
 }, z.objectInputType<{
     uuid: z.ZodString;
     index: z.ZodNumber;
-    title: z.ZodString;
-    text: z.ZodString;
+    title: z.ZodNullable<z.ZodString>;
+    text: z.ZodNullable<z.ZodString>;
     start_time: z.ZodNullable<z.ZodNumber>;
 }, z.ZodTypeAny, "passthrough">>;
 export type Chapter = z.infer<typeof ChapterSchema>;
@@ -164,49 +164,49 @@ export type ConversationType = z.infer<typeof ConversationTypeSchema>;
 /** Meeting event metadata (Google Meet / Teams / etc.). */
 export declare const MeetingEventSchema: z.ZodEffects<z.ZodObject<{
     uuid: z.ZodString;
-    title: z.ZodString;
+    title: z.ZodNullable<z.ZodString>;
     meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     internal: z.ZodBoolean;
-    direction: z.ZodString;
-    start_time: z.ZodString;
-    end_time: z.ZodString;
+    direction: z.ZodNullable<z.ZodString>;
+    start_time: z.ZodNullable<z.ZodString>;
+    end_time: z.ZodNullable<z.ZodString>;
 }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
     uuid: z.ZodString;
-    title: z.ZodString;
+    title: z.ZodNullable<z.ZodString>;
     meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     internal: z.ZodBoolean;
-    direction: z.ZodString;
-    start_time: z.ZodString;
-    end_time: z.ZodString;
+    direction: z.ZodNullable<z.ZodString>;
+    start_time: z.ZodNullable<z.ZodString>;
+    end_time: z.ZodNullable<z.ZodString>;
 }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
     uuid: z.ZodString;
-    title: z.ZodString;
+    title: z.ZodNullable<z.ZodString>;
     meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     internal: z.ZodBoolean;
-    direction: z.ZodString;
-    start_time: z.ZodString;
-    end_time: z.ZodString;
+    direction: z.ZodNullable<z.ZodString>;
+    start_time: z.ZodNullable<z.ZodString>;
+    end_time: z.ZodNullable<z.ZodString>;
 }, z.ZodTypeAny, "passthrough">>, {
     uuid: string;
-    title: string;
+    title: string | null;
     meetingUrl: string | null;
     meetingProvider: string | null;
     internal: boolean;
-    direction: string;
-    startTime: string;
-    endTime: string;
+    direction: string | null;
+    startTime: string | null;
+    endTime: string | null;
 }, z.objectInputType<{
     uuid: z.ZodString;
-    title: z.ZodString;
+    title: z.ZodNullable<z.ZodString>;
     meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
     internal: z.ZodBoolean;
-    direction: z.ZodString;
-    start_time: z.ZodString;
-    end_time: z.ZodString;
+    direction: z.ZodNullable<z.ZodString>;
+    start_time: z.ZodNullable<z.ZodString>;
+    end_time: z.ZodNullable<z.ZodString>;
 }, z.ZodTypeAny, "passthrough">>;
 export type MeetingEvent = z.infer<typeof MeetingEventSchema>;
 /** Prompt completion item (AI-generated text for a prompt template). */
@@ -398,49 +398,49 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
     deal: z.ZodOptional<z.ZodNullable<z.ZodUnknown>>;
     meeting_event: z.ZodOptional<z.ZodNullable<z.ZodEffects<z.ZodObject<{
         uuid: z.ZodString;
-        title: z.ZodString;
+        title: z.ZodNullable<z.ZodString>;
         meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         internal: z.ZodBoolean;
-        direction: z.ZodString;
-        start_time: z.ZodString;
-        end_time: z.ZodString;
+        direction: z.ZodNullable<z.ZodString>;
+        start_time: z.ZodNullable<z.ZodString>;
+        end_time: z.ZodNullable<z.ZodString>;
     }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
         uuid: z.ZodString;
-        title: z.ZodString;
+        title: z.ZodNullable<z.ZodString>;
         meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         internal: z.ZodBoolean;
-        direction: z.ZodString;
-        start_time: z.ZodString;
-        end_time: z.ZodString;
+        direction: z.ZodNullable<z.ZodString>;
+        start_time: z.ZodNullable<z.ZodString>;
+        end_time: z.ZodNullable<z.ZodString>;
     }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
         uuid: z.ZodString;
-        title: z.ZodString;
+        title: z.ZodNullable<z.ZodString>;
         meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         internal: z.ZodBoolean;
-        direction: z.ZodString;
-        start_time: z.ZodString;
-        end_time: z.ZodString;
+        direction: z.ZodNullable<z.ZodString>;
+        start_time: z.ZodNullable<z.ZodString>;
+        end_time: z.ZodNullable<z.ZodString>;
     }, z.ZodTypeAny, "passthrough">>, {
         uuid: string;
-        title: string;
+        title: string | null;
         meetingUrl: string | null;
         meetingProvider: string | null;
         internal: boolean;
-        direction: string;
-        startTime: string;
-        endTime: string;
+        direction: string | null;
+        startTime: string | null;
+        endTime: string | null;
     }, z.objectInputType<{
         uuid: z.ZodString;
-        title: z.ZodString;
+        title: z.ZodNullable<z.ZodString>;
         meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         internal: z.ZodBoolean;
-        direction: z.ZodString;
-        start_time: z.ZodString;
-        end_time: z.ZodString;
+        direction: z.ZodNullable<z.ZodString>;
+        start_time: z.ZodNullable<z.ZodString>;
+        end_time: z.ZodNullable<z.ZodString>;
     }, z.ZodTypeAny, "passthrough">>>>;
     feedbacks: z.ZodOptional<z.ZodArray<z.ZodUnknown, "many">>;
     owner: z.ZodOptional<z.ZodNullable<z.ZodObject<{
@@ -542,32 +542,32 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
     chapters: z.ZodOptional<z.ZodArray<z.ZodEffects<z.ZodObject<{
         uuid: z.ZodString;
         index: z.ZodNumber;
-        title: z.ZodString;
-        text: z.ZodString;
+        title: z.ZodNullable<z.ZodString>;
+        text: z.ZodNullable<z.ZodString>;
         start_time: z.ZodNullable<z.ZodNumber>;
     }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
         uuid: z.ZodString;
         index: z.ZodNumber;
-        title: z.ZodString;
-        text: z.ZodString;
+        title: z.ZodNullable<z.ZodString>;
+        text: z.ZodNullable<z.ZodString>;
         start_time: z.ZodNullable<z.ZodNumber>;
     }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
         uuid: z.ZodString;
         index: z.ZodNumber;
-        title: z.ZodString;
-        text: z.ZodString;
+        title: z.ZodNullable<z.ZodString>;
+        text: z.ZodNullable<z.ZodString>;
         start_time: z.ZodNullable<z.ZodNumber>;
     }, z.ZodTypeAny, "passthrough">>, {
         uuid: string;
         index: number;
-        title: string;
-        text: string;
+        title: string | null;
+        text: string | null;
         startTime: number | null;
     }, z.objectInputType<{
         uuid: z.ZodString;
         index: z.ZodNumber;
-        title: z.ZodString;
-        text: z.ZodString;
+        title: z.ZodNullable<z.ZodString>;
+        text: z.ZodNullable<z.ZodString>;
         start_time: z.ZodNullable<z.ZodNumber>;
     }, z.ZodTypeAny, "passthrough">>, "many">>;
     scorecards: z.ZodOptional<z.ZodArray<z.ZodUnknown, "many">>;
@@ -649,13 +649,13 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
     deal?: unknown;
     meeting_event?: {
         uuid: string;
-        title: string;
+        title: string | null;
         meetingUrl: string | null;
         meetingProvider: string | null;
         internal: boolean;
-        direction: string;
-        startTime: string;
-        endTime: string;
+        direction: string | null;
+        startTime: string | null;
+        endTime: string | null;
     } | null | undefined;
     feedbacks?: unknown[] | undefined;
     owner?: z.objectOutputType<{
@@ -691,8 +691,8 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
     chapters?: {
         uuid: string;
         index: number;
-        title: string;
-        text: string;
+        title: string | null;
+        text: string | null;
         startTime: number | null;
     }[] | undefined;
     scorecards?: unknown[] | undefined;
@@ -738,13 +738,13 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
     deal?: unknown;
     meeting_event?: z.objectInputType<{
         uuid: z.ZodString;
-        title: z.ZodString;
+        title: z.ZodNullable<z.ZodString>;
         meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         internal: z.ZodBoolean;
-        direction: z.ZodString;
-        start_time: z.ZodString;
-        end_time: z.ZodString;
+        direction: z.ZodNullable<z.ZodString>;
+        start_time: z.ZodNullable<z.ZodString>;
+        end_time: z.ZodNullable<z.ZodString>;
     }, z.ZodTypeAny, "passthrough"> | null | undefined;
     feedbacks?: unknown[] | undefined;
     owner?: z.objectInputType<{
@@ -780,8 +780,8 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
     chapters?: z.objectInputType<{
         uuid: z.ZodString;
         index: z.ZodNumber;
-        title: z.ZodString;
-        text: z.ZodString;
+        title: z.ZodNullable<z.ZodString>;
+        text: z.ZodNullable<z.ZodString>;
         start_time: z.ZodNullable<z.ZodNumber>;
     }, z.ZodTypeAny, "passthrough">[] | undefined;
     scorecards?: unknown[] | undefined;
@@ -827,13 +827,13 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
     deal: {} | null;
     meetingEvent: {
         uuid: string;
-        title: string;
+        title: string | null;
         meetingUrl: string | null;
         meetingProvider: string | null;
         internal: boolean;
-        direction: string;
-        startTime: string;
-        endTime: string;
+        direction: string | null;
+        startTime: string | null;
+        endTime: string | null;
     } | null;
     feedbacks: unknown[];
     owner: z.objectOutputType<{
@@ -869,8 +869,8 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
     chapters: {
         uuid: string;
         index: number;
-        title: string;
-        text: string;
+        title: string | null;
+        text: string | null;
         startTime: number | null;
     }[];
     scorecards: unknown[];
@@ -916,13 +916,13 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
     deal?: unknown;
     meeting_event?: z.objectInputType<{
         uuid: z.ZodString;
-        title: z.ZodString;
+        title: z.ZodNullable<z.ZodString>;
         meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         internal: z.ZodBoolean;
-        direction: z.ZodString;
-        start_time: z.ZodString;
-        end_time: z.ZodString;
+        direction: z.ZodNullable<z.ZodString>;
+        start_time: z.ZodNullable<z.ZodString>;
+        end_time: z.ZodNullable<z.ZodString>;
     }, z.ZodTypeAny, "passthrough"> | null | undefined;
     feedbacks?: unknown[] | undefined;
     owner?: z.objectInputType<{
@@ -958,8 +958,8 @@ export declare const CallSummarySchema: z.ZodEffects<z.ZodObject<{
     chapters?: z.objectInputType<{
         uuid: z.ZodString;
         index: z.ZodNumber;
-        title: z.ZodString;
-        text: z.ZodString;
+        title: z.ZodNullable<z.ZodString>;
+        text: z.ZodNullable<z.ZodString>;
         start_time: z.ZodNullable<z.ZodNumber>;
     }, z.ZodTypeAny, "passthrough">[] | undefined;
     scorecards?: unknown[] | undefined;
@@ -1015,49 +1015,49 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
     deal: z.ZodOptional<z.ZodNullable<z.ZodUnknown>>;
     meeting_event: z.ZodOptional<z.ZodNullable<z.ZodEffects<z.ZodObject<{
         uuid: z.ZodString;
-        title: z.ZodString;
+        title: z.ZodNullable<z.ZodString>;
         meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         internal: z.ZodBoolean;
-        direction: z.ZodString;
-        start_time: z.ZodString;
-        end_time: z.ZodString;
+        direction: z.ZodNullable<z.ZodString>;
+        start_time: z.ZodNullable<z.ZodString>;
+        end_time: z.ZodNullable<z.ZodString>;
     }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
         uuid: z.ZodString;
-        title: z.ZodString;
+        title: z.ZodNullable<z.ZodString>;
         meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         internal: z.ZodBoolean;
-        direction: z.ZodString;
-        start_time: z.ZodString;
-        end_time: z.ZodString;
+        direction: z.ZodNullable<z.ZodString>;
+        start_time: z.ZodNullable<z.ZodString>;
+        end_time: z.ZodNullable<z.ZodString>;
     }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
         uuid: z.ZodString;
-        title: z.ZodString;
+        title: z.ZodNullable<z.ZodString>;
         meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         internal: z.ZodBoolean;
-        direction: z.ZodString;
-        start_time: z.ZodString;
-        end_time: z.ZodString;
+        direction: z.ZodNullable<z.ZodString>;
+        start_time: z.ZodNullable<z.ZodString>;
+        end_time: z.ZodNullable<z.ZodString>;
     }, z.ZodTypeAny, "passthrough">>, {
         uuid: string;
-        title: string;
+        title: string | null;
         meetingUrl: string | null;
         meetingProvider: string | null;
         internal: boolean;
-        direction: string;
-        startTime: string;
-        endTime: string;
+        direction: string | null;
+        startTime: string | null;
+        endTime: string | null;
     }, z.objectInputType<{
         uuid: z.ZodString;
-        title: z.ZodString;
+        title: z.ZodNullable<z.ZodString>;
         meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         internal: z.ZodBoolean;
-        direction: z.ZodString;
-        start_time: z.ZodString;
-        end_time: z.ZodString;
+        direction: z.ZodNullable<z.ZodString>;
+        start_time: z.ZodNullable<z.ZodString>;
+        end_time: z.ZodNullable<z.ZodString>;
     }, z.ZodTypeAny, "passthrough">>>>;
     feedbacks: z.ZodOptional<z.ZodArray<z.ZodUnknown, "many">>;
     owner: z.ZodOptional<z.ZodNullable<z.ZodObject<{
@@ -1159,32 +1159,32 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
     chapters: z.ZodOptional<z.ZodArray<z.ZodEffects<z.ZodObject<{
         uuid: z.ZodString;
         index: z.ZodNumber;
-        title: z.ZodString;
-        text: z.ZodString;
+        title: z.ZodNullable<z.ZodString>;
+        text: z.ZodNullable<z.ZodString>;
         start_time: z.ZodNullable<z.ZodNumber>;
     }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
         uuid: z.ZodString;
         index: z.ZodNumber;
-        title: z.ZodString;
-        text: z.ZodString;
+        title: z.ZodNullable<z.ZodString>;
+        text: z.ZodNullable<z.ZodString>;
         start_time: z.ZodNullable<z.ZodNumber>;
     }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
         uuid: z.ZodString;
         index: z.ZodNumber;
-        title: z.ZodString;
-        text: z.ZodString;
+        title: z.ZodNullable<z.ZodString>;
+        text: z.ZodNullable<z.ZodString>;
         start_time: z.ZodNullable<z.ZodNumber>;
     }, z.ZodTypeAny, "passthrough">>, {
         uuid: string;
         index: number;
-        title: string;
-        text: string;
+        title: string | null;
+        text: string | null;
         startTime: number | null;
     }, z.objectInputType<{
         uuid: z.ZodString;
         index: z.ZodNumber;
-        title: z.ZodString;
-        text: z.ZodString;
+        title: z.ZodNullable<z.ZodString>;
+        text: z.ZodNullable<z.ZodString>;
         start_time: z.ZodNullable<z.ZodNumber>;
     }, z.ZodTypeAny, "passthrough">>, "many">>;
     scorecards: z.ZodOptional<z.ZodArray<z.ZodUnknown, "many">>;
@@ -1359,13 +1359,13 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
     deal?: unknown;
     meeting_event?: {
         uuid: string;
-        title: string;
+        title: string | null;
         meetingUrl: string | null;
         meetingProvider: string | null;
         internal: boolean;
-        direction: string;
-        startTime: string;
-        endTime: string;
+        direction: string | null;
+        startTime: string | null;
+        endTime: string | null;
     } | null | undefined;
     feedbacks?: unknown[] | undefined;
     owner?: z.objectOutputType<{
@@ -1401,8 +1401,8 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
     chapters?: {
         uuid: string;
         index: number;
-        title: string;
-        text: string;
+        title: string | null;
+        text: string | null;
         startTime: number | null;
     }[] | undefined;
     scorecards?: unknown[] | undefined;
@@ -1465,13 +1465,13 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
     deal?: unknown;
     meeting_event?: z.objectInputType<{
         uuid: z.ZodString;
-        title: z.ZodString;
+        title: z.ZodNullable<z.ZodString>;
         meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         internal: z.ZodBoolean;
-        direction: z.ZodString;
-        start_time: z.ZodString;
-        end_time: z.ZodString;
+        direction: z.ZodNullable<z.ZodString>;
+        start_time: z.ZodNullable<z.ZodString>;
+        end_time: z.ZodNullable<z.ZodString>;
     }, z.ZodTypeAny, "passthrough"> | null | undefined;
     feedbacks?: unknown[] | undefined;
     owner?: z.objectInputType<{
@@ -1507,8 +1507,8 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
     chapters?: z.objectInputType<{
         uuid: z.ZodString;
         index: z.ZodNumber;
-        title: z.ZodString;
-        text: z.ZodString;
+        title: z.ZodNullable<z.ZodString>;
+        text: z.ZodNullable<z.ZodString>;
         start_time: z.ZodNullable<z.ZodNumber>;
     }, z.ZodTypeAny, "passthrough">[] | undefined;
     scorecards?: unknown[] | undefined;
@@ -1571,13 +1571,13 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
     deal: {} | null;
     meetingEvent: {
         uuid: string;
-        title: string;
+        title: string | null;
         meetingUrl: string | null;
         meetingProvider: string | null;
         internal: boolean;
-        direction: string;
-        startTime: string;
-        endTime: string;
+        direction: string | null;
+        startTime: string | null;
+        endTime: string | null;
     } | null;
     feedbacks: unknown[];
     owner: z.objectOutputType<{
@@ -1613,8 +1613,8 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
     chapters: {
         uuid: string;
         index: number;
-        title: string;
-        text: string;
+        title: string | null;
+        text: string | null;
         startTime: number | null;
     }[];
     scorecards: unknown[];
@@ -1677,13 +1677,13 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
     deal?: unknown;
     meeting_event?: z.objectInputType<{
         uuid: z.ZodString;
-        title: z.ZodString;
+        title: z.ZodNullable<z.ZodString>;
         meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
         internal: z.ZodBoolean;
-        direction: z.ZodString;
-        start_time: z.ZodString;
-        end_time: z.ZodString;
+        direction: z.ZodNullable<z.ZodString>;
+        start_time: z.ZodNullable<z.ZodString>;
+        end_time: z.ZodNullable<z.ZodString>;
     }, z.ZodTypeAny, "passthrough"> | null | undefined;
     feedbacks?: unknown[] | undefined;
     owner?: z.objectInputType<{
@@ -1719,8 +1719,8 @@ export declare const CallDetailSchema: z.ZodEffects<z.ZodObject<{
     chapters?: z.objectInputType<{
         uuid: z.ZodString;
         index: z.ZodNumber;
-        title: z.ZodString;
-        text: z.ZodString;
+        title: z.ZodNullable<z.ZodString>;
+        text: z.ZodNullable<z.ZodString>;
         start_time: z.ZodNullable<z.ZodNumber>;
     }, z.ZodTypeAny, "passthrough">[] | undefined;
     scorecards?: unknown[] | undefined;
@@ -1795,49 +1795,49 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         deal: z.ZodOptional<z.ZodNullable<z.ZodUnknown>>;
         meeting_event: z.ZodOptional<z.ZodNullable<z.ZodEffects<z.ZodObject<{
             uuid: z.ZodString;
-            title: z.ZodString;
+            title: z.ZodNullable<z.ZodString>;
             meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             internal: z.ZodBoolean;
-            direction: z.ZodString;
-            start_time: z.ZodString;
-            end_time: z.ZodString;
+            direction: z.ZodNullable<z.ZodString>;
+            start_time: z.ZodNullable<z.ZodString>;
+            end_time: z.ZodNullable<z.ZodString>;
         }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
             uuid: z.ZodString;
-            title: z.ZodString;
+            title: z.ZodNullable<z.ZodString>;
             meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             internal: z.ZodBoolean;
-            direction: z.ZodString;
-            start_time: z.ZodString;
-            end_time: z.ZodString;
+            direction: z.ZodNullable<z.ZodString>;
+            start_time: z.ZodNullable<z.ZodString>;
+            end_time: z.ZodNullable<z.ZodString>;
         }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
             uuid: z.ZodString;
-            title: z.ZodString;
+            title: z.ZodNullable<z.ZodString>;
             meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             internal: z.ZodBoolean;
-            direction: z.ZodString;
-            start_time: z.ZodString;
-            end_time: z.ZodString;
+            direction: z.ZodNullable<z.ZodString>;
+            start_time: z.ZodNullable<z.ZodString>;
+            end_time: z.ZodNullable<z.ZodString>;
         }, z.ZodTypeAny, "passthrough">>, {
             uuid: string;
-            title: string;
+            title: string | null;
             meetingUrl: string | null;
             meetingProvider: string | null;
             internal: boolean;
-            direction: string;
-            startTime: string;
-            endTime: string;
+            direction: string | null;
+            startTime: string | null;
+            endTime: string | null;
         }, z.objectInputType<{
             uuid: z.ZodString;
-            title: z.ZodString;
+            title: z.ZodNullable<z.ZodString>;
             meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             internal: z.ZodBoolean;
-            direction: z.ZodString;
-            start_time: z.ZodString;
-            end_time: z.ZodString;
+            direction: z.ZodNullable<z.ZodString>;
+            start_time: z.ZodNullable<z.ZodString>;
+            end_time: z.ZodNullable<z.ZodString>;
         }, z.ZodTypeAny, "passthrough">>>>;
         feedbacks: z.ZodOptional<z.ZodArray<z.ZodUnknown, "many">>;
         owner: z.ZodOptional<z.ZodNullable<z.ZodObject<{
@@ -1939,32 +1939,32 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         chapters: z.ZodOptional<z.ZodArray<z.ZodEffects<z.ZodObject<{
             uuid: z.ZodString;
             index: z.ZodNumber;
-            title: z.ZodString;
-            text: z.ZodString;
+            title: z.ZodNullable<z.ZodString>;
+            text: z.ZodNullable<z.ZodString>;
             start_time: z.ZodNullable<z.ZodNumber>;
         }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
             uuid: z.ZodString;
             index: z.ZodNumber;
-            title: z.ZodString;
-            text: z.ZodString;
+            title: z.ZodNullable<z.ZodString>;
+            text: z.ZodNullable<z.ZodString>;
             start_time: z.ZodNullable<z.ZodNumber>;
         }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
             uuid: z.ZodString;
             index: z.ZodNumber;
-            title: z.ZodString;
-            text: z.ZodString;
+            title: z.ZodNullable<z.ZodString>;
+            text: z.ZodNullable<z.ZodString>;
             start_time: z.ZodNullable<z.ZodNumber>;
         }, z.ZodTypeAny, "passthrough">>, {
             uuid: string;
             index: number;
-            title: string;
-            text: string;
+            title: string | null;
+            text: string | null;
             startTime: number | null;
         }, z.objectInputType<{
             uuid: z.ZodString;
             index: z.ZodNumber;
-            title: z.ZodString;
-            text: z.ZodString;
+            title: z.ZodNullable<z.ZodString>;
+            text: z.ZodNullable<z.ZodString>;
             start_time: z.ZodNullable<z.ZodNumber>;
         }, z.ZodTypeAny, "passthrough">>, "many">>;
         scorecards: z.ZodOptional<z.ZodArray<z.ZodUnknown, "many">>;
@@ -2046,13 +2046,13 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         deal?: unknown;
         meeting_event?: {
             uuid: string;
-            title: string;
+            title: string | null;
             meetingUrl: string | null;
             meetingProvider: string | null;
             internal: boolean;
-            direction: string;
-            startTime: string;
-            endTime: string;
+            direction: string | null;
+            startTime: string | null;
+            endTime: string | null;
         } | null | undefined;
         feedbacks?: unknown[] | undefined;
         owner?: z.objectOutputType<{
@@ -2088,8 +2088,8 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         chapters?: {
             uuid: string;
             index: number;
-            title: string;
-            text: string;
+            title: string | null;
+            text: string | null;
             startTime: number | null;
         }[] | undefined;
         scorecards?: unknown[] | undefined;
@@ -2135,13 +2135,13 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         deal?: unknown;
         meeting_event?: z.objectInputType<{
             uuid: z.ZodString;
-            title: z.ZodString;
+            title: z.ZodNullable<z.ZodString>;
             meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             internal: z.ZodBoolean;
-            direction: z.ZodString;
-            start_time: z.ZodString;
-            end_time: z.ZodString;
+            direction: z.ZodNullable<z.ZodString>;
+            start_time: z.ZodNullable<z.ZodString>;
+            end_time: z.ZodNullable<z.ZodString>;
         }, z.ZodTypeAny, "passthrough"> | null | undefined;
         feedbacks?: unknown[] | undefined;
         owner?: z.objectInputType<{
@@ -2177,8 +2177,8 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         chapters?: z.objectInputType<{
             uuid: z.ZodString;
             index: z.ZodNumber;
-            title: z.ZodString;
-            text: z.ZodString;
+            title: z.ZodNullable<z.ZodString>;
+            text: z.ZodNullable<z.ZodString>;
             start_time: z.ZodNullable<z.ZodNumber>;
         }, z.ZodTypeAny, "passthrough">[] | undefined;
         scorecards?: unknown[] | undefined;
@@ -2224,13 +2224,13 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         deal: {} | null;
         meetingEvent: {
             uuid: string;
-            title: string;
+            title: string | null;
             meetingUrl: string | null;
             meetingProvider: string | null;
             internal: boolean;
-            direction: string;
-            startTime: string;
-            endTime: string;
+            direction: string | null;
+            startTime: string | null;
+            endTime: string | null;
         } | null;
         feedbacks: unknown[];
         owner: z.objectOutputType<{
@@ -2266,8 +2266,8 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         chapters: {
             uuid: string;
             index: number;
-            title: string;
-            text: string;
+            title: string | null;
+            text: string | null;
             startTime: number | null;
         }[];
         scorecards: unknown[];
@@ -2313,13 +2313,13 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         deal?: unknown;
         meeting_event?: z.objectInputType<{
             uuid: z.ZodString;
-            title: z.ZodString;
+            title: z.ZodNullable<z.ZodString>;
             meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             internal: z.ZodBoolean;
-            direction: z.ZodString;
-            start_time: z.ZodString;
-            end_time: z.ZodString;
+            direction: z.ZodNullable<z.ZodString>;
+            start_time: z.ZodNullable<z.ZodString>;
+            end_time: z.ZodNullable<z.ZodString>;
         }, z.ZodTypeAny, "passthrough"> | null | undefined;
         feedbacks?: unknown[] | undefined;
         owner?: z.objectInputType<{
@@ -2355,8 +2355,8 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         chapters?: z.objectInputType<{
             uuid: z.ZodString;
             index: z.ZodNumber;
-            title: z.ZodString;
-            text: z.ZodString;
+            title: z.ZodNullable<z.ZodString>;
+            text: z.ZodNullable<z.ZodString>;
             start_time: z.ZodNullable<z.ZodNumber>;
         }, z.ZodTypeAny, "passthrough">[] | undefined;
         scorecards?: unknown[] | undefined;
@@ -2417,13 +2417,13 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         deal: {} | null;
         meetingEvent: {
             uuid: string;
-            title: string;
+            title: string | null;
             meetingUrl: string | null;
             meetingProvider: string | null;
             internal: boolean;
-            direction: string;
-            startTime: string;
-            endTime: string;
+            direction: string | null;
+            startTime: string | null;
+            endTime: string | null;
         } | null;
         feedbacks: unknown[];
         owner: z.objectOutputType<{
@@ -2459,8 +2459,8 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         chapters: {
             uuid: string;
             index: number;
-            title: string;
-            text: string;
+            title: string | null;
+            text: string | null;
             startTime: number | null;
         }[];
         scorecards: unknown[];
@@ -2513,13 +2513,13 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         deal?: unknown;
         meeting_event?: z.objectInputType<{
             uuid: z.ZodString;
-            title: z.ZodString;
+            title: z.ZodNullable<z.ZodString>;
             meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             internal: z.ZodBoolean;
-            direction: z.ZodString;
-            start_time: z.ZodString;
-            end_time: z.ZodString;
+            direction: z.ZodNullable<z.ZodString>;
+            start_time: z.ZodNullable<z.ZodString>;
+            end_time: z.ZodNullable<z.ZodString>;
         }, z.ZodTypeAny, "passthrough"> | null | undefined;
         feedbacks?: unknown[] | undefined;
         owner?: z.objectInputType<{
@@ -2555,8 +2555,8 @@ export declare const CallsListResponseSchema: z.ZodObject<{
         chapters?: z.objectInputType<{
             uuid: z.ZodString;
             index: z.ZodNumber;
-            title: z.ZodString;
-            text: z.ZodString;
+            title: z.ZodNullable<z.ZodString>;
+            text: z.ZodNullable<z.ZodString>;
             start_time: z.ZodNullable<z.ZodNumber>;
         }, z.ZodTypeAny, "passthrough">[] | undefined;
         scorecards?: unknown[] | undefined;
@@ -2620,49 +2620,49 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
         deal: z.ZodOptional<z.ZodNullable<z.ZodUnknown>>;
         meeting_event: z.ZodOptional<z.ZodNullable<z.ZodEffects<z.ZodObject<{
             uuid: z.ZodString;
-            title: z.ZodString;
+            title: z.ZodNullable<z.ZodString>;
             meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             internal: z.ZodBoolean;
-            direction: z.ZodString;
-            start_time: z.ZodString;
-            end_time: z.ZodString;
+            direction: z.ZodNullable<z.ZodString>;
+            start_time: z.ZodNullable<z.ZodString>;
+            end_time: z.ZodNullable<z.ZodString>;
         }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
             uuid: z.ZodString;
-            title: z.ZodString;
+            title: z.ZodNullable<z.ZodString>;
             meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             internal: z.ZodBoolean;
-            direction: z.ZodString;
-            start_time: z.ZodString;
-            end_time: z.ZodString;
+            direction: z.ZodNullable<z.ZodString>;
+            start_time: z.ZodNullable<z.ZodString>;
+            end_time: z.ZodNullable<z.ZodString>;
         }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
             uuid: z.ZodString;
-            title: z.ZodString;
+            title: z.ZodNullable<z.ZodString>;
             meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             internal: z.ZodBoolean;
-            direction: z.ZodString;
-            start_time: z.ZodString;
-            end_time: z.ZodString;
+            direction: z.ZodNullable<z.ZodString>;
+            start_time: z.ZodNullable<z.ZodString>;
+            end_time: z.ZodNullable<z.ZodString>;
         }, z.ZodTypeAny, "passthrough">>, {
             uuid: string;
-            title: string;
+            title: string | null;
             meetingUrl: string | null;
             meetingProvider: string | null;
             internal: boolean;
-            direction: string;
-            startTime: string;
-            endTime: string;
+            direction: string | null;
+            startTime: string | null;
+            endTime: string | null;
         }, z.objectInputType<{
             uuid: z.ZodString;
-            title: z.ZodString;
+            title: z.ZodNullable<z.ZodString>;
             meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             internal: z.ZodBoolean;
-            direction: z.ZodString;
-            start_time: z.ZodString;
-            end_time: z.ZodString;
+            direction: z.ZodNullable<z.ZodString>;
+            start_time: z.ZodNullable<z.ZodString>;
+            end_time: z.ZodNullable<z.ZodString>;
         }, z.ZodTypeAny, "passthrough">>>>;
         feedbacks: z.ZodOptional<z.ZodArray<z.ZodUnknown, "many">>;
         owner: z.ZodOptional<z.ZodNullable<z.ZodObject<{
@@ -2764,32 +2764,32 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
         chapters: z.ZodOptional<z.ZodArray<z.ZodEffects<z.ZodObject<{
             uuid: z.ZodString;
             index: z.ZodNumber;
-            title: z.ZodString;
-            text: z.ZodString;
+            title: z.ZodNullable<z.ZodString>;
+            text: z.ZodNullable<z.ZodString>;
             start_time: z.ZodNullable<z.ZodNumber>;
         }, "passthrough", z.ZodTypeAny, z.objectOutputType<{
             uuid: z.ZodString;
             index: z.ZodNumber;
-            title: z.ZodString;
-            text: z.ZodString;
+            title: z.ZodNullable<z.ZodString>;
+            text: z.ZodNullable<z.ZodString>;
             start_time: z.ZodNullable<z.ZodNumber>;
         }, z.ZodTypeAny, "passthrough">, z.objectInputType<{
             uuid: z.ZodString;
             index: z.ZodNumber;
-            title: z.ZodString;
-            text: z.ZodString;
+            title: z.ZodNullable<z.ZodString>;
+            text: z.ZodNullable<z.ZodString>;
             start_time: z.ZodNullable<z.ZodNumber>;
         }, z.ZodTypeAny, "passthrough">>, {
             uuid: string;
             index: number;
-            title: string;
-            text: string;
+            title: string | null;
+            text: string | null;
             startTime: number | null;
         }, z.objectInputType<{
             uuid: z.ZodString;
             index: z.ZodNumber;
-            title: z.ZodString;
-            text: z.ZodString;
+            title: z.ZodNullable<z.ZodString>;
+            text: z.ZodNullable<z.ZodString>;
             start_time: z.ZodNullable<z.ZodNumber>;
         }, z.ZodTypeAny, "passthrough">>, "many">>;
         scorecards: z.ZodOptional<z.ZodArray<z.ZodUnknown, "many">>;
@@ -2964,13 +2964,13 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
         deal?: unknown;
         meeting_event?: {
             uuid: string;
-            title: string;
+            title: string | null;
             meetingUrl: string | null;
             meetingProvider: string | null;
             internal: boolean;
-            direction: string;
-            startTime: string;
-            endTime: string;
+            direction: string | null;
+            startTime: string | null;
+            endTime: string | null;
         } | null | undefined;
         feedbacks?: unknown[] | undefined;
         owner?: z.objectOutputType<{
@@ -3006,8 +3006,8 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
         chapters?: {
             uuid: string;
             index: number;
-            title: string;
-            text: string;
+            title: string | null;
+            text: string | null;
             startTime: number | null;
         }[] | undefined;
         scorecards?: unknown[] | undefined;
@@ -3070,13 +3070,13 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
         deal?: unknown;
         meeting_event?: z.objectInputType<{
             uuid: z.ZodString;
-            title: z.ZodString;
+            title: z.ZodNullable<z.ZodString>;
             meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             internal: z.ZodBoolean;
-            direction: z.ZodString;
-            start_time: z.ZodString;
-            end_time: z.ZodString;
+            direction: z.ZodNullable<z.ZodString>;
+            start_time: z.ZodNullable<z.ZodString>;
+            end_time: z.ZodNullable<z.ZodString>;
         }, z.ZodTypeAny, "passthrough"> | null | undefined;
         feedbacks?: unknown[] | undefined;
         owner?: z.objectInputType<{
@@ -3112,8 +3112,8 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
         chapters?: z.objectInputType<{
             uuid: z.ZodString;
             index: z.ZodNumber;
-            title: z.ZodString;
-            text: z.ZodString;
+            title: z.ZodNullable<z.ZodString>;
+            text: z.ZodNullable<z.ZodString>;
             start_time: z.ZodNullable<z.ZodNumber>;
         }, z.ZodTypeAny, "passthrough">[] | undefined;
         scorecards?: unknown[] | undefined;
@@ -3176,13 +3176,13 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
         deal: {} | null;
         meetingEvent: {
             uuid: string;
-            title: string;
+            title: string | null;
             meetingUrl: string | null;
             meetingProvider: string | null;
             internal: boolean;
-            direction: string;
-            startTime: string;
-            endTime: string;
+            direction: string | null;
+            startTime: string | null;
+            endTime: string | null;
         } | null;
         feedbacks: unknown[];
         owner: z.objectOutputType<{
@@ -3218,8 +3218,8 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
         chapters: {
             uuid: string;
             index: number;
-            title: string;
-            text: string;
+            title: string | null;
+            text: string | null;
             startTime: number | null;
         }[];
         scorecards: unknown[];
@@ -3282,13 +3282,13 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
         deal?: unknown;
         meeting_event?: z.objectInputType<{
             uuid: z.ZodString;
-            title: z.ZodString;
+            title: z.ZodNullable<z.ZodString>;
             meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             internal: z.ZodBoolean;
-            direction: z.ZodString;
-            start_time: z.ZodString;
-            end_time: z.ZodString;
+            direction: z.ZodNullable<z.ZodString>;
+            start_time: z.ZodNullable<z.ZodString>;
+            end_time: z.ZodNullable<z.ZodString>;
         }, z.ZodTypeAny, "passthrough"> | null | undefined;
         feedbacks?: unknown[] | undefined;
         owner?: z.objectInputType<{
@@ -3324,8 +3324,8 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
         chapters?: z.objectInputType<{
             uuid: z.ZodString;
             index: z.ZodNumber;
-            title: z.ZodString;
-            text: z.ZodString;
+            title: z.ZodNullable<z.ZodString>;
+            text: z.ZodNullable<z.ZodString>;
             start_time: z.ZodNullable<z.ZodNumber>;
         }, z.ZodTypeAny, "passthrough">[] | undefined;
         scorecards?: unknown[] | undefined;
@@ -3390,13 +3390,13 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
         deal: {} | null;
         meetingEvent: {
             uuid: string;
-            title: string;
+            title: string | null;
             meetingUrl: string | null;
             meetingProvider: string | null;
             internal: boolean;
-            direction: string;
-            startTime: string;
-            endTime: string;
+            direction: string | null;
+            startTime: string | null;
+            endTime: string | null;
         } | null;
         feedbacks: unknown[];
         owner: z.objectOutputType<{
@@ -3432,8 +3432,8 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
         chapters: {
             uuid: string;
             index: number;
-            title: string;
-            text: string;
+            title: string | null;
+            text: string | null;
             startTime: number | null;
         }[];
         scorecards: unknown[];
@@ -3498,13 +3498,13 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
         deal?: unknown;
         meeting_event?: z.objectInputType<{
             uuid: z.ZodString;
-            title: z.ZodString;
+            title: z.ZodNullable<z.ZodString>;
             meeting_url: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             meeting_provider: z.ZodOptional<z.ZodNullable<z.ZodString>>;
             internal: z.ZodBoolean;
-            direction: z.ZodString;
-            start_time: z.ZodString;
-            end_time: z.ZodString;
+            direction: z.ZodNullable<z.ZodString>;
+            start_time: z.ZodNullable<z.ZodString>;
+            end_time: z.ZodNullable<z.ZodString>;
         }, z.ZodTypeAny, "passthrough"> | null | undefined;
         feedbacks?: unknown[] | undefined;
         owner?: z.objectInputType<{
@@ -3540,8 +3540,8 @@ export declare const CallDetailResponseSchema: z.ZodObject<{
         chapters?: z.objectInputType<{
             uuid: z.ZodString;
             index: z.ZodNumber;
-            title: z.ZodString;
-            text: z.ZodString;
+            title: z.ZodNullable<z.ZodString>;
+            text: z.ZodNullable<z.ZodString>;
             start_time: z.ZodNullable<z.ZodNumber>;
         }, z.ZodTypeAny, "passthrough">[] | undefined;
         scorecards?: unknown[] | undefined;

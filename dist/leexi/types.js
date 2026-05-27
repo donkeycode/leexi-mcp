@@ -48,8 +48,11 @@ export const ChapterSchema = z
     .object({
     uuid: z.string(),
     index: z.number().int(),
-    title: z.string(),
-    text: z.string(),
+    // v0.4.12 — l'API renvoie title=null sur des calls historiques (chaptering
+    // généré sans titre dérivé). Avant v0.4.12 ces calls faisaient exploser
+    // leexi_list_calls (cf. note start_time ci-dessous). text passe préventif.
+    title: z.string().nullable(),
+    text: z.string().nullable(),
     // v0.4.9 — l'API renvoie null sur des calls historiques (chaptering
     // généré sans timeline). Avant v0.4.9 ces calls faisaient exploser
     // CallSummarySchema/CallDetailSchema et bloquaient leexi_list_calls
@@ -60,8 +63,8 @@ export const ChapterSchema = z
     .transform((raw) => ({
     uuid: raw.uuid,
     index: raw.index,
-    title: raw.title,
-    text: raw.text,
+    title: raw.title ?? null,
+    text: raw.text ?? null,
     startTime: raw.start_time ?? null,
 }));
 /** A task (action item) extracted by Leexi AI. */
@@ -99,24 +102,28 @@ export const ConversationTypeSchema = z
 export const MeetingEventSchema = z
     .object({
     uuid: z.string(),
-    title: z.string(),
+    // v0.4.12 — l'API renvoie meeting_event avec title/direction/end_time/start_time
+    // null sur des calls historiques (meeting metadata partielle, événements supprimés,
+    // calls non liés à un meeting structuré côté Google/Teams). Avant v0.4.12 ces calls
+    // faisaient exploser leexi_list_calls sur la page contenant le call corrompu.
+    title: z.string().nullable(),
     meeting_url: z.string().nullable().optional(),
     meeting_provider: z.string().nullable().optional(),
     internal: z.boolean(),
-    direction: z.string(),
-    start_time: z.string(),
-    end_time: z.string(),
+    direction: z.string().nullable(),
+    start_time: z.string().nullable(),
+    end_time: z.string().nullable(),
 })
     .passthrough()
     .transform((raw) => ({
     uuid: raw.uuid,
-    title: raw.title,
+    title: raw.title ?? null,
     meetingUrl: raw.meeting_url ?? null,
     meetingProvider: raw.meeting_provider ?? null,
     internal: raw.internal,
-    direction: raw.direction,
-    startTime: raw.start_time,
-    endTime: raw.end_time,
+    direction: raw.direction ?? null,
+    startTime: raw.start_time ?? null,
+    endTime: raw.end_time ?? null,
 }));
 /** Prompt completion item (AI-generated text for a prompt template). */
 export const PromptSchema = z

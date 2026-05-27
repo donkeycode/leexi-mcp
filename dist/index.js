@@ -19402,8 +19402,11 @@ var SpeakerSchema = external_exports.object({
 var ChapterSchema = external_exports.object({
   uuid: external_exports.string(),
   index: external_exports.number().int(),
-  title: external_exports.string(),
-  text: external_exports.string(),
+  // v0.4.12 — l'API renvoie title=null sur des calls historiques (chaptering
+  // généré sans titre dérivé). Avant v0.4.12 ces calls faisaient exploser
+  // leexi_list_calls (cf. note start_time ci-dessous). text passe préventif.
+  title: external_exports.string().nullable(),
+  text: external_exports.string().nullable(),
   // v0.4.9 — l'API renvoie null sur des calls historiques (chaptering
   // généré sans timeline). Avant v0.4.9 ces calls faisaient exploser
   // CallSummarySchema/CallDetailSchema et bloquaient leexi_list_calls
@@ -19412,8 +19415,8 @@ var ChapterSchema = external_exports.object({
 }).passthrough().transform((raw) => ({
   uuid: raw.uuid,
   index: raw.index,
-  title: raw.title,
-  text: raw.text,
+  title: raw.title ?? null,
+  text: raw.text ?? null,
   startTime: raw.start_time ?? null
 }));
 var TaskSchema2 = external_exports.object({
@@ -19442,22 +19445,26 @@ var ConversationTypeSchema = external_exports.object({
 }).passthrough();
 var MeetingEventSchema = external_exports.object({
   uuid: external_exports.string(),
-  title: external_exports.string(),
+  // v0.4.12 — l'API renvoie meeting_event avec title/direction/end_time/start_time
+  // null sur des calls historiques (meeting metadata partielle, événements supprimés,
+  // calls non liés à un meeting structuré côté Google/Teams). Avant v0.4.12 ces calls
+  // faisaient exploser leexi_list_calls sur la page contenant le call corrompu.
+  title: external_exports.string().nullable(),
   meeting_url: external_exports.string().nullable().optional(),
   meeting_provider: external_exports.string().nullable().optional(),
   internal: external_exports.boolean(),
-  direction: external_exports.string(),
-  start_time: external_exports.string(),
-  end_time: external_exports.string()
+  direction: external_exports.string().nullable(),
+  start_time: external_exports.string().nullable(),
+  end_time: external_exports.string().nullable()
 }).passthrough().transform((raw) => ({
   uuid: raw.uuid,
-  title: raw.title,
+  title: raw.title ?? null,
   meetingUrl: raw.meeting_url ?? null,
   meetingProvider: raw.meeting_provider ?? null,
   internal: raw.internal,
-  direction: raw.direction,
-  startTime: raw.start_time,
-  endTime: raw.end_time
+  direction: raw.direction ?? null,
+  startTime: raw.start_time ?? null,
+  endTime: raw.end_time ?? null
 }));
 var PromptSchema2 = external_exports.object({
   uuid: external_exports.string(),

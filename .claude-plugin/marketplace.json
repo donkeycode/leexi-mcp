@@ -6,12 +6,12 @@
   },
   "metadata": {
     "description": "Leexi MCP plugin \u2014 read calls and transcripts from Claude.",
-    "version": "0.4.11"
+    "version": "0.4.12"
   },
   "plugins": [
     {
       "name": "leexi-mcp",
-      "version": "0.4.11",
+      "version": "0.4.12",
       "source": "./",
       "description": "Read Leexi calls and transcripts from Claude. Built for post-call automation routines.",
       "category": "productivity",

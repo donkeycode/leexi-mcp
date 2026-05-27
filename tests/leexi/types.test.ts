@@ -8,6 +8,7 @@ import {
   CallSummarySchema,
   CallsListResponseSchema,
   ChapterSchema,
+  MeetingEventSchema,
   SpeakerSchema,
   TaskSchema,
 } from "../../src/leexi/types.js";
@@ -197,6 +198,47 @@ describe("Leexi schemas", () => {
     const parsed = ChapterSchema.parse(raw);
     expect(parsed.startTime).toBeNull();
     expect(parsed.title).toBe("Chapitre 1: Introduction");
+  });
+
+  // v0.4.12 — régression : l'API Leexi renvoie parfois chapters[].title à null
+  // (chaptering généré sans titre dérivé). Avant v0.4.12, leexi_list_calls
+  // plantait sur ces calls. text passe en nullable() préventivement (même
+  // pattern probable).
+  it("ChapterSchema accepts null on title and text (historical calls)", () => {
+    const raw = {
+      uuid: "ch-historical-no-title",
+      index: 2,
+      title: null,
+      text: null,
+      start_time: 60.0,
+    };
+    const parsed = ChapterSchema.parse(raw);
+    expect(parsed.title).toBeNull();
+    expect(parsed.text).toBeNull();
+    expect(parsed.startTime).toBe(60.0);
+  });
+
+  // v0.4.12 — régression : l'API Leexi renvoie parfois meeting_event avec
+  // title/direction/end_time/start_time null sur des calls historiques
+  // (meeting metadata partielle, événements supprimés/orphelins). Avant v0.4.12
+  // ces calls faisaient exploser leexi_list_calls sur la page.
+  it("MeetingEventSchema accepts null on title, direction, start_time, end_time", () => {
+    const raw = {
+      uuid: "me-historical",
+      title: null,
+      meeting_url: "https://meet.google.com/abc-defg-hij",
+      meeting_provider: "google_meeting",
+      internal: false,
+      direction: null,
+      start_time: null,
+      end_time: null,
+    };
+    const parsed = MeetingEventSchema.parse(raw);
+    expect(parsed.title).toBeNull();
+    expect(parsed.direction).toBeNull();
+    expect(parsed.startTime).toBeNull();
+    expect(parsed.endTime).toBeNull();
+    expect(parsed.meetingProvider).toBe("google_meeting");
   });
 
   // v0.4.10 — régression : l'API Leexi renvoie parfois duration à null
