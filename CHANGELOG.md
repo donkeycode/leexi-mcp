@@ -4,6 +4,29 @@ All notable changes to `@donkeycode/leexi-mcp` will be documented here. Format i
 
 ## [Unreleased]
 
+## [0.4.13] — 2026-05-27
+
+### Fixed (CRITIQUE — perte de state à chaque bump de version)
+
+- **`LEEXI_STATE_FILE` déplacé sur un chemin stable indépendant de la version du plugin.**
+  - Avant : `${CLAUDE_PLUGIN_ROOT}/state/processed-calls.json` → ce chemin contient le numéro de version (`.claude/plugins/cache/leexi-mcp/leexi-mcp/0.4.X/state/...`), donc à **chaque update plugin**, le `ProcessedStore` redémarrait à vide (`ENOENT → empty store`, store.ts:38) et **tous les calls déjà traités étaient re-listés comme non-traités** par `leexi_list_calls only_unprocessed=true`.
+  - Après : `${HOME}/.local/state/leexi-mcp/processed-calls.json` (convention XDG_STATE_HOME). Persistant à travers les bumps.
+
+### Migration
+
+Au passage à 0.4.13, copier le state du dernier MCP utilisé :
+```bash
+mkdir -p ~/.local/state/leexi-mcp
+cp ~/.claude/plugins/cache/leexi-mcp/leexi-mcp/0.4.12/state/processed-calls.json \
+   ~/.local/state/leexi-mcp/processed-calls.json
+```
+Sans migration, le store démarre vide une dernière fois (puis stable).
+
+### Impact constaté
+
+- 26/05 backfill historique : 710 calls marqués processed dans le JSONL vault ; le MCP côté serveur n'avait que 697 entrées synchrones (asymétrie écriture vault vs `leexi_mark_processed`).
+- 27/05 bump 0.4.11 → 0.4.12 : state file MCP repassé à 0 → 865 calls re-listés comme unprocessed dès la première routine du matin.
+
 ## [0.4.12] — 2026-05-27
 
 ### Fixed (bloquant reprise historique, suite v0.4.11)
