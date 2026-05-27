@@ -1,4 +1,5 @@
 // Environment-based configuration parsed and validated with Zod
+import { homedir } from "node:os";
 import { z } from "zod";
 import { ConfigError } from "./errors.js";
 
@@ -12,12 +13,35 @@ const ConfigSchema = z.object({
 
 export type Config = z.infer<typeof ConfigSchema>;
 
+/**
+ * Expand shell-style home references in a path string.
+ *
+ * Some MCP launchers (e.g. Claude Code) inject env var placeholders like
+ * `${HOME}/foo` from `.mcp.json` without performing shell substitution, so
+ * Node.js receives the literal `${HOME}/foo`. We expand it here so a path
+ * like `${HOME}/.local/state/leexi-mcp/processed-calls.json` resolves to
+ * `/Users/alice/.local/state/leexi-mcp/processed-calls.json` instead of
+ * failing silently with ENOENT.
+ *
+ * Handles: `${HOME}`, `$HOME`, and a leading `~/`. Leaves anything else as-is.
+ */
+function expandHomePath(input: string | undefined): string | undefined {
+  if (input === undefined) return undefined;
+  let out = input;
+  out = out.replace(/\$\{HOME\}/g, homedir());
+  out = out.replace(/\$HOME(?=$|[/\\])/g, homedir());
+  if (out.startsWith("~/") || out === "~") {
+    out = homedir() + out.slice(1);
+  }
+  return out;
+}
+
 export function loadConfig(): Config {
   const raw = {
     apiKeyId: process.env.LEEXI_API_KEY_ID,
     apiKey: process.env.LEEXI_API_KEY,
     baseUrl: process.env.LEEXI_API_BASE_URL,
-    stateFile: process.env.LEEXI_STATE_FILE,
+    stateFile: expandHomePath(process.env.LEEXI_STATE_FILE),
     rateLimitPerMinute: process.env.LEEXI_RATE_LIMIT_PER_MINUTE,
   };
 

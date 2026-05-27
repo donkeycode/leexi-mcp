@@ -6887,6 +6887,9 @@ var require_dist = __commonJS({
   }
 });
 
+// src/config.ts
+import { homedir } from "node:os";
+
 // node_modules/.pnpm/zod@3.25.76/node_modules/zod/v3/external.js
 var external_exports = {};
 __export(external_exports, {
@@ -10962,12 +10965,22 @@ var ConfigSchema = external_exports.object({
   stateFile: external_exports.string().min(1, "LEEXI_STATE_FILE must be set"),
   rateLimitPerMinute: external_exports.coerce.number().int().positive().default(50)
 });
+function expandHomePath(input) {
+  if (input === void 0) return void 0;
+  let out = input;
+  out = out.replace(/\$\{HOME\}/g, homedir());
+  out = out.replace(/\$HOME(?=$|[/\\])/g, homedir());
+  if (out.startsWith("~/") || out === "~") {
+    out = homedir() + out.slice(1);
+  }
+  return out;
+}
 function loadConfig() {
   const raw = {
     apiKeyId: process.env.LEEXI_API_KEY_ID,
     apiKey: process.env.LEEXI_API_KEY,
     baseUrl: process.env.LEEXI_API_BASE_URL,
-    stateFile: process.env.LEEXI_STATE_FILE,
+    stateFile: expandHomePath(process.env.LEEXI_STATE_FILE),
     rateLimitPerMinute: process.env.LEEXI_RATE_LIMIT_PER_MINUTE
   };
   const fieldToEnvVar = {

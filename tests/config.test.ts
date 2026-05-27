@@ -1,3 +1,4 @@
+import { homedir } from "node:os";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { loadConfig } from "../src/config.js";
 import { ConfigError } from "../src/errors.js";
@@ -66,5 +67,50 @@ describe("loadConfig", () => {
     process.env.LEEXI_RATE_LIMIT_PER_MINUTE = "not-a-number";
 
     expect(() => loadConfig()).toThrow(ConfigError);
+  });
+
+  // The MCP launcher (Claude Code) sometimes injects `.mcp.json` env values
+  // without performing shell substitution, so a path declared as
+  // `${HOME}/foo` arrives in the child process as the literal string
+  // `${HOME}/foo`. loadConfig() must expand these so the path is usable.
+
+  it("expands ${HOME} in LEEXI_STATE_FILE", () => {
+    process.env.LEEXI_API_KEY_ID = "test-id";
+    process.env.LEEXI_API_KEY = "test-key";
+    process.env.LEEXI_STATE_FILE = "${HOME}/.local/state/leexi-mcp/processed-calls.json";
+
+    const config = loadConfig();
+
+    expect(config.stateFile).toBe(`${homedir()}/.local/state/leexi-mcp/processed-calls.json`);
+  });
+
+  it("expands $HOME in LEEXI_STATE_FILE", () => {
+    process.env.LEEXI_API_KEY_ID = "test-id";
+    process.env.LEEXI_API_KEY = "test-key";
+    process.env.LEEXI_STATE_FILE = "$HOME/.local/state/leexi-mcp/processed-calls.json";
+
+    const config = loadConfig();
+
+    expect(config.stateFile).toBe(`${homedir()}/.local/state/leexi-mcp/processed-calls.json`);
+  });
+
+  it("expands ~/ at start of LEEXI_STATE_FILE", () => {
+    process.env.LEEXI_API_KEY_ID = "test-id";
+    process.env.LEEXI_API_KEY = "test-key";
+    process.env.LEEXI_STATE_FILE = "~/.local/state/leexi-mcp/processed-calls.json";
+
+    const config = loadConfig();
+
+    expect(config.stateFile).toBe(`${homedir()}/.local/state/leexi-mcp/processed-calls.json`);
+  });
+
+  it("leaves an absolute path untouched", () => {
+    process.env.LEEXI_API_KEY_ID = "test-id";
+    process.env.LEEXI_API_KEY = "test-key";
+    process.env.LEEXI_STATE_FILE = "/var/lib/leexi-mcp/processed.json";
+
+    const config = loadConfig();
+
+    expect(config.stateFile).toBe("/var/lib/leexi-mcp/processed.json");
   });
 });

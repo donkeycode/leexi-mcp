@@ -4,6 +4,22 @@ All notable changes to `@donkeycode/leexi-mcp` will be documented here. Format i
 
 ## [Unreleased]
 
+## [0.4.15] — 2026-05-27
+
+### Fixed (CRITIQUE — `${HOME}` non substitué par certains launchers MCP)
+
+- **`config.ts` étend désormais `${HOME}`, `$HOME` et un `~/` initial dans `LEEXI_STATE_FILE`.**
+  - Avant : `process.env.LEEXI_STATE_FILE` était lu brut. Quand Claude Code (et d'autres launchers MCP) injectent les valeurs de `.mcp.json` sans faire la substitution shell, un path comme `${HOME}/.local/state/leexi-mcp/processed-calls.json` arrive dans le child process **littéralement**, avec `${HOME}` non résolu. Résultat : `ProcessedStore` ouvre un path inexistant, `ENOENT` traité comme store vide (store.ts:38), `only_unprocessed=true` ne filtre plus rien.
+  - Après : expansion défensive côté MCP. `${HOME}/foo`, `$HOME/foo`, `~/foo` → `/Users/alice/foo` quelle que soit la manière dont le launcher passe la variable.
+
+### Tests
+
+- `tests/config.test.ts` : +4 cas (`${HOME}`, `$HOME`, `~/`, path absolu). Total 78/78.
+
+### Contexte
+
+Bug observé 27/05/2026 après-midi : malgré le passage à un chemin XDG stable en 0.4.13 et le reload-auto en 0.4.14, le MCP loaded en runtime continuait à retourner 865 calls non filtrés. Cause : Claude Code passait `LEEXI_STATE_FILE` au MCP sans avoir résolu `${HOME}` au préalable, donc `ProcessedStore.load()` tentait d'ouvrir un fichier nommé littéralement `${HOME}/.local/state/...` → ENOENT → map vide → aucun filtrage. Cette release rend le MCP résistant à cette catégorie de mauvaise substitution.
+
 ## [0.4.14] — 2026-05-27
 
 ### Fixed
