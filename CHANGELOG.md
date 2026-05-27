@@ -4,6 +4,23 @@ All notable changes to `@donkeycode/leexi-mcp` will be documented here. Format i
 
 ## [Unreleased]
 
+## [0.4.14] — 2026-05-27
+
+### Fixed
+
+- **`ProcessedStore` reload automatique sur changement disque (mtime-based).**
+  Avant : `load()` n'était appelé qu'au boot du serveur MCP — toute écriture externe au state file (vault sync, édition manuelle, second processus MCP) restait invisible jusqu'au prochain redémarrage. C'est ce qui a empêché la sync 710-entrées de prendre effet immédiatement sur le MCP loaded en 0.4.13.
+  Après : `isProcessed()`, `markProcessed()` et `list()` vérifient `fs.stat().mtimeMs` (1 syscall cheap) et rechargent uniquement si le fichier sur disque est plus récent que la map en mémoire. `persist()` met à jour le mtime tracké en interne pour ne pas re-charger sur ses propres écritures.
+
+### Added
+
+- **Protection contre les race conditions writer-writer.**
+  `markProcessed()` recharge maintenant le fichier avant d'appliquer son changement, garantissant qu'un append externe entre deux marks ne sera pas écrasé par la map en mémoire stale.
+
+### Tests
+
+- `tests/store/processed-store.test.ts` : +2 tests (`picks up entries written externally`, `does not overwrite entries added externally`). Total 74/74.
+
 ## [0.4.13] — 2026-05-27
 
 ### Fixed (CRITIQUE — perte de state à chaque bump de version)

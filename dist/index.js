@@ -19778,7 +19778,7 @@ function sleep(ms) {
 }
 
 // src/store/processed-store.ts
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, stat, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
 var EntrySchema = external_exports.object({
   uuid: external_exports.string(),
@@ -19796,26 +19796,50 @@ var ProcessedStore = class {
   path;
   loaded = false;
   map = /* @__PURE__ */ new Map();
+  lastMtimeMs = null;
   /** Load entries from disk; treats ENOENT as empty store. */
   async load() {
     try {
+      const fileStat = await stat(this.path);
       const raw = await readFile(this.path, "utf8");
       const data = StoreSchema.parse(JSON.parse(raw));
       this.map = new Map(data.entries.map((e) => [e.uuid, e]));
+      this.lastMtimeMs = fileStat.mtimeMs;
     } catch (err) {
       if (err.code !== "ENOENT") throw err;
       this.map = /* @__PURE__ */ new Map();
+      this.lastMtimeMs = null;
     }
     this.loaded = true;
+  }
+  /**
+   * Reload from disk if the file has been modified since our last load.
+   * Cheap: 1 fs.stat() syscall when up-to-date, full reparse only when stale.
+   */
+  async reloadIfStale() {
+    try {
+      const fileStat = await stat(this.path);
+      if (this.lastMtimeMs === null || fileStat.mtimeMs > this.lastMtimeMs) {
+        await this.load();
+      }
+    } catch (err) {
+      if (err.code !== "ENOENT") throw err;
+      if (this.lastMtimeMs !== null) {
+        this.map = /* @__PURE__ */ new Map();
+        this.lastMtimeMs = null;
+      }
+    }
   }
   /** Returns true if the given UUID has been marked processed. */
   async isProcessed(uuid2) {
     this.ensureLoaded();
+    await this.reloadIfStale();
     return this.map.has(uuid2);
   }
   /** Mark a UUID as processed and persist to disk immediately. */
   async markProcessed(uuid2, metadata) {
     this.ensureLoaded();
+    await this.reloadIfStale();
     this.map.set(uuid2, {
       uuid: uuid2,
       processedAt: (/* @__PURE__ */ new Date()).toISOString(),
@@ -19826,6 +19850,7 @@ var ProcessedStore = class {
   /** Return all processed entries. */
   async list() {
     this.ensureLoaded();
+    await this.reloadIfStale();
     return Array.from(this.map.values());
   }
   /** Write current state to disk, creating parent directories as needed. */
@@ -19836,6 +19861,8 @@ var ProcessedStore = class {
       entries: Array.from(this.map.values())
     };
     await writeFile(this.path, JSON.stringify(payload, null, 2), "utf8");
+    const fileStat = await stat(this.path);
+    this.lastMtimeMs = fileStat.mtimeMs;
   }
   ensureLoaded() {
     if (!this.loaded) {
